@@ -1,0 +1,693 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\HKT_OJ\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\controllers\\problemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\controllers\\problemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\controllers\\roadmapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\controllers\\roadmapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\sections.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\sections.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\services\\judge0service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\services\\judge0service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\migrations\\20250514162711_db.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\migrations\\20250514162711_db.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\viewmodels\\submitrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\viewmodels\\submitrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\viewmodels\\problemcardviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\viewmodels\\problemcardviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\problem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\problem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\viewmodels\\problemcreaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\viewmodels\\problemcreaterequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\submission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\submission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\viewmodels\\addmodulecontentrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\viewmodels\\addmodulecontentrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\controllers\\submissioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\controllers\\submissioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\viewmodels\\submissionrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\viewmodels\\submissionrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\viewmodels\\submissionresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\viewmodels\\submissionresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\viewmodels\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\viewmodels\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\problemconstraint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\problemconstraint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\viewmodels\\addsectionrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\viewmodels\\addsectionrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\viewmodels\\addmodulerequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\viewmodels\\addmodulerequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\data\\appdbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\data\\appdbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\modulecontent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\modulecontent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\migrations\\20250512005215_i.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\migrations\\20250512005215_i.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\modules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\modules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\viewmodels\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\viewmodels\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\viewmodels\\loginresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\viewmodels\\loginresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\problemprogress.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\problemprogress.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\solution.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\solution.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\commentreaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\commentreaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\blogreaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\blogreaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\blogpost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\blogpost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\blogcomment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\blogcomment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\models\\testcase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\models\\testcase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\migrations\\20250508042457_initdatabases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\migrations\\20250508042457_initdatabases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\migrations\\20250508012202_initdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\migrations\\20250508012202_initdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\migrations\\20250512013305_changeint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\migrations\\20250512013305_changeint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|d:\\hkt_oj\\hkt_oj\\migrations\\20250514170508_init23.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E513ABF9-6DFD-45F2-82EB-C5DD9420425F}|HKT_OJ\\HKT_OJ.csproj|solutionrelative:hkt_oj\\migrations\\20250514170508_init23.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ProblemCardViewModel.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\ProblemCardViewModel.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\ViewModels\\ProblemCardViewModel.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\ProblemCardViewModel.cs",
+              "RelativeToolTip": "HKT_OJ\\ViewModels\\ProblemCardViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T00:37:22.428Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Judge0Service.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Services\\Judge0Service.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Services\\Judge0Service.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Services\\Judge0Service.cs",
+              "RelativeToolTip": "HKT_OJ\\Services\\Judge0Service.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBsAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T23:51:38.895Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Program.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Program.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Program.cs",
+              "RelativeToolTip": "HKT_OJ\\Program.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAQwEcAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T23:47:20.22Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "HKT_OJ\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAGoAAAAAAAAAAAAkwEgAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T01:12:04.458Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "20250514162711_DB.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Migrations\\20250514162711_DB.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Migrations\\20250514162711_DB.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Migrations\\20250514162711_DB.cs",
+              "RelativeToolTip": "HKT_OJ\\Migrations\\20250514162711_DB.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-14T16:27:12.136Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Sections.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\Sections.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\Sections.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\Sections.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\Sections.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T16:31:12.918Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "SubmitRequest.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\SubmitRequest.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\ViewModels\\SubmitRequest.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\SubmitRequest.cs",
+              "RelativeToolTip": "HKT_OJ\\ViewModels\\SubmitRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-14T17:17:54.638Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProblemController.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Controllers\\ProblemController.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Controllers\\ProblemController.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Controllers\\ProblemController.cs",
+              "RelativeToolTip": "HKT_OJ\\Controllers\\ProblemController.cs",
+              "ViewState": "AgIAAL0BAAAAAAAAAAAQwNABAABJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T04:03:59.024Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Problem.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\Problem.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\Problem.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\Problem.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\Problem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T01:26:06.763Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RoadmapController.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Controllers\\RoadmapController.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Controllers\\RoadmapController.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Controllers\\RoadmapController.cs",
+              "RelativeToolTip": "HKT_OJ\\Controllers\\RoadmapController.cs",
+              "ViewState": "AgIAAOAAAAAAAAAAAAAQwOQAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T00:37:40.276Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AddModuleContentRequest.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\AddModuleContentRequest.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\ViewModels\\AddModuleContentRequest.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\AddModuleContentRequest.cs",
+              "RelativeToolTip": "HKT_OJ\\ViewModels\\AddModuleContentRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T00:40:03.478Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "SubmissionRequest.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\SubmissionRequest.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\ViewModels\\SubmissionRequest.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\SubmissionRequest.cs",
+              "RelativeToolTip": "HKT_OJ\\ViewModels\\SubmissionRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T23:50:45.357Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Submission.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\Submission.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\Submission.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\Submission.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\Submission.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T16:28:29.715Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ProblemCreateRequest.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\ProblemCreateRequest.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\ViewModels\\ProblemCreateRequest.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\ProblemCreateRequest.cs",
+              "RelativeToolTip": "HKT_OJ\\ViewModels\\ProblemCreateRequest.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAUwB4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T04:01:48.324Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "SubmissionController.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Controllers\\SubmissionController.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Controllers\\SubmissionController.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Controllers\\SubmissionController.cs",
+              "RelativeToolTip": "HKT_OJ\\Controllers\\SubmissionController.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAwwBIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-23T23:49:58.593Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\appsettings.json",
+              "RelativeDocumentMoniker": "HKT_OJ\\appsettings.json",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\appsettings.json",
+              "RelativeToolTip": "HKT_OJ\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-24T00:03:42.662Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "20250514170508_Init23.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Migrations\\20250514170508_Init23.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Migrations\\20250514170508_Init23.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Migrations\\20250514170508_Init23.cs",
+              "RelativeToolTip": "HKT_OJ\\Migrations\\20250514170508_Init23.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-14T17:05:08.397Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "SubmissionResult.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\SubmissionResult.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\ViewModels\\SubmissionResult.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\SubmissionResult.cs",
+              "RelativeToolTip": "HKT_OJ\\ViewModels\\SubmissionResult.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T16:29:36.345Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Data\\AppDbContext.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "HKT_OJ\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T01:10:12.424Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "WeatherForecastController.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Controllers\\WeatherForecastController.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Controllers\\WeatherForecastController.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Controllers\\WeatherForecastController.cs",
+              "RelativeToolTip": "HKT_OJ\\Controllers\\WeatherForecastController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-14T08:14:59.022Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "RegisterRequest.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\RegisterRequest.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\ViewModels\\RegisterRequest.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\RegisterRequest.cs",
+              "RelativeToolTip": "HKT_OJ\\ViewModels\\RegisterRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T01:34:04.581Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "ProblemConstraint.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\ProblemConstraint.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\ProblemConstraint.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\ProblemConstraint.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\ProblemConstraint.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T16:28:07.835Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "AppDbContextFactory.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Data\\AppDbContextFactory.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Data\\AppDbContextFactory.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Data\\AppDbContextFactory.cs",
+              "RelativeToolTip": "HKT_OJ\\Data\\AppDbContextFactory.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwA8AAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T00:47:33.84Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "ModuleContent.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\ModuleContent.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\ModuleContent.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\ModuleContent.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\ModuleContent.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwA4AAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T16:34:05.188Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "20250512013305_changeint.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Migrations\\20250512013305_changeint.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Migrations\\20250512013305_changeint.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Migrations\\20250512013305_changeint.cs",
+              "RelativeToolTip": "HKT_OJ\\Migrations\\20250512013305_changeint.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAzwBoAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T01:33:05.983Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "AddSectionRequest.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\AddSectionRequest.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\ViewModels\\AddSectionRequest.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\AddSectionRequest.cs",
+              "RelativeToolTip": "HKT_OJ\\ViewModels\\AddSectionRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T00:39:13.847Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "AddModuleRequest.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\AddModuleRequest.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\ViewModels\\AddModuleRequest.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\AddModuleRequest.cs",
+              "RelativeToolTip": "HKT_OJ\\ViewModels\\AddModuleRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T00:39:32.435Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Modules.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\Modules.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\Modules.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\Modules.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\Modules.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T16:31:37.499Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "20250512005215_I.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Migrations\\20250512005215_I.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Migrations\\20250512005215_I.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Migrations\\20250512005215_I.cs",
+              "RelativeToolTip": "HKT_OJ\\Migrations\\20250512005215_I.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T00:52:15.504Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "LoginResponse.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\LoginResponse.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\ViewModels\\LoginResponse.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\LoginResponse.cs",
+              "RelativeToolTip": "HKT_OJ\\ViewModels\\LoginResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T01:11:35.082Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "LoginRequest.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\LoginRequest.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\ViewModels\\LoginRequest.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\ViewModels\\LoginRequest.cs",
+              "RelativeToolTip": "HKT_OJ\\ViewModels\\LoginRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T01:10:35.948Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "HKT_OJ\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Properties\\launchSettings.json",
+              "RelativeToolTip": "HKT_OJ\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-24T00:03:55.056Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "Solution.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\Solution.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\Solution.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\Solution.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\Solution.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T04:08:21.499Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\User.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\User.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\User.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\User.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwAwAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T01:25:36.303Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "ProblemProgress.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\ProblemProgress.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\ProblemProgress.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\ProblemProgress.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\ProblemProgress.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T23:53:45.735Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "20250508042457_InitDatabases.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Migrations\\20250508042457_InitDatabases.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Migrations\\20250508042457_InitDatabases.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Migrations\\20250508042457_InitDatabases.cs",
+              "RelativeToolTip": "HKT_OJ\\Migrations\\20250508042457_InitDatabases.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T04:24:57.683Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "CommentReaction.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\CommentReaction.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\CommentReaction.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\CommentReaction.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\CommentReaction.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAcAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T16:39:00.922Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "BlogReaction.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\BlogReaction.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\BlogReaction.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\BlogReaction.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\BlogReaction.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAsAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T16:35:45.463Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "BlogPost.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\BlogPost.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\BlogPost.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\BlogPost.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\BlogPost.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T16:34:27.182Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "BlogComment.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\BlogComment.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\BlogComment.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\BlogComment.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\BlogComment.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T16:35:22.615Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "20250508012202_InitDatabase.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Migrations\\20250508012202_InitDatabase.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Migrations\\20250508012202_InitDatabase.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Migrations\\20250508012202_InitDatabase.cs",
+              "RelativeToolTip": "HKT_OJ\\Migrations\\20250508012202_InitDatabase.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwA0AAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T01:22:02.888Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "Testcase.cs",
+              "DocumentMoniker": "D:\\HKT_OJ\\HKT_OJ\\Models\\Testcase.cs",
+              "RelativeDocumentMoniker": "HKT_OJ\\Models\\Testcase.cs",
+              "ToolTip": "D:\\HKT_OJ\\HKT_OJ\\Models\\Testcase.cs",
+              "RelativeToolTip": "HKT_OJ\\Models\\Testcase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-07T16:30:06.81Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

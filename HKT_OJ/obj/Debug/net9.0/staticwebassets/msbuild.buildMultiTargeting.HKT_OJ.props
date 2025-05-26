@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\HKT_OJ.props" />
+</Project>
