@@ -333,14 +333,21 @@ namespace HKT_OJ.Controllers
 
             if (finalResult == "Accepted")
             {
-                var user = await _context.User.FindAsync(userId);
-                if (user != null)
+                bool hasAcceptedBefore = await _context.Submission
+                    .AnyAsync(s => s.UserId == userId && s.ProblemId == problemId && s.Result == "Accepted");
+
+                if (!hasAcceptedBefore)
                 {
-                    user.ProblemSolved += 1;
-                    _context.User.Update(user);
-                    await _context.SaveChangesAsync();
+                    var user = await _context.User.FindAsync(userId);
+                    if (user != null)
+                    {
+                        user.ProblemSolved += 1;
+                        _context.User.Update(user);
+                        await _context.SaveChangesAsync();
+                    }
                 }
             }
+
 
 
             return Ok(new
@@ -351,7 +358,7 @@ namespace HKT_OJ.Controllers
             });
         }
 
-        [Authorize(Roles = "0")]
+
         [HttpGet("submissiondetails/{submissionId}")]
         public async Task<IActionResult> GetSubmissionDetails(int submissionId)
         {
@@ -902,8 +909,21 @@ namespace HKT_OJ.Controllers
         [HttpPut("update-non-sample-testcases/{problemId}")]
         public async Task<IActionResult> UpdateNonSampleTestcases(int problemId, [FromBody] NonSampleTestcaseUpdateRequest request)
         {
+            if (request == null)
+                return BadRequest("❌ Payload is null");
+
+            if (request.ToUpdate == null || request.ToAdd == null || request.ToDelete == null)
+                return BadRequest("❌ Missing one or more required lists (ToAdd / ToUpdate / ToDelete)");
+
+
             string basePath = Path.Combine("wwwroot", "testcases", $"Problem_{problemId}");
             Directory.CreateDirectory(basePath);
+
+            Console.WriteLine("📥 Received request to update non-sample testcases:");
+            Console.WriteLine("ToAdd: " + request.ToAdd?.Count);
+            Console.WriteLine("ToUpdate: " + request.ToUpdate?.Count);
+            Console.WriteLine("ToDelete: " + request.ToDelete?.Count);
+
 
             // 1. Update existing testcases
             foreach (var t in request.ToUpdate)

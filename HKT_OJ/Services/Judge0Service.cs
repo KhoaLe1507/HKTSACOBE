@@ -13,7 +13,7 @@ namespace HKT_OJ.Services
         {
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("https://judge0-ce.p.rapidapi.com/");
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", "bc566068b9msh8d895514b2c30acp1be086jsn1921678b893e");
+            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", "dfd07089a0msh3caae10d120f03cp1536b6jsn87d624a43086");
             _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "judge0-ce.p.rapidapi.com");
         }
 
