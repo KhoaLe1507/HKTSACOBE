@@ -143,7 +143,7 @@ namespace HKT_OJ.Controllers
         }
 
         // ===== GET: Select Section for Dropdown =====
-        [Authorize(Roles = "2")]
+        [Authorize(Roles = "1,2")]
         [HttpGet("GetAllSections")]
         public IActionResult GetAllSections()
         {
@@ -160,7 +160,7 @@ namespace HKT_OJ.Controllers
         }
 
         // ===== GET: Select Module theo Section =====
-        [Authorize(Roles = "2")]
+        [Authorize(Roles = "1,2")]
         [HttpGet("GetModulesBySection/{sectionId}")]
         public IActionResult GetModulesBySection(int sectionId)
         {
@@ -178,7 +178,7 @@ namespace HKT_OJ.Controllers
         }
 
         // ===== GET: Select ModuleContent theo Module =====
-        [Authorize(Roles = "2")]
+        [Authorize(Roles = "1,2")]
         [HttpGet("GetModuleContentsByModule/{moduleId}")]
         public IActionResult GetModuleContentsByModule(int moduleId)
         {
@@ -370,7 +370,6 @@ namespace HKT_OJ.Controllers
         }
         ///c => c.Type == ClaimTypes.NameIdentifier
 
-        [Authorize(Roles = "1")]
         [HttpGet("MyModuleContents")]
         public IActionResult GetMyModuleContents()
         {

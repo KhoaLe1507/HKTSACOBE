@@ -99,7 +99,7 @@ namespace HKT_OJ.Controllers
 
 
 
-        [Authorize(Roles = "1")]
+        [Authorize(Roles = "1,2")]
         [HttpPost("add")]
         public async Task<IActionResult> AddProblem([FromBody] ProblemCreateRequest request)
         {
@@ -107,6 +107,15 @@ namespace HKT_OJ.Controllers
             if (userIdClaim == null) return Unauthorized("User not logged in.");
 
             int authorId = int.Parse(userIdClaim.Value);
+
+            var author = await _context.User.FindAsync(authorId);
+            if (author != null)
+            {
+                author.ProblemCreated += 1;
+                _context.User.Update(author);
+                await _context.SaveChangesAsync();
+            }
+
 
             var problem = new Problem
             {
@@ -167,7 +176,7 @@ namespace HKT_OJ.Controllers
                 _context.Testcase.Add(testcase);
             }
 
-            // 🔥 Sinh Testcase Random từ Constraints
+            // 🔥 Sinh Testcase Random 
             if (request.NumberOfGeneratedTestcases > 0)
             {
                 int generatorLangId = _judge0Service.MapLanguageToId(request.TestGeneratorLanguage);
@@ -175,11 +184,13 @@ namespace HKT_OJ.Controllers
 
                 for (int i = 0; i < request.NumberOfGeneratedTestcases; i++)
                 {
+                    Console.WriteLine("🔧 [TESTGEN] Generating input with the following source code:");
+                    Console.WriteLine(request.TestGeneratorSource);
                     string generatedInput = await _judge0Service.RunCodeAndGetOutputWithoutInput(
                         request.TestGeneratorSource,
                         generatorLangId.ToString()
                     );
-
+                    Console.WriteLine("FIXBUGGGG"+generatedInput);
                     string expectedOutput = await _judge0Service.ExecuteAndGetOutputAsync(
                         request.Solution.Source,
                         solutionLangId.ToString(),
@@ -275,7 +286,7 @@ namespace HKT_OJ.Controllers
                 string memoryStr = resultJson.GetProperty("memory").ToString();
 
                 int executedTime = (int)(float.Parse(timeStr)); // ms
-                int memory = int.Parse(memoryStr); // KB
+                int memory = int.TryParse(memoryStr, out var parsedMem) ? parsedMem : 0; // KB
 
                 string userOutputPath = SaveStdoutToFile(stdout, problemId, submission.SubmissionId, tc.TestcaseId);
 
@@ -319,6 +330,18 @@ namespace HKT_OJ.Controllers
             _context.SubmissionResult.AddRange(submissionResults);
             _context.Submission.Update(submission);
             await _context.SaveChangesAsync();
+
+            if (finalResult == "Accepted")
+            {
+                var user = await _context.User.FindAsync(userId);
+                if (user != null)
+                {
+                    user.ProblemSolved += 1;
+                    _context.User.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
 
             return Ok(new
             {
@@ -369,6 +392,154 @@ namespace HKT_OJ.Controllers
         }
 
 
+        [HttpGet("getallsubmission/{problemId}")]
+        [Authorize]
+        public async Task<IActionResult> GetAllSubmissionsForProblem(int problemId)
+        {
+            var problem = await _context.Problem.FindAsync(problemId);
+            if (problem == null)
+                return NotFound("Problem not found.");
+
+            var submissions = await _context.Submission
+                .Where(s => s.ProblemId == problemId)
+                .OrderByDescending(s => s.SubmitAtTime)
+                .Select(s => new
+                {
+                    SubmissionId = s.SubmissionId,
+                    UserName = _context.User
+                        .Where(u => u.UserId == s.UserId)
+                        .Select(u => u.UserName)
+                        .FirstOrDefault(),
+                    SubmitAtTime = s.SubmitAtTime,
+                    ProblemName = problem.Name,
+                    TimeExecuted = s.Time,
+                    Memory = s.Memory,
+                    Language = s.Language,
+                    Result = s.Result
+                })
+                .ToListAsync();
+
+            return Ok(submissions);
+        }
+        [HttpGet("solution/{problemId}")]
+        public async Task<IActionResult> GetProblemSolution(int problemId)
+        {
+            var problem = await _context.Problem.FindAsync(problemId);
+            if (problem == null)
+                return NotFound("Problem not found.");
+
+            var solution = await _context.Solution
+                .FirstOrDefaultAsync(s => s.ProblemId == problemId);
+            if (solution == null)
+                return NotFound("Solution not found.");
+
+            var author = await _context.User
+                .Where(u => u.UserId == problem.AuthorId)
+                .Select(u => u.FullName)
+                .FirstOrDefaultAsync();
+
+            return Ok(new
+            {
+                ProblemTitle = problem.Name,
+                Author = author,
+                Explanation = solution.Explanation,
+                Language = solution.Language,
+                SourceCode = solution.Source
+            });
+        }
+
+        [HttpGet("details/{problemId}")]
+        public async Task<IActionResult> GetProblemDetails(int problemId)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null) return Unauthorized("User not logged in.");
+            int userId = int.Parse(userIdClaim.Value);
+
+            var problem = await _context.Problem.FindAsync(problemId);
+            if (problem == null) return NotFound("Problem not found.");
+
+            var solution = await _context.Solution.FirstOrDefaultAsync(s => s.ProblemId == problemId);
+            var moduleContent = await _context.ModuleContent.FindAsync(problem.ModuleContentId);
+            var module = await _context.Modules.FindAsync(moduleContent.ModuleId);
+            var section = await _context.Sections.FindAsync(module.SectionId);
+
+            // 🔍 Xác định Status của bài với user hiện tại
+            var userSubmissions = _context.Submission
+                .Where(s => s.ProblemId == problemId && s.UserId == userId)
+                .ToList();
+
+            string status = "Not Started";
+            if (userSubmissions.Any(s => s.Result == "Accepted"))
+                status = "Completed";
+            else if (userSubmissions.Any())
+                status = "In Progress";
+
+            // 🔍 Constraints
+            var constraints = await _context.ProblemConstraint
+                .Where(c => c.ProblemId == problemId)
+                .Select(c => new
+                {
+                    c.Variable,
+                    c.MinValue,
+                    c.MaxValue
+                })
+                .ToListAsync();
+
+            // 🔍 Sample Testcases
+            var sampleTests = await _context.Testcase
+                .Where(t => t.ProblemId == problemId && t.IsSample == true)
+                .Select(t => new
+                {
+                    TestcaseId = t.TestcaseId,
+                    Input = System.IO.File.ReadAllText(Path.Combine("wwwroot", t.InputPath.TrimStart('/'))),
+                    Output = System.IO.File.ReadAllText(Path.Combine("wwwroot", t.OutputPath.TrimStart('/'))),
+                    Explanation = t.Explanation
+                })
+                .ToListAsync();
+
+            //Non Sample Testcase
+            // 🔍 Non-sample Testcases
+            var regularTests = await _context.Testcase
+                .Where(t => t.ProblemId == problemId && t.IsSample == false)
+                .Select(t => new
+                {
+                    TestcaseId = t.TestcaseId,
+                    Input = System.IO.File.ReadAllText(Path.Combine("wwwroot", t.InputPath.TrimStart('/'))),
+                    Output = System.IO.File.ReadAllText(Path.Combine("wwwroot", t.OutputPath.TrimStart('/'))),
+                    Explanation = t.Explanation
+                })
+                .ToListAsync();
+
+
+            return Ok(new
+            {
+                    Name = problem.Name,
+                    Frequent = problem.Frequent,
+                    ModuleContentName = moduleContent.Title,
+                    SectionName = section.Name,
+                    Difficulty = problem.Difficulty,
+                    TimeLimit = problem.TimeLimit,
+                    MemoryLimit = problem.MemoryLimit,
+                    Status = status,
+                    ProblemStatement = problem.ProblemStatement,
+                    FormatInput = problem.FormatInput,
+                    FormatOutput = problem.FormatOutput,
+                    Constraints = constraints,
+                    SampleTestcases = sampleTests,
+                    Testcases = regularTests,
+                    Solution = new
+                    {
+                        Language = solution?.Language ?? "cpp",
+                        Explanation = solution?.Explanation ?? "",
+                        Source = solution?.Source ?? ""
+                    },
+                    SectionId = section.Id,
+                    ModuleId = module.Id,
+                    ModuleContentId=moduleContent.Id
+            });
+        }
+
+
 
         private string SaveStdoutToFile(string stdout, int problemId, int submissionId, int testcaseId)
         {
@@ -403,128 +574,454 @@ namespace HKT_OJ.Controllers
             return "/" + relativePath.Replace("\\", "/");
         }
 
-        [HttpGet("getallsubmission/{problemId}")]
-        [Authorize]
-        public async Task<IActionResult> GetAllSubmissionsForProblem(int problemId)
+
+        // =================== Edit ===================
+        [Authorize(Roles = "1,2")]
+        [HttpPut("edit/{problemId}")]
+        public async Task<IActionResult> EditProblem(int problemId, [FromBody] ProblemCreateRequest request)
         {
             var problem = await _context.Problem.FindAsync(problemId);
-            if (problem == null)
-                return NotFound("Problem not found.");
+            if (problem == null) return NotFound("Problem not found");
 
-            var submissions = await _context.Submission
-                .Where(s => s.ProblemId == problemId)
-                .OrderByDescending(s => s.SubmitAtTime)
-                .Select(s => new
-                {
-                    SubmissionId = s.SubmissionId,
-                    UserName = _context.User
-                        .Where(u => u.UserId == s.UserId)
-                        .Select(u => u.UserName)
-                        .FirstOrDefault(),
-                    SubmitAtTime = s.SubmitAtTime,
-                    ProblemName = problem.Name,
-                    TimeExecuted = s.Time,
-                    Memory = s.Memory,
-                    Language = s.Language,
-                    Result = s.Result
-                })
-                .ToListAsync();
+            problem.Name = request.Name;
+            problem.Frequent = request.Frequent;
+            problem.ModuleContentId = request.ModuleContentId;
+            problem.Difficulty = request.Difficulty;
+            problem.TimeLimit = request.TimeLimit;
+            problem.MemoryLimit = request.MemoryLimit;
+            problem.ProblemStatement = request.ProblemStatement;
+            problem.FormatInput = request.FormatInput;
+            problem.FormatOutput = request.FormatOutput;
+            _context.Problem.Update(problem);
 
-            return Ok(submissions);
-        }
-        [HttpGet("solution/{problemId}")]
-        [Authorize]
-        public async Task<IActionResult> GetProblemSolution(int problemId)
-        {
-            var problem = await _context.Problem.FindAsync(problemId);
-            if (problem == null)
-                return NotFound("Problem not found.");
-
-            var solution = await _context.Solution
-                .FirstOrDefaultAsync(s => s.ProblemId == problemId);
-            if (solution == null)
-                return NotFound("Solution not found.");
-
-            var author = await _context.User
-                .Where(u => u.UserId == problem.AuthorId)
-                .Select(u => u.FullName)
-                .FirstOrDefaultAsync();
-
-            return Ok(new
+            // Update solution
+            var solution = await _context.Solution.FirstOrDefaultAsync(s => s.ProblemId == problemId);
+            if (solution != null)
             {
-                ProblemTitle = problem.Name,
-                Author = author,
-                Explanation = solution.Explanation,
-                Language = solution.Language,
-                SourceCode = solution.Source
-            });
+                solution.Source = request.Solution.Source;
+                solution.Language = request.Solution.Language;
+                solution.Explanation = request.Solution.Explanation;
+                _context.Solution.Update(solution);
+            }
+
+            // Remove old constraints and add new
+            var oldConstraints = _context.ProblemConstraint.Where(c => c.ProblemId == problemId);
+            _context.ProblemConstraint.RemoveRange(oldConstraints);
+            foreach (var c in request.Constraints)
+            {
+                _context.ProblemConstraint.Add(new ProblemConstraint
+                {
+                    ProblemId = problemId,
+                    Variable = c.Variable,
+                    MinValue = c.MinValue,
+                    MaxValue = c.MaxValue
+                });
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Problem updated successfully" });
         }
 
-        [Authorize]
-        [HttpGet("details/{problemId}")]
-        public async Task<IActionResult> GetProblemDetails(int problemId)
+        // =================== Edit ===================
+        [HttpGet("edit-details/{problemId}")]
+        [Authorize(Roles = "1,2")]
+        public async Task<IActionResult> GetProblemEditDetails(int problemId)
         {
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            if (userIdClaim == null) return Unauthorized("User not logged in.");
-            int userId = int.Parse(userIdClaim.Value);
-
             var problem = await _context.Problem.FindAsync(problemId);
-            if (problem == null) return NotFound("Problem not found.");
+            if (problem == null) return NotFound("Problem not found");
 
-            var moduleContent = await _context.ModuleContent.FindAsync(problem.ModuleContentId);
-            var module = await _context.Modules.FindAsync(moduleContent.ModuleId);
-            var section = await _context.Sections.FindAsync(module.SectionId);
-
-            // 🔍 Xác định Status của bài với user hiện tại
-            var userSubmissions = _context.Submission
-                .Where(s => s.ProblemId == problemId && s.UserId == userId)
-                .ToList();
-
-            string status = "Not Started";
-            if (userSubmissions.Any(s => s.Result == "Accepted"))
-                status = "Completed";
-            else if (userSubmissions.Any())
-                status = "In Progress";
-
-            // 🔍 Constraints
             var constraints = await _context.ProblemConstraint
                 .Where(c => c.ProblemId == problemId)
-                .Select(c => new
-                {
-                    c.Variable,
-                    c.MinValue,
-                    c.MaxValue
-                })
                 .ToListAsync();
 
-            // 🔍 Sample Testcases
-            var sampleTests = await _context.Testcase
-                .Where(t => t.ProblemId == problemId && t.IsSample == true)
+            var solution = await _context.Solution.FirstOrDefaultAsync(s => s.ProblemId == problemId);
+
+            var testcases = await _context.Testcase
+                .Where(t => t.ProblemId == problemId)
                 .Select(t => new
                 {
-                    Input = System.IO.File.ReadAllText(Path.Combine("wwwroot", t.InputPath.TrimStart('/'))),
-                    Output = System.IO.File.ReadAllText(Path.Combine("wwwroot", t.OutputPath.TrimStart('/'))),
-                    Explanation = t.Explanation
+                    t.TestcaseId,
+                    t.InputPath,
+                    t.OutputPath,
+                    t.IsSample,
+                    t.Explanation
                 })
                 .ToListAsync();
 
             return Ok(new
             {
-                    Name = problem.Name,
-                    Frequent = problem.Frequent,
-                    ModuleContentName = moduleContent.Title,
-                    SectionName = section.Name,
-                    Difficulty = problem.Difficulty,
-                    TimeLimit = problem.TimeLimit,
-                    MemoryLimit = problem.MemoryLimit,
-                    Status = status,
-                    ProblemStatement = problem.ProblemStatement,
-                    FormatInput = problem.FormatInput,
-                    FormatOutput = problem.FormatOutput,
-                    Constraints = constraints,
-                    SampleTestcases = sampleTests
+                problem.ProblemId,
+                problem.Name,
+                problem.Frequent,
+                problem.ModuleContentId,
+                problem.Difficulty,
+                problem.TimeLimit,
+                problem.MemoryLimit,
+                problem.ProblemStatement,
+                problem.FormatInput,
+                problem.FormatOutput,
+                Constraints = constraints,
+                Solution = solution,
+                Testcases = testcases
             });
         }
+
+        // =================== Edit ===================
+        [HttpGet("get-testcase-file")]
+        public IActionResult GetTestcaseFile([FromQuery] string filePath)
+        {
+            var fullPath = Path.Combine("wwwroot", filePath);
+            if (!System.IO.File.Exists(fullPath))
+                return NotFound();
+
+            string content = System.IO.File.ReadAllText(fullPath);
+            return Ok(new { content });
+        }
+
+        // =================== Edit ===================
+        [HttpPut("update-testcase-file")]
+        public async Task<IActionResult> UpdateTestcaseFile([FromBody] FileUpdateRequest req)
+        {
+            var fullPath = Path.Combine("wwwroot", req.FilePath);
+            System.IO.File.WriteAllText(fullPath, req.NewContent);
+
+            var testcase = _context.Testcase.FirstOrDefault(t => t.InputPath == req.FilePath || t.OutputPath == req.FilePath);
+            if (testcase != null)
+            {
+                int problemId = testcase.ProblemId;
+                int testcaseId = testcase.TestcaseId;
+
+                var submissionIds = _context.Submission
+                    .Where(s => s.ProblemId == problemId)
+                    .Select(s => s.SubmissionId)
+                    .ToList();
+
+                var resultsToDelete = _context.SubmissionResult
+                    .Where(sr => sr.TestcaseId == testcaseId && submissionIds.Contains(sr.SubmissionId));
+
+                _context.SubmissionResult.RemoveRange(resultsToDelete);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok("Updated");
+        }
+
+        // =================== Edit ===================
+        [HttpDelete("delete-testcase/{testcaseId}")]
+        public async Task<IActionResult> DeleteTestcase(int testcaseId)
+        {
+            var tc = await _context.Testcase.FindAsync(testcaseId);
+            if (tc == null) return NotFound();
+
+            var inputPath = Path.Combine("wwwroot", tc.InputPath);
+            var outputPath = Path.Combine("wwwroot", tc.OutputPath);
+            if (System.IO.File.Exists(inputPath)) System.IO.File.Delete(inputPath);
+            if (System.IO.File.Exists(outputPath)) System.IO.File.Delete(outputPath);
+
+            var submissionIds = _context.Submission
+                .Where(s => s.ProblemId == tc.ProblemId)
+                .Select(s => s.SubmissionId)
+                .ToList();
+
+            var resultsToDelete = _context.SubmissionResult
+                .Where(sr => sr.TestcaseId == tc.TestcaseId && submissionIds.Contains(sr.SubmissionId));
+
+            _context.SubmissionResult.RemoveRange(resultsToDelete);
+            _context.Testcase.Remove(tc);
+            await _context.SaveChangesAsync();
+
+            return Ok("Testcase deleted");
+        }
+
+        // =================== Edit ===================
+        [HttpPost("add-manual-testcase")]
+        public async Task<IActionResult> AddManualTestcase([FromBody] ManualTestcaseRequest req)
+        {
+            var testcase = new Testcase
+            {
+                ProblemId = req.ProblemId,
+                InputPath = SaveToFile(req.Input, req.ProblemId, "input"),
+                OutputPath = SaveToFile(req.Output, req.ProblemId, "output"),
+                IsSample = true,
+                Explanation = req.Explanation
+            };
+
+            _context.Testcase.Add(testcase);
+            await _context.SaveChangesAsync();
+            return Ok("Manual testcase added");
+        }
+
+        // =================== Edit ===================
+        [HttpPost("add-auto-testcase")]
+        public async Task<IActionResult> AddAutoTestcase([FromBody] AutoTestcaseRequest req)
+        {
+            int generatorLangId = _judge0Service.MapLanguageToId(req.GeneratorLanguage);
+            int solutionLangId = _judge0Service.MapLanguageToId(req.SolutionLanguage);
+
+            for (int i = 0; i < req.NumberOfTestcases; i++)
+            {
+                string generatedInput = await _judge0Service.RunCodeAndGetOutputWithoutInput(
+                    req.GeneratorSource, generatorLangId.ToString());
+
+                string expectedOutput = await _judge0Service.ExecuteAndGetOutputAsync(
+                    req.SolutionSource, solutionLangId.ToString(), generatedInput);
+
+                var testcase = new Testcase
+                {
+                    ProblemId = req.ProblemId,
+                    InputPath = SaveToFile(generatedInput, req.ProblemId, "input"),
+                    OutputPath = SaveToFile(expectedOutput, req.ProblemId, "output"),
+                    IsSample = false
+                };
+
+                _context.Testcase.Add(testcase);
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok("Auto testcases added");
+        }
+
+
+
+        //==================NEW EDIT===================
+
+        [Authorize(Roles = "1,2")]
+        [HttpPut("update/{problemId}")]
+        public async Task<IActionResult> UpdateProblem(int problemId, [FromBody] ProblemUpdateRequest request)
+        {
+            var problem = await _context.Problem.FindAsync(problemId);
+            if (problem == null) return NotFound("Problem not found");
+
+            // Cập nhật thông tin cơ bản
+            problem.Name = request.Name;
+            problem.ProblemStatement = request.ProblemStatement;
+            problem.TimeLimit = request.TimeLimit;
+            problem.MemoryLimit = request.MemoryLimit;
+            problem.FormatInput = request.FormatInput;
+            problem.FormatOutput = request.FormatOutput;
+            problem.Difficulty = request.Difficulty;
+            problem.ModuleContentId = request.ModuleContentId;
+            problem.Frequent = request.Frequent;
+
+            // Cập nhật Solution
+            var solution = await _context.Solution.FirstOrDefaultAsync(s => s.ProblemId == problemId);
+            if (solution == null)
+            {
+                solution = new Solution { ProblemId = problemId };
+                _context.Solution.Add(solution);
+            }
+
+            solution.Language = request.SolutionLanguage;
+            solution.Explanation = request.SolutionExplanation;
+            solution.Source = request.SolutionSource;
+
+            // Cập nhật Constraints
+            var oldConstraints = _context.ProblemConstraint.Where(c => c.ProblemId == problemId);
+            _context.ProblemConstraint.RemoveRange(oldConstraints);
+            foreach (var c in request.Constraints)
+            {
+                _context.ProblemConstraint.Add(new ProblemConstraint
+                {
+                    ProblemId = problemId,
+                    Variable = c.Variable,
+                    MinValue = c.MinValue,
+                    MaxValue = c.MaxValue
+                });
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok("✅ Problem updated successfully");
+        }
+
+
+        [Authorize(Roles = "1,2")]
+        [HttpPut("update-sample-testcases/{problemId}")]
+        public async Task<IActionResult> UpdateSampleTestcases(int problemId, [FromBody] SampleTestcaseUpdateRequest request)
+        {
+            string basePath = Path.Combine("wwwroot", "testcases", $"Problem_{problemId}");
+            Directory.CreateDirectory(basePath);
+
+            // 1. Update existing
+            foreach (var t in request.ToUpdate)
+            {
+                var tc = await _context.Testcase.FindAsync(t.TestcaseId);
+                if (tc == null) continue;
+
+                var relatedResults = _context.SubmissionResult.Where(r => r.TestcaseId == tc.TestcaseId);
+                _context.SubmissionResult.RemoveRange(relatedResults);
+
+                System.IO.File.WriteAllText(Path.Combine("wwwroot", tc.InputPath.TrimStart('/')), t.Input);
+                System.IO.File.WriteAllText(Path.Combine("wwwroot", tc.OutputPath.TrimStart('/')), t.ExpectedOutput);
+                tc.Explanation = t.Explanation;
+            }
+
+            // 2. Delete by ID
+            foreach (var id in request.ToDelete)
+            {
+                var tc = await _context.Testcase.FindAsync(id);
+                if (tc == null) continue;
+
+                var relatedResults = _context.SubmissionResult.Where(r => r.TestcaseId == id);
+                _context.SubmissionResult.RemoveRange(relatedResults);
+
+                string inputFile = Path.Combine("wwwroot", tc.InputPath.TrimStart('/'));
+                string outputFile = Path.Combine("wwwroot", tc.OutputPath.TrimStart('/'));
+                if (System.IO.File.Exists(inputFile)) System.IO.File.Delete(inputFile);
+                if (System.IO.File.Exists(outputFile)) System.IO.File.Delete(outputFile);
+
+                _context.Testcase.Remove(tc);
+            }
+
+            // 3. Add new
+            foreach (var t in request.ToAdd)
+            {
+                string Save(string content, string type)
+                {
+                    var fileName = $"{type}_{Guid.NewGuid()}.txt";
+                    var filePath = Path.Combine(basePath, fileName);
+                    System.IO.File.WriteAllText(filePath, content);
+                    return $"/testcases/Problem_{problemId}/{fileName}";
+                }
+
+                _context.Testcase.Add(new Testcase
+                {
+                    ProblemId = problemId,
+                    InputPath = Save(t.Input, "input"),
+                    OutputPath = Save(t.ExpectedOutput, "output"),
+                    IsSample = true,
+                    Explanation = t.Explanation
+                });
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok("✅ Sample testcases updated");
+        }
+
+
+        [Authorize(Roles = "1,2")]
+        [HttpPut("update-non-sample-testcases/{problemId}")]
+        public async Task<IActionResult> UpdateNonSampleTestcases(int problemId, [FromBody] NonSampleTestcaseUpdateRequest request)
+        {
+            string basePath = Path.Combine("wwwroot", "testcases", $"Problem_{problemId}");
+            Directory.CreateDirectory(basePath);
+
+            // 1. Update existing testcases
+            foreach (var t in request.ToUpdate)
+            {
+                var tc = await _context.Testcase.FindAsync(t.TestcaseId);
+                if (tc == null || tc.IsSample) continue; // bỏ qua nếu là sample hoặc không tồn tại
+
+                // 🔥 Xóa các bản ghi SubmissionResult liên quan
+                var relatedResults = _context.SubmissionResult.Where(r => r.TestcaseId == tc.TestcaseId);
+                _context.SubmissionResult.RemoveRange(relatedResults);
+
+                // Ghi lại file
+                var inputPath = Path.Combine("wwwroot", tc.InputPath.TrimStart('/'));
+                var outputPath = Path.Combine("wwwroot", tc.OutputPath.TrimStart('/'));
+
+                System.IO.File.WriteAllText(inputPath, t.Input);
+                System.IO.File.WriteAllText(outputPath, t.ExpectedOutput);
+
+                tc.Explanation = t.Explanation;
+            }
+
+            // 2. Xóa testcase theo id
+            foreach (var id in request.ToDelete)
+            {
+                var tc = await _context.Testcase.FindAsync(id);
+                if (tc == null || tc.IsSample) continue;
+
+                var relatedResults = _context.SubmissionResult.Where(r => r.TestcaseId == id);
+                _context.SubmissionResult.RemoveRange(relatedResults);
+
+                var inputPath = Path.Combine("wwwroot", tc.InputPath.TrimStart('/'));
+                var outputPath = Path.Combine("wwwroot", tc.OutputPath.TrimStart('/'));
+
+                if (System.IO.File.Exists(inputPath)) System.IO.File.Delete(inputPath);
+                if (System.IO.File.Exists(outputPath)) System.IO.File.Delete(outputPath);
+
+                _context.Testcase.Remove(tc);
+            }
+
+            // 3. Thêm testcase mới
+            foreach (var t in request.ToAdd)
+            {
+                string Save(string content, string type)
+                {
+                    var fileName = $"{type}_{Guid.NewGuid()}.txt";
+                    var filePath = Path.Combine(basePath, fileName);
+                    System.IO.File.WriteAllText(filePath, content);
+                    return $"/testcases/Problem_{problemId}/{fileName}";
+                }
+
+                _context.Testcase.Add(new Testcase
+                {
+                    ProblemId = problemId,
+                    InputPath = Save(t.Input, "input"),
+                    OutputPath = Save(t.ExpectedOutput, "output"),
+                    IsSample = false,
+                    Explanation = t.Explanation
+                });
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok("✅ Non-sample testcases updated successfully");
+        }
+
+        [Authorize(Roles = "1,2")]
+        [HttpPost("generate-random-testcases/{problemId}")]
+        public async Task<IActionResult> GenerateRandomTestcases(int problemId, [FromBody] GenerateTestcaseRequest request)
+        {
+            var problem = await _context.Problem.FindAsync(problemId);
+            if (problem == null)
+                return NotFound("Problem not found");
+
+            if (request.NumberOfTestcases <= 0)
+                return BadRequest("Invalid number of testcases");
+
+            string folder = Path.Combine("wwwroot", "testcases", $"Problem_{problemId}");
+            Directory.CreateDirectory(folder);
+
+            int generatorLangId = _judge0Service.MapLanguageToId(request.TestGeneratorLanguage);
+            int solutionLangId = _judge0Service.MapLanguageToId(request.SolutionLanguage);
+
+            for (int i = 0; i < request.NumberOfTestcases; i++)
+            {
+                // Sinh input từ generator
+                string generatedInput = await _judge0Service.RunCodeAndGetOutputWithoutInput(
+                    request.TestGeneratorSource, generatorLangId.ToString());
+
+                if (string.IsNullOrWhiteSpace(generatedInput)) continue;
+
+                // Sinh output từ solution
+                string expectedOutput = await _judge0Service.ExecuteAndGetOutputAsync(
+                    request.SolutionSource, solutionLangId.ToString(), generatedInput);
+
+                if (expectedOutput == null) expectedOutput = "";
+
+                // Ghi file
+                string Save(string content, string type)
+                {
+                    var fileName = $"{type}_{Guid.NewGuid()}.txt";
+                    var filePath = Path.Combine(folder, fileName);
+                    System.IO.File.WriteAllText(filePath, content);
+                    return $"/testcases/Problem_{problemId}/{fileName}";
+                }
+
+                _context.Testcase.Add(new Testcase
+                {
+                    ProblemId = problemId,
+                    InputPath = Save(generatedInput, "input"),
+                    OutputPath = Save(expectedOutput, "output"),
+                    IsSample = false,
+                    Explanation = null 
+                });
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok("✅ Random testcases generated");
+        }
+
 
 
 

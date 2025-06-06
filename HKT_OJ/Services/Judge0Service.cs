@@ -13,7 +13,7 @@ namespace HKT_OJ.Services
         {
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("https://judge0-ce.p.rapidapi.com/");
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", "a555b3b428msh4d9e4ed63f3d25dp149914jsna261d830c5ac");
+            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", "bc566068b9msh8d895514b2c30acp1be086jsn1921678b893e");
             _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "judge0-ce.p.rapidapi.com");
         }
 
@@ -49,11 +49,13 @@ namespace HKT_OJ.Services
         }
         public async Task<string> ExecuteAndGetOutputAsync(string sourceCode, string languageId, string input)
         {
+            string Base64(string s) => Convert.ToBase64String(Encoding.UTF8.GetBytes(s ?? ""));
+
             var payload = new
             {
-                source_code = sourceCode,
+                source_code = Base64(sourceCode),
                 language_id = languageId,
-                stdin = input,
+                stdin = Base64(input),
                 time_limit = 2.0f,
                 memory_limit = 262144
             };
@@ -61,15 +63,22 @@ namespace HKT_OJ.Services
             var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("submissions?base64_encoded=true&wait=true", content);
             var responseBody = await response.Content.ReadAsStringAsync();
+
             Console.WriteLine("Judge0 response: " + responseBody);
+
             using var doc = JsonDocument.Parse(responseBody);
-            return doc.RootElement.GetProperty("stdout").GetString() ?? "";
+            return doc.RootElement.TryGetProperty("stdout", out var stdoutBase64)
+                ? Encoding.UTF8.GetString(Convert.FromBase64String(stdoutBase64.GetString() ?? ""))
+                : "";
         }
+
         public async Task<string> RunCodeAndGetOutputWithoutInput(string sourceCode, string languageId)
         {
+            string Base64(string s) => Convert.ToBase64String(Encoding.UTF8.GetBytes(s ?? ""));
+
             var payload = new
             {
-                source_code = sourceCode,
+                source_code = Base64(sourceCode),
                 language_id = languageId,
                 time_limit = 2.0f,
                 memory_limit = 262144
@@ -79,9 +88,15 @@ namespace HKT_OJ.Services
             var response = await _httpClient.PostAsync("submissions?base64_encoded=true&wait=true", content);
             var responseBody = await response.Content.ReadAsStringAsync();
 
+            Console.WriteLine("Judge0 response2222: " + responseBody);
+
             using var doc = JsonDocument.Parse(responseBody);
-            return doc.RootElement.TryGetProperty("stdout", out var stdout) ? stdout.GetString() ?? "" : "";
+            return doc.RootElement.TryGetProperty("stdout", out var stdoutBase64)
+                ? Encoding.UTF8.GetString(Convert.FromBase64String(stdoutBase64.GetString() ?? ""))
+                : "";
         }
+
+
 
 
     }

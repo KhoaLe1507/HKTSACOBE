@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Dynamic Programming</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from {
+                filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.3));
+            }
+            to {
+                filter: drop-shadow(0 0 30px rgba(118, 75, 162, 0.4));
+            }
+        }
+
+        h2 {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin: 40px 0 20px 0;
+            color: #2c3e50;
+            border-left: 5px solid #667eea;
+            padding-left: 20px;
+            animation: fadeInLeft 0.6s ease-out;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin: 30px 0 15px 0;
+            color: #34495e;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        p {
+            font-size: 1.1em;
+            font-weight: 500;
+            margin-bottom: 20px;
+            text-align: justify;
+            color: #444;
+            animation: fadeIn 0.7s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 10px 30px rgba(240, 147, 251, 0.3);
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 10px 30px rgba(240, 147, 251, 0.3);
+            }
+            50% {
+                box-shadow: 0 15px 40px rgba(240, 147, 251, 0.5);
+            }
+        }
+
+        .complexity-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 700;
+            font-size: 1.1em;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            animation: slideInRight 0.6s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .code-container {
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 0;
+            margin: 25px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            animation: codeSlideIn 0.8s ease-out;
+        }
+
+        @keyframes codeSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .code-header {
+            background: linear-gradient(90deg, #4a5568, #2d3748);
+            padding: 15px 20px;
+            border-bottom: 1px solid #4a5568;
+            color: #e2e8f0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .code-header::before {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: #ff5f57;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #28ca42;
+        }
+
+        pre {
+            margin: 0 !important;
+            background: #2d3748 !important;
+            padding: 20px !important;
+            border-radius: 0 !important;
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+            font-weight: 500 !important;
+        }
+
+        .math-formula {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: mathPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes mathPulse {
+            from {
+                background: #f8f9fa;
+            }
+            to {
+                background: #e3f2fd;
+            }
+        }
+
+        .problem-example {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 15px 35px rgba(255, 154, 158, 0.3);
+            animation: exampleFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes exampleFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .approach-section {
+            background: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            animation: approachSlide 0.7s ease-out;
+        }
+
+        @keyframes approachSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .transition-list {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 3px 10px rgba(255, 193, 7, 0.2);
+        }
+
+        .transition-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .transition-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ffeaa7;
+            font-weight: 600;
+        }
+
+        .transition-list li:last-child {
+            border-bottom: none;
+        }
+
+        .section {
+            margin: 50px 0;
+            padding: 20px 0;
+            animation: sectionFade 0.8s ease-out;
+        }
+
+        @keyframes sectionFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .intro-section {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .intro-section p {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin: 0;
+            color: white;
+        }
+
+        .line-numbers {
+            color: #6b7280;
+            user-select: none;
+            margin-right: 1em;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            h2 {
+                font-size: 1.8em;
+            }
+            
+            pre {
+                font-size: 12px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Introduction to Dynamic Programming</h1>
+        
+        <div class="intro-section">
+            <p>Master the art of breaking down complex problems into simpler sub-problems</p>
+        </div>
+
+        <div class="section">
+            <h2>What is Dynamic Programming?</h2>
+            <p>Dynamic Programming (DP) is an essential algorithmic technique in Competitive Programming, particularly crucial from the gold division to prestigious competitions like the International Olympiad of Informatics. The fundamental principle of DP is to break down complex problems into smaller, manageable sub-problems, thereby eliminating the redundant computations that plague brute force approaches.</p>
+            
+            <div class="highlight-box">
+                <p><strong>Key Insight:</strong> Although grasping the general concepts behind DP is relatively straightforward, the technique's versatility allows it to be applied across a diverse spectrum of problems, making it an indispensable skill for competitors in the USACO Gold division and beyond.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Example Problem: Frog Jump</h2>
+            <div class="problem-example">
+                <h3>Problem Statement</h3>
+                <p>A frog needs to travel from stone 1 to stone N (where N ≤ 10⁵). The frog can only jump a distance of one or two stones at a time. The cost of traveling between any two stones i and j is given by |hᵢ - hⱼ|, where hᵢ represents the height of stone i. Find the minimum total cost for the frog to reach stone N.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Approach 1: Without Dynamic Programming</h2>
+            <div class="complexity-box">
+                Time Complexity: O(2ᴺ)
+            </div>
+            
+            <p>The naive recursive approach considers both possible jumps (1 stone or 2 stones) at each position. Since there are two possibilities at each step, the recursion creates a binary tree where each branch splits into two sub-branches. This exponential growth results in a time complexity of O(2ᴺ), which becomes impractical for large values of N.</p>
+            
+            <p>However, this approach can be significantly optimized using dynamic programming by maintaining a record of "optimal states" to avoid recalculating the same states multiple times. For instance, when computing jump sequences like [1,2,1] and [2,1,2], both paths reach stone 3, and DP allows us to cache and reuse this state.</p>
+        </div>
+
+        <div class="section">
+            <h2>Approach 2: With Dynamic Programming</h2>
+            <div class="complexity-box">
+                Time Complexity: O(N)
+            </div>
+            
+            <p>Dynamic Programming offers two fundamental approaches for solving problems:</p>
+            
+            <div class="approach-section">
+                <p><strong>Push DP:</strong> Update future states based on the current state</p>
+                <p><strong>Pull DP:</strong> Calculate the current state based on past states</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Push DP Implementation</h3>
+            <p>In Push DP, we define dp[i] as the minimum cost to reach stone i. From each stone, we can make two possible transitions:</p>
+            
+            <div class="transition-list">
+                <ul>
+                    <li>Jump one stone: dp[i + 1] = min(dp[i + 1], dp[i] + |height[i] - height[i + 1]|)</li>
+                    <li>Jump two stones: dp[i + 2] = min(dp[i + 2], dp[i] + |height[i] - height[i + 2]|)</li>
+                </ul>
+            </div>
+
+            <div class="math-formula">
+                Base case: dp[0] = 0 (frog starts at stone 0)
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">Push DP Solution - C++</div>
+                <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    int N;
+    cin &gt;&gt; N;
+    vector&lt;int&gt; height(N);
+    for (int i = 0; i &lt; N; i++) {
+        cin &gt;&gt; height[i];
+    }
+    
+    // dp[i] represents minimum cost to reach stone i
+    vector&lt;int&gt; dp(N, INT_MAX);
+    dp[0] = 0;  // Base case: frog starts at stone 0
+    
+    for (int i = 0; i &lt; N; i++) {
+        // Jump one stone
+        if (i + 1 &lt; N) {
+            dp[i + 1] = min(dp[i + 1], 
+                           dp[i] + abs(height[i] - height[i + 1]));
+        }
+        
+        // Jump two stones
+        if (i + 2 &lt; N) {
+            dp[i + 2] = min(dp[i + 2], 
+                           dp[i] + abs(height[i] - height[i + 2]));
+        }
+    }
+    
+    cout &lt;&lt; dp[N - 1] &lt;&lt; endl;
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Pull DP Implementation</h3>
+            <p>In Pull DP, we calculate the minimum cost to reach stone i by considering all possible ways to arrive at that stone:</p>
+            
+            <div class="transition-list">
+                <ul>
+                    <li>From stone i-1: dp[i] = min(dp[i], dp[i-1] + |height[i] - height[i-1]|)</li>
+                    <li>From stone i-2: dp[i] = min(dp[i], dp[i-2] + |height[i] - height[i-2]|)</li>
+                </ul>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">Pull DP Solution - C++</div>
+                <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    int N;
+    cin &gt;&gt; N;
+    vector&lt;int&gt; height(N);
+    for (int i = 0; i &lt; N; i++) {
+        cin &gt;&gt; height[i];
+    }
+    
+    // dp[i] represents minimum cost to reach stone i
+    vector&lt;int&gt; dp(N, INT_MAX);
+    dp[0] = 0;  // Base case: frog starts at stone 0
+    
+    for (int i = 1; i &lt; N; i++) {
+        // Jump from previous stone (i-1)
+        dp[i] = min(dp[i], dp[i - 1] + abs(height[i] - height[i - 1]));
+        
+        // Jump from two stones back (i-2)
+        if (i &gt;= 2) {
+            dp[i] = min(dp[i], dp[i - 2] + abs(height[i] - height[i - 2]));
+        }
+    }
+    
+    cout &lt;&lt; dp[N - 1] &lt;&lt; endl;
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Classical DP Problems</h2>
+            <p>The world of Dynamic Programming encompasses numerous classical problems that serve as foundational building blocks for more complex algorithmic challenges. These classical problems, while well-established in competitive programming literature, provide essential insights into the various patterns and techniques used in DP.</p>
+            
+            <div class="highlight-box">
+                <p><strong>Important Note:</strong> While these problems are considered "classical," this doesn't necessarily mean they appear frequently in modern contests. Since many competitors are familiar with these standard problems, contest organizers rarely use direct applications of them. Instead, they often appear as sub-problems within larger, more complex challenges.</p>
+            </div>
+            
+            <p>Understanding these classical patterns is crucial because they form the foundation for recognizing DP opportunities in novel problem contexts. The key is to identify when a new problem can be reduced to or incorporates elements from these well-known paradigms.</p>
+        </div>
+
+        <div class="section">
+            <h2>Key Takeaways</h2>
+            <div class="approach-section">
+                <p><strong>1. Problem Decomposition:</strong> DP excels at breaking complex problems into smaller, overlapping sub-problems.</p>
+                <p><strong>2. State Management:</strong> Efficient state representation and transition are crucial for optimal DP solutions.</p>
+                <p><strong>3. Time vs Space Trade-off:</strong> DP trades memory for computational efficiency, often dramatically reducing time complexity.</p>
+                <p><strong>4. Pattern Recognition:</strong> Learning classical DP problems helps identify similar patterns in new challenges.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scrolling animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.section, .math-formula, .code-container');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            elements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -12,5 +12,7 @@ namespace HKT_OJ.Models
         public string? ImageUrl { get; set; }
         [Required] public DateTime CreatedAt { get; set; }
         [Required] public string Visibility { get; set; }
+
+        [Required] public string ApprovalStatus { get; set; } = "Pending";
     }
 }

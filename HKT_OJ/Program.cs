@@ -69,6 +69,7 @@ namespace HKT_OJ
                 c.RoutePrefix = string.Empty;
             });
             app.UseCors("AllowReactApp");
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();

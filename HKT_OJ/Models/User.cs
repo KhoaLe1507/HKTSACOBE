@@ -18,7 +18,7 @@ namespace HKT_OJ.Models
         [Required] public string PhoneNumber { get; set; }
         [Required] public bool IsActive { get; set; }
         [Required] public DateTime CreatedAt { get; set; }
-        [Required] public string School { get; set; }
+        [Required] public string? School { get; set; }
         [Required] public int ProblemSolved { get; set; } = 0;
         [Required] public int ProblemCreated { get; set; } = 0;
     }
