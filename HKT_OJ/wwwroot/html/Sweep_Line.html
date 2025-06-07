@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweep Line</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            animation: slideInDown 1s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 280px;
+            height: 4px;
+            background: linear-gradient(90deg, #8e44ad, #9b59b6);
+            margin: 20px auto;
+            border-radius: 2px;
+            animation: expandLine 1.2s ease-out 0.5s both;
+        }
+
+        @keyframes expandLine {
+            from {
+                width: 0;
+            }
+            to {
+                width: 280px;
+            }
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #34495e;
+            margin-top: 60px;
+            margin-bottom: 25px;
+            border-left: 5px solid #8e44ad;
+            padding-left: 20px;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h3::before {
+            content: '📈';
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+
+        p {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: justify;
+            line-height: 1.8;
+        }
+
+        .code-container {
+            background: #1e1e1e;
+            border-radius: 12px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: 1px solid #333;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .code-header {
+            background: linear-gradient(90deg, #8e44ad, #9b59b6);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #444;
+        }
+
+        pre {
+            margin: 0 !important;
+            background: #1e1e1e !important;
+            border-radius: 0 !important;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+            font-weight: 500 !important;
+        }
+
+        .line-numbers-rows {
+            border-right: 1px solid #444 !important;
+            padding-right: 10px !important;
+            margin-right: 15px !important;
+        }
+
+        .complexity {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            margin: 25px 0;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.1);
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 35px;
+            background: #fafbfc;
+            border-radius: 15px;
+            border: 1px solid #e1e8ed;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hover-effect {
+            transition: all 0.3s ease;
+        }
+
+        .hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #8e44ad 0%, #9b59b6 100%);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 800;
+        }
+
+        .algorithm-box {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #28a745;
+            font-weight: 700;
+        }
+
+        .algorithm-box::before {
+            content: '⚡ Key Insight: ';
+            font-weight: 800;
+            color: #155724;
+        }
+
+        .sweep-concept-box {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #9c27b0;
+            font-weight: 700;
+        }
+
+        .sweep-concept-box::before {
+            content: '📏 Sweep Line Concept: ';
+            font-weight: 800;
+            color: #7b1fa2;
+        }
+
+        .efficiency-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #ff9800;
+            font-weight: 700;
+        }
+
+        .efficiency-box::before {
+            content: '⚡ Efficiency Insight: ';
+            font-weight: 800;
+            color: #f57c00;
+        }
+
+        .focus-problem {
+            background: linear-gradient(135deg, #fef9e7, #f9e79f);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #8e44ad;
+            text-align: center;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(142, 68, 173, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(142, 68, 173, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(142, 68, 173, 0);
+            }
+        }
+
+        .math-formula {
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: #2d3748;
+            border: 1px solid #e9ecef;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+            margin: 25px 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 4px solid #8e44ad;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -15px;
+            top: 15px;
+            background: #8e44ad;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .introduction-box {
+            background: linear-gradient(135deg, #fef9e7, #f9e79f);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #8e44ad;
+            font-weight: 700;
+        }
+
+        .introduction-box::before {
+            content: '📈 Sweep Line Algorithm: ';
+            font-weight: 800;
+            color: #e67e22;
+        }
+
+        .solution-header {
+            color: #8e44ad;
+            font-weight: 800;
+            border-bottom: 3px solid #8e44ad;
+            padding-bottom: 8px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #718096;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .divide-conquer-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #2196f3;
+            font-weight: 700;
+        }
+
+        .divide-conquer-box::before {
+            content: '🔄 Divide & Conquer: ';
+            font-weight: 800;
+            color: #1976d2;
+        }
+
+        .closest-pair-box {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #f44336;
+            font-weight: 700;
+        }
+
+        .closest-pair-box::before {
+            content: '📍 Closest Pair Problem: ';
+            font-weight: 800;
+            color: #d32f2f;
+        }
+
+        .optimization-box {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #28a745;
+            font-weight: 700;
+        }
+
+        .optimization-box::before {
+            content: '🎯 Optimization: ';
+            font-weight: 800;
+            color: #155724;
+        }
+
+        .bounding-box {
+            background: linear-gradient(135deg, #f0f4f8, #ddd6fe);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #8b5cf6;
+            font-weight: 700;
+        }
+
+        .bounding-box::before {
+            content: '📦 Bounding Box Analysis: ';
+            font-weight: 800;
+            color: #7c3aed;
+        }
+
+        .set-approach-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #ff9800;
+            font-weight: 700;
+        }
+
+        .set-approach-box::before {
+            content: '🗂️ Set-Based Approach: ';
+            font-weight: 800;
+            color: #f57c00;
+        }
+
+        .segment-intersection-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #2196f3;
+            font-weight: 700;
+        }
+
+        .segment-intersection-box::before {
+            content: '📐 Segment Intersection: ';
+            font-weight: 800;
+            color: #1976d2;
+        }
+
+        .active-segments-box {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #9c27b0;
+            font-weight: 700;
+        }
+
+        .active-segments-box::before {
+            content: '🔄 Active Segments: ';
+            font-weight: 800;
+            color: #7b1fa2;
+        }
+
+        .resource-list {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #28a745;
+            font-weight: 700;
+        }
+
+        .resource-list::before {
+            content: '📖 Resources: ';
+            font-weight: 800;
+            color: #155724;
+        }
+
+        .implementation-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #2196f3;
+            font-weight: 700;
+        }
+
+        .implementation-box::before {
+            content: '⚙️ Implementation: ';
+            font-weight: 800;
+            color: #1976d2;
+        }
+
+        ul {
+            margin: 25px 0;
+            padding-left: 0;
+        }
+
+        li {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            list-style: none;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        li::before {
+            content: '📊';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .applications-box {
+            background: linear-gradient(135deg, #f0f4f8, #ddd6fe);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #8b5cf6;
+            font-weight: 700;
+        }
+
+        .applications-box::before {
+            content: '📖 Applications: ';
+            font-weight: 800;
+            color: #7c3aed;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+            
+            code {
+                font-size: 0.85rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sweep Line</h1>
+        <p class="subtitle">Advanced Computational Geometry Technique</p>
+        
+        <div class="section hover-effect">
+            <h2>Introduction to Sweep Line</h2>
+            
+            <div class="introduction-box">
+                Imagine you have a vertical line that "sweeps" the plane from left to right. That's the main idea behind the sweep line algorithm - a powerful computational geometry technique used to solve complex geometric problems efficiently.
+            </div>
+
+            <div class="sweep-concept-box">
+                <strong>Core Concept:</strong> The sweep line algorithm processes geometric objects by moving a conceptual line across the plane, typically from left to right. As the line moves, it encounters various geometric events (like points, line intersections, or polygon vertices) that trigger specific operations.
+            </div>
+
+            <div class="efficiency-box">
+                You might be thinking "wait - isn't keeping track of the sweep line at all possible positions super inefficient?" And you'd be correct. However, we don't actually need to keep track of the sweep line at all possible positions - only at the "critical" positions (e.g. points and intersections).
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Event-Driven Processing:</strong> The key insight is that we only care about discrete events where something interesting happens. Between events, the relative ordering of geometric objects remains constant, so we can skip over empty space efficiently.
+            </div>
+
+            <div class="applications-box">
+                <strong>Common Applications:</strong><br>
+                • <strong>Closest Pair of Points:</strong> Finding the minimum distance between points<br>
+                • <strong>Line Segment Intersection:</strong> Detecting intersections among multiple segments<br>
+                • <strong>Rectangle Union:</strong> Computing the area covered by overlapping rectangles<br>
+                • <strong>Convex Hull:</strong> Finding the boundary of point sets<br>
+                • <strong>Voronoi Diagrams:</strong> Partitioning space based on nearest points<br>
+                • <strong>Range Queries:</strong> Answering geometric queries efficiently
+            </div>
+
+            <div class="resource-list">
+                <strong>Learning Resources:</strong><br>
+                • <strong>CPH</strong> - 30.1, 30.2 - Sweep Line Algorithms<br>
+                • <strong>TC</strong> - Line Sweep Algorithms
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Note:</strong> This section covers fundamental sweep line concepts. Readers should be familiar with basic geometric primitives and may benefit from understanding the 1D case (union of intervals on number line) as a foundation.
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Closest Pair</h2>
+            
+            <div class="focus-problem">
+                <strong>🎯 Closest Pair</strong><br>
+                <em>Kattis - Normal</em><br>
+                Focus Problem – try your best to solve this problem before continuing!
+            </div>
+
+            <h3 class="solution-header">Solution 1: Divide and Conquer Approach</h3>
+
+            <div class="complexity">
+                <strong>Time Complexity: $\mathcal{O}(N\log N)$</strong>
+            </div>
+
+            <div class="divide-conquer-box">
+                We will use a divide and conquer algorithm. First, sort the points by x-coordinate. Now, let <span class="math-formula">P</span> be the subarray of points in the current step. Then, partition <span class="math-formula">P</span> into two groups <span class="math-formula">L</span> and <span class="math-formula">R</span> representing the left and right halves of <span class="math-formula">P</span>.
+            </div>
+
+            <p>Let <span class="math-formula">δₗ</span> and <span class="math-formula">δᵣ</span> be the answer of <span class="math-formula">L</span> and <span class="math-formula">R</span> respectively, and define <span class="math-formula">δ</span> as <span class="math-formula">min(δₗ, δᵣ)</span>.</p>
+
+            <p>Then <span class="math-formula">δ</span> is the upperbound of the answer. If a more optimal answer exists, it must bridge the two halves of the array (i.e. one of its endpoints is in <span class="math-formula">L</span> and the other is in <span class="math-formula">R</span>). Let <span class="math-formula">mx</span> be the x-coordinate of any median of <span class="math-formula">P</span>. Define two sets <span class="math-formula">L'</span> and <span class="math-formula">R'</span> such that:</p>
+
+            <div class="closest-pair-box">
+                <span class="math-formula">L' = {pᵢ | xᵢ ≤ mx, mx - xᵢ ≤ δ}</span><br>
+                <span class="math-formula">R' = {pᵢ | xᵢ ≥ mx, xᵢ - mx ≤ δ}</span>
+            </div>
+
+            <div class="optimization-box">
+                A brute force matching algorithm that computes <span class="math-formula">dist(p, q)</span> for all <span class="math-formula">p ∈ L'</span>, <span class="math-formula">q ∈ R'</span> would have a worst-case runtime of <span class="math-formula">(n/2)² = 𝒪(n²)</span>. However, because we are searching for distances of at most <span class="math-formula">δ</span>, it suffices for each <span class="math-formula">p ∈ L'</span> to check all points <span class="math-formula">{q | q ∈ R', p.y - δ ≤ q.y ≤ p.y + δ}</span>.
+            </div>
+
+            <div class="bounding-box">
+                It can be shown that for each point <span class="math-formula">p</span>, there is a constant number of points that satisfy this property. Because each point in <span class="math-formula">R'</span> is at least <span class="math-formula">δᵣ ≥ δ</span> apart, arranging the points in the worst case would result in 6 points in the corners and sides of the bounding rectangle.
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Geometric Insight:</strong> Within a δ × 2δ rectangle, we can have at most 6 points that are all at least δ distance apart from each other. This geometric constraint is what makes the algorithm efficient.
+            </div>
+
+            <div class="implementation-box">
+                To achieve the desired <span class="math-formula">𝒪(n)</span> complexity per layer, we need to be able to efficiently get the points sorted by both x-coordinate (for dividing <span class="math-formula">P</span>) and y-coordinate (for matching between <span class="math-formula">L'</span> and <span class="math-formula">R'</span>). This can be achieved by taking advantage of the merge-sort-like algorithm: sort by x-coordinate in the beginning, then for each step, merge the y-coordinates recursively.
+            </div>
+
+            <p>Because each step now runs in linear time and there is a total of <span class="math-formula">⌈log n⌉</span> steps, by the master theorem our solution now runs in <span class="math-formula">𝒪(n log n)</span>.</p>
+
+            <div class="code-container">
+                <div class="code-header">
+                    C++ - Divide and Conquer Closest Pair
+                </div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+struct Point {
+    long double x, y;
+    bool operator&lt;(const Point &amp;other) {
+        if (x == other.x) return y &lt; other.y;
+        return x &lt; other.x;
+    }
+};
+
+const pair&lt;Point, Point&gt; INF{{-1e9, -1e9}, {1e9, 1e9}};
+
+long double dist(const pair&lt;Point, Point&gt; &amp;a) {
+    long double d1 = a.first.x - a.second.x;
+    long double d2 = a.first.y - a.second.y;
+    return sqrt(d1 * d1 + d2 * d2);
+}
+
+pair&lt;Point, Point&gt; get_closest_points(const pair&lt;Point, Point&gt; &amp;a,
+                                      const pair&lt;Point, Point&gt; &amp;b) {
+    return dist(a) &lt; dist(b) ? a : b;
+}
+
+/**
+ * Brute force for points near the median
+ */
+pair&lt;Point, Point&gt; strip_solve(vector&lt;Point&gt; &amp;points) {
+    pair&lt;Point, Point&gt; ans = INF;
+    for (int i = 0; i &lt; (int)points.size(); i++) {
+        for (int j = i + 1; j &lt; (int)points.size() &amp;&amp; j - i &lt; 9; j++) {
+            ans = get_closest_points(ans, {points[i], points[j]});
+        }
+    }
+    return ans;
+}
+
+/** Solve the problem for range [l, r] */
+pair&lt;Point, Point&gt; solve(vector&lt;Point&gt; &amp;points, int l, int r) {
+    if (l == r) return INF;
+    int mid = (l + r) / 2;
+
+    pair&lt;Point, Point&gt; ans_left = solve(points, l, mid);
+    pair&lt;Point, Point&gt; ans_right = solve(points, mid + 1, r);
+    pair&lt;Point, Point&gt; ans = get_closest_points(ans_left, ans_right);
+    long double delta = dist(ans);
+
+    Point mid_point = points[mid];
+    vector&lt;Point&gt; strip;
+    for (int i = l; i &lt; r; i++) {
+        if (abs(points[i].x - mid_point.x) &lt;= delta) {
+            strip.push_back(points[i]);
+        }
+    }
+
+    sort(strip.begin(), strip.end(), [](Point a, Point b) {
+        return a.y &lt; b.y || (a.y == b.y &amp;&amp; a.x &lt; b.x);
+    });
+
+    return get_closest_points(ans, strip_solve(strip));
+}
+
+int main() {
+    int n;
+    while (scanf("%d", &amp;n) &amp;&amp; n &gt; 0) {
+        vector&lt;Point&gt; v;
+        for (int i = 0; i &lt; n; i++) {
+            long double x, y;
+            scanf("%Lf %Lf", &amp;x, &amp;y);
+            v.push_back({x, y});
+        }
+        sort(v.begin(), v.end());
+        pair&lt;Point, Point&gt; ans = solve(v, 0, v.size());
+        printf("%0.2Lf %0.2Lf %0.2Lf %0.2Lf\n", ans.first.x, ans.first.y,
+               ans.second.x, ans.second.y);
+    }
+}
+</code></pre>
+
+            </div>
+
+            <h3 class="solution-header">Solution 2: Set-Based Approach</h3>
+
+            <div class="complexity">
+                <strong>Time Complexity: $\mathcal{O}(N\log N)$</strong>
+            </div>
+
+            <div class="set-approach-box">
+                Extending Solution 1, we can use a set instead of divide and conquer. Once again, we define <span class="math-formula">δ</span> as the shortest distance between two points so far. After sorting the points by x-coordinate, we iterate through them while maintaining a running window containing the y-coordinates of all points in <span class="math-formula">[x-δ, x]</span>.
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Sliding Window Technique:</strong> As we visit point <span class="math-formula">P</span>, we utilize the set to consider all points with y-coordinate in <span class="math-formula">[Pᵧ - δ, Pᵧ + δ]</span>. The set contains <span class="math-formula">[Pₓ - δ, Pₓ]</span> because of how it is maintained as a running window. Now we have the same bounding box as Solution 1, with at most 6 points inside.
+            </div>
+
+            <p>For each point, we recalculate <span class="math-formula">δ = min(δ, δₚ)</span>, and update our set accordingly. Each point is inserted and removed from the set at most once, so the algorithm yields <span class="math-formula">𝒪(n log n)</span>.</p>
+
+            <div class="optimization-box">
+                <strong>Efficiency Analysis:</strong> The set-based approach is often more practical to implement than the divide-and-conquer version, while maintaining the same asymptotic complexity. The constant factors are typically better in practice.
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Line Segments</h2>
+            
+            <div class="focus-problem">
+                <strong>🎯 Cow Steeplechase II</strong><br>
+                <em>Silver - Normal</em><br>
+                Focus Problem – try your best to solve this problem before continuing!
+            </div>
+
+            <h3 class="solution-header">Solution</h3>
+
+            <div class="segment-intersection-box">
+                Let's simplify the problem a little bit and focus on finding any overlapping segments. To find a pair of overlapping segments, use a sweep line approach by sweeping a vertical line across the scene from left to right, pausing at every segment endpoint.
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Event-Driven Processing:</strong> We simulate this by sorting all the segment endpoints by <span class="math-formula">x</span> and walking through the sorted array (called 'events' in the code below). As we scan, we keep track of active segments using a set (called 'active_segments' in the code below).
+            </div>
+
+            <ol class="step-list">
+                <li>Sort all segment endpoints by x-coordinate to create an event list</li>
+                <li>Process events from left to right, maintaining active segments in a set</li>
+                <li>When hitting the beginning point of a segment, add it to the active set</li>
+                <li>When hitting the ending point of a segment, remove it from the active set</li>
+                <li>Check for intersections between adjacent segments in the ordered set</li>
+            </ol>
+
+            <div class="active-segments-box">
+                When we hit the beginning point of a segment, add it to the active set, and remove it from the active set when we hit the ending point of a segment. Inserting or removing the active segments from the set takes <span class="math-formula">𝒪(log n)</span> per operation.
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Key Insight:</strong> The active set of segments is ordered by <span class="math-formula">y</span> coordinate. If two segments overlap, they are adjacent in the set, so every time we insert or remove a segment, we check if the adjacent segments overlap.
+            </div>
+
+            <div class="optimization-box">
+                <strong>Adjacency Property:</strong> This is the crucial observation that makes sweep line efficient for segment intersection. By maintaining segments sorted by y-coordinate, we only need to check adjacent pairs rather than all possible pairs.
+            </div>
+
+            <div class="implementation-box">
+                Here's how the algorithm works: as the sweep line moves from left to right, we maintain the vertical ordering of active segments. When segments intersect, they must be adjacent in this ordering at the moment of intersection.
+            </div>
+
+            <h3 class="solution-header">Implementation</h3>
+
+            <div class="complexity">
+                <strong>Time Complexity: $\mathcal{O}(n\log n)$</strong>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    C++ - Line Segment Intersection
+                </div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+long long sweep_line_x;
+
+int sign(long long x) {
+    if (x == 0) return 0;
+    return x &lt; 0 ? -1 : +1;
+}
+
+double coordinate(Segment a) {
+    if (a.a == a.x) return a.b;
+    return a.b + (a.y - a.b) * (sweep_line_x - a.a) / (a.x - a.a);
+}
+
+/*
+ * To check if two segments intersect we will use the
+ * signed area of the ABC triangle. This can be derived
+ * from the cross product of the vectors AB and AC.
+ */
+bool intersect(Segment a, Segment b) {
+    Point p1 = {a.a, a.b}, q1 = {a.x, a.y}, p2 = {b.a, b.b}, q2 = {b.x, b.y};
+    return ((q2 - p1) * (q1 - p1)) * ((q1 - p1) * (p2 - p1)) &gt;= 0 &amp;&amp;
+           ((q1 - p2) * (q2 - p2)) * ((q2 - p2) * (p1 - p2)) &gt;= 0;
+}
+
+long long orientation(Point a, Point b, Point c) {
+    return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+}
+
+int main() {
+    ifstream in("cowjump.in");
+    int n;
+    in &gt;&gt; n;
+    vector&lt;Segment&gt; segments;
+    vector&lt;Point&gt; events;
+
+    for (int i = 0; i &lt; n; i++) {
+        int a, b, x, y;
+        in &gt;&gt; a &gt;&gt; b &gt;&gt; x &gt;&gt; y;
+        segments.push_back({a, b, x, y, i});
+        events.push_back({a, b, i});
+        events.push_back({x, y, i});
+    }
+
+    sort(events.begin(), events.end());
+
+    set&lt;Segment&gt; active_segments;
+
+    int first_segment, second_segment;
+    for (int i = 0; i &lt; 2 * n; i++) {
+        first_segment = events[i].segment_idx;
+        sweep_line_x = events[i].x;
+
+        auto it = active_segments.find(segments[first_segment]);
+        if (it != active_segments.end()) {
+            auto after = next(it), before = it;
+            if (before != active_segments.begin() &amp;&amp; after != active_segments.end()) {
+                before--;
+                if (intersect(segments[before-&gt;idx], segments[after-&gt;idx])) {
+                    first_segment = before-&gt;idx;
+                    second_segment = after-&gt;idx;
+                    break;
+                }
+            }
+            active_segments.erase(it);
+        } else {
+            it = active_segments.lower_bound(segments[first_segment]);
+
+            if (it != active_segments.end() &amp;&amp;
+                intersect(segments[first_segment], *it)) {
+                second_segment = it-&gt;idx;
+                break;
+            }
+            if (it != active_segments.begin()) {
+                it--;
+                if (intersect(segments[it-&gt;idx], segments[first_segment])) {
+                    second_segment = it-&gt;idx;
+                    break;
+                }
+            }
+            active_segments.insert(segments[first_segment]);
+        }
+    }
+
+    if (first_segment &gt; second_segment) swap(first_segment, second_segment);
+
+    int ans = 0;
+    for (int i = 0; i &lt; n; i++) {
+        if (i != second_segment &amp;&amp; intersect(segments[i], segments[second_segment])) {
+            ans++;
+        }
+    }
+
+    ofstream("cowjump.out") &lt;&lt; (ans &gt; 1 ? second_segment + 1 : first_segment + 1);
+}
+</code></pre>
+
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Advanced Sweep Line Concepts</h2>
+
+            <h3 class="solution-header">Event Processing Framework</h3>
+
+            <div class="algorithm-box">
+                <strong>General Sweep Line Pattern:</strong> Most sweep line algorithms follow a common pattern: sort events by x-coordinate, maintain a data structure representing the current state of the sweep line, and process events to update this state while computing the desired result.
+            </div>
+
+            <div class="implementation-box">
+                <strong>Event Types:</strong><br>
+                • <strong>Point Events:</strong> When the sweep line encounters individual points<br>
+                • <strong>Start/End Events:</strong> When segments or intervals begin or end<br>
+                • <strong>Intersection Events:</strong> When geometric objects intersect<br>
+                • <strong>Query Events:</strong> When we need to answer a question about the current state
+            </div>
+
+            <h3 class="solution-header">Data Structure Considerations</h3>
+
+            <div class="optimization-box">
+                <strong>Active Set Management:</strong> The choice of data structure for maintaining the active set is crucial. Common options include:<br>
+                • <strong>Balanced Binary Search Trees:</strong> For ordered operations (C++ set/map)<br>
+                • <strong>Segment Trees:</strong> For range queries and updates<br>
+                • <strong>Fenwick Trees:</strong> For prefix sum operations<br>
+                • <strong>Priority Queues:</strong> For event scheduling
+            </div>
+
+            <div class="efficiency-box">
+                <strong>Coordinate Compression:</strong> When dealing with large coordinate ranges, compress coordinates to reduce memory usage and improve cache performance. This is especially important when using array-based data structures.
+            </div>
+
+            <h3 class="solution-header">Common Sweep Line Problems</h3>
+
+            <div class="applications-box">
+                <strong>Rectangle Problems:</strong><br>
+                • <strong>Rectangle Union Area:</strong> Computing total area covered by overlapping rectangles<br>
+                • <strong>Rectangle Intersection:</strong> Finding all pairs of intersecting rectangles<br>
+                • <strong>Skyline Problem:</strong> Computing the outline of buildings<br>
+                • <strong>Maximum Rectangle:</strong> Finding largest rectangle in a histogram
+            </div>
+
+            <div class="segment-intersection-box">
+                <strong>Line Segment Problems:</strong><br>
+                • <strong>All Intersections:</strong> Finding all intersection points among n segments<br>
+                • <strong>Intersection Count:</strong> Counting total number of intersections<br>
+                • <strong>Segment Union:</strong> Computing total length covered by segments<br>
+                • <strong>Stabbing Number:</strong> Finding maximum number of segments crossed by a vertical line
+            </div>
+
+            <h3 class="solution-header">Implementation Tips and Tricks</h3>
+
+            <div class="bounding-box">
+                <strong>Precision and Robustness:</strong><br>
+                • Use integer coordinates when possible to avoid floating-point precision issues<br>
+                • When floating-point is necessary, use appropriate epsilon values for comparisons<br>
+                • Be careful with edge cases: vertical segments, coincident points, degenerate cases<br>
+                • Consider using exact arithmetic libraries for critical applications
+            </div>
+
+            <div class="closest-pair-box">
+                <strong>Performance Optimization:</strong><br>
+                • Sort events once at the beginning rather than repeatedly<br>
+                • Use efficient data structures with good cache locality<br>
+                • Minimize memory allocations during the sweep<br>
+                • Consider parallel algorithms for very large datasets<br>
+                • Profile your code to identify bottlenecks
+            </div>
+
+            <h3 class="solution-header">Variations and Extensions</h3>
+
+            <div class="divide-conquer-box">
+                <strong>Multi-Dimensional Sweep:</strong> Sweep line concepts can be extended to higher dimensions. For example, sweeping a plane through 3D space to solve 3D geometric problems, though this significantly increases complexity.
+            </div>
+
+            <div class="set-approach-box">
+                <strong>Bidirectional Sweep:</strong> Some problems benefit from sweeping in multiple directions or maintaining multiple sweep lines simultaneously. This can help with problems that have symmetries or require global optimization.
+            </div>
+
+            <div class="active-segments-box">
+                <strong>Online vs Offline Algorithms:</strong> Sweep line algorithms are typically offline (all input known in advance), but some can be adapted for online processing where input arrives incrementally.
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Problem-Solving Strategies</h2>
+
+            <h3 class="solution-header">Recognizing Sweep Line Opportunities</h3>
+
+            <div class="algorithm-box">
+                <strong>When to Consider Sweep Line:</strong><br>
+                • Problems involving intervals, segments, or rectangles<br>
+                • Geometric optimization problems (closest pair, farthest pair)<br>
+                • Intersection detection among multiple objects<br>
+                • Area or perimeter calculations<br>
+                • Range queries on geometric data<br>
+                • Problems with a natural left-to-right or temporal ordering
+            </div>
+
+            <div class="efficiency-box">
+                <strong>Complexity Analysis:</strong> Sweep line algorithms typically achieve O(n log n) complexity by replacing brute force O(n²) approaches with efficient event processing and data structure operations.
+            </div>
+
+            <h3 class="solution-header">Common Patterns and Templates</h3>
+
+            <div class="implementation-box">
+                <strong>Standard Sweep Line Template:</strong><br>
+                1. Define events and sort them by x-coordinate<br>
+                2. Initialize data structure for active set<br>
+                3. Process events in order, updating active set<br>
+                4. For each event, perform necessary computations<br>
+                5. Handle edge cases and boundary conditions
+            </div>
+
+            <div class="optimization-box">
+                <strong>Debugging Strategies:</strong><br>
+                • Visualize the sweep line progression with small test cases<br>
+                • Print the state of the active set at each event<br>
+                • Verify that geometric predicates handle edge cases correctly<br>
+                • Test with degenerate inputs (collinear points, overlapping segments)<br>
+                • Use assertion checks for invariants
+            </div>
+
+            <h3 class="solution-header">Advanced Applications</h3>
+
+            <div class="applications-box">
+                <strong>Computational Geometry Applications:</strong><br>
+                • <strong>Voronoi Diagrams:</strong> Fortune's algorithm uses sweep line for O(n log n) construction<br>
+                • <strong>Delaunay Triangulation:</strong> Can be computed using sweep line techniques<br>
+                • <strong>Convex Hull:</strong> Graham scan is essentially a rotational sweep<br>
+                • <strong>Visibility Graphs:</strong> Computing visibility in polygonal environments<br>
+                • <strong>Motion Planning:</strong> Path planning for robots in geometric environments
+            </div>
+
+            <div class="segment-intersection-box">
+                <strong>Real-World Applications:</strong><br>
+                • <strong>GIS Systems:</strong> Processing geographic data and spatial queries<br>
+                • <strong>VLSI Design:</strong> Circuit layout and design rule checking<br>
+                • <strong>Computer Graphics:</strong> Rendering, clipping, and collision detection<br>
+                • <strong>Database Systems:</strong> Spatial indexing and query processing<br>
+                • <strong>Computational Biology:</strong> Sequence alignment and protein folding
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Summary and Key Takeaways</h2>
+
+            <div class="algorithm-box">
+                Sweep line algorithms are powerful tools for solving geometric problems efficiently. By processing events in a systematic order and maintaining relevant state information, we can reduce the complexity of many geometric problems from quadratic to log-linear time.
+            </div>
+
+            <div class="introduction-box">
+                <strong>What You've Mastered:</strong><br>
+                • Understanding the sweep line paradigm and event-driven processing<br>
+                • Closest pair algorithms using both divide-and-conquer and set-based approaches<br>
+                • Line segment intersection detection with active set management<br>
+                • Geometric insight about bounding boxes and adjacency properties<br>
+                • Implementation strategies and optimization techniques<br>
+                • Recognition patterns for sweep line problem opportunities
+            </div>
+
+            <div class="focus-problem">
+                <strong>🎯 Practice Challenge:</strong><br>
+                Try implementing sweep line solutions for rectangle union area, skyline problem, and all segment intersections. Start with simpler 1D interval problems before moving to 2D geometric cases!
+            </div>
+
+            <div class="bounding-box">
+                <strong>Key Insights to Remember:</strong><br>
+                • Process events in sorted order to maintain algorithmic correctness<br>
+                • Use appropriate data structures for efficient active set operations<br>
+                • Geometric constraints often limit the number of objects to consider<br>
+                • Edge cases and degeneracies require careful handling<br>
+                • Coordinate compression can significantly improve practical performance
+            </div>
+
+            <div class="complexity">
+                <strong>Performance Summary:</strong><br>
+                • <strong>Closest Pair:</strong> <span class="math-formula">$\mathcal{O}(n \log n)$</span> vs naive <span class="math-formula">$\mathcal{O}(n^2)$</span><br>
+                • <strong>Segment Intersection:</strong> <span class="math-formula">$\mathcal{O}(n \log n)$</span> for detection, <span class="math-formula">$\mathcal{O}((n+k) \log n)$</span> for all intersections<br>
+                • <strong>Rectangle Union:</strong> <span class="math-formula">$\mathcal{O}(n \log n)$</span> with coordinate compression<br>
+                • <strong>General Pattern:</strong> <span class="math-formula">$\mathcal{O}(n \log n)$</span> sorting + <span class="math-formula">$\mathcal{O}(\log n)$</span> per event
+            </div>
+
+            <div class="applications-box">
+                <strong>Real-World Impact:</strong><br>
+                • <strong>Computer Graphics:</strong> Real-time rendering and game engines<br>
+                • <strong>Geographic Information Systems:</strong> Map processing and spatial analysis<br>
+                • <strong>Manufacturing:</strong> CAD/CAM systems and quality control<br>
+                • <strong>Robotics:</strong> Path planning and environment mapping<br>
+                • <strong>Computational Biology:</strong> Genomic analysis and protein structure prediction<br>
+                • <strong>Finance:</strong> Algorithmic trading and risk analysis
+            </div>
+
+            <div class="sweep-concept-box">
+                <strong>Final Thoughts:</strong> Sweep line algorithms exemplify the power of systematic geometric processing. The key is recognizing when a problem has the structure that allows for efficient sweeping and choosing the right data structures to support the required operations. With practice, these techniques become invaluable tools for solving complex geometric problems elegantly and efficiently.
+            </div>
+
+            <div class="efficiency-box">
+                <strong>Next Steps:</strong> Continue exploring advanced geometric algorithms like Fortune's algorithm for Voronoi diagrams, Bentley-Ottmann algorithm for segment intersections, and sweep line approaches to 3D problems. The fundamental concepts you've learned here form the foundation for these more sophisticated techniques.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+</body>
+</html>

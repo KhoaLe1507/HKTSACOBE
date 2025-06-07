@@ -740,6 +740,29 @@
         }
       }
     },
+    "/api/Problem/delete/{problemId}": {
+      "delete": {
+        "tags": [
+          "Problem"
+        ],
+        "parameters": [
+          {
+            "name": "problemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Problem/submit/{problemId}": {
       "post": {
         "tags": [
@@ -1313,19 +1336,71 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/AddModuleContentRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddModuleContentRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddModuleContentRequest"
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Frequent": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "HtmlContentPath": {
+                    "type": "string"
+                  },
+                  "AuthorId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ModuleId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Position": {
+                    "type": "string"
+                  },
+                  "ReferenceId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "Frequent": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "HtmlContentPath": {
+                  "style": "form"
+                },
+                "AuthorId": {
+                  "style": "form"
+                },
+                "ModuleId": {
+                  "style": "form"
+                },
+                "Position": {
+                  "style": "form"
+                },
+                "ReferenceId": {
+                  "style": "form"
+                },
+                "file": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -1637,19 +1712,71 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/AddModuleContentRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddModuleContentRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddModuleContentRequest"
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Frequent": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "HtmlContentPath": {
+                    "type": "string"
+                  },
+                  "AuthorId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "ModuleId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Position": {
+                    "type": "string"
+                  },
+                  "ReferenceId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "Frequent": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "HtmlContentPath": {
+                  "style": "form"
+                },
+                "AuthorId": {
+                  "style": "form"
+                },
+                "ModuleId": {
+                  "style": "form"
+                },
+                "Position": {
+                  "style": "form"
+                },
+                "ReferenceId": {
+                  "style": "form"
+                },
+                "file": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -1720,6 +1847,117 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Roadmap/GetSectionDetail/{id}": {
+      "get": {
+        "tags": [
+          "Roadmap"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Roadmap/GetModuleDetail/{id}": {
+      "get": {
+        "tags": [
+          "Roadmap"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Roadmap/GetModuleContentDetail/{id}": {
+      "get": {
+        "tags": [
+          "Roadmap"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Roadmap/ListMyModuleContents": {
+      "get": {
+        "tags": [
+          "Roadmap"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Statistics/professor-dashboard": {
+      "get": {
+        "tags": [
+          "Statistics"
+        ],
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
             }
           }
         ],
@@ -1897,44 +2135,6 @@
   },
   "components": {
     "schemas": {
-      "AddModuleContentRequest": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "frequent": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "htmlContentPath": {
-            "type": "string",
-            "nullable": true
-          },
-          "authorId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "moduleId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "position": {
-            "type": "string",
-            "nullable": true
-          },
-          "referenceId": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
       "AddModuleRequest": {
         "type": "object",
         "properties": {

@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic I/O - Getting Started</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 600;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideDown 1s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #059669, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 10px;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            color: #475569;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            animation: fadeInScale 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .content-section:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        .content-section:nth-child(odd) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #10b981;
+            padding-bottom: 15px;
+        }
+
+        .subsection-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 40px 0 25px 0;
+        }
+
+        p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .code-inline {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            background: #f1f5f9;
+            padding: 3px 8px;
+            border-radius: 6px;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .code-block {
+            background: #1e293b !important;
+            border-radius: 15px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid #334155;
+        }
+
+        .code-header {
+            background: #334155;
+            padding: 15px 25px;
+            border-bottom: 1px solid #475569;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            margin: 0 !important;
+            background: transparent !important;
+            padding: 25px !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 500 !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 500 !important;
+        }
+
+        .line-numbers .line-numbers-rows {
+            border-right: 2px solid #475569 !important;
+            background: #2d3748 !important;
+        }
+
+        .line-numbers-rows > span:before {
+            color: #94a3b8 !important;
+            font-weight: 600 !important;
+        }
+
+        .io-comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .io-comparison-table th {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 20px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .io-comparison-table td {
+            padding: 18px 20px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .io-comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .io-comparison-table tr:hover {
+            background: #dcfce7;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border: 2px solid #3b82f6;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+        }
+
+        .tip-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #1e40af;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tip-title::before {
+            content: "💡";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .tip-box p {
+            color: #1e40af;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            animation: pulse 2s infinite;
+        }
+
+        .warning-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #92400e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .warning-title::before {
+            content: "⚠️";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .warning-box p {
+            color: #92400e;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #34d399 0%, #10b981 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .io-methods-list {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            border-left: 6px solid #10b981;
+        }
+
+        .io-methods-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .io-methods-list li {
+            padding: 12px 0;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .io-methods-list li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: 800;
+        }
+
+        .io-methods-list li:last-child {
+            border-bottom: none;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            z-index: 1000;
+        }
+
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .input-output-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .demo-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .demo-title {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .demo-content {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            color: #374151;
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .content-section {
+                padding: 30px 20px;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+
+            .input-output-demo {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">Basic I/O</h1>
+            <p class="subtitle">Getting Started with Input and Output Operations</p>
+            <p class="description">Master the fundamentals of reading input and writing output efficiently in competitive programming across different languages.</p>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Introduction to I/O Operations</h2>
+            <p>Input/Output (I/O) operations are fundamental to competitive programming. Every program needs to read data from input sources and produce results as output. Understanding efficient I/O methods is crucial for solving problems within time limits, especially when dealing with large datasets.</p>
+            
+            <p>In competitive programming, <span class="highlight">fast I/O</span> can be the difference between getting accepted and receiving a Time Limit Exceeded (TLE) verdict. While I/O operations are generally considered <span class="code-inline">O(1)</span> per operation, when you're reading millions of integers, even small constant factors matter significantly.</p>
+
+            <div class="tip-box">
+                <div class="tip-title">Key Principle</div>
+                <p>Always choose the most appropriate I/O method for your programming language and the specific constraints of the problem you're solving.</p>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">C++ I/O Methods</h2>
+            <p>C++ offers several methods for handling input and output. Each method has different performance characteristics and use cases.</p>
+
+            <h3 class="subsection-title">Standard I/O with cin and cout</h3>
+            <p>The most common and beginner-friendly approach uses <span class="code-inline">cin</span> for input and <span class="code-inline">cout</span> for output.</p>
+
+            <div class="code-block">
+                <div class="code-header">Basic C++ I/O</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    cout << "You entered: " << n << endl;
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Fast I/O Optimization</h3>
+            <p>For competitive programming, you can significantly speed up <span class="code-inline">cin</span> and <span class="code-inline">cout</span> with these optimizations:</p>
+
+            <div class="code-block">
+                <div class="code-header">Optimized C++ I/O</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int main() {
+    // Fast I/O optimizations
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int n;
+    cin >> n;
+    cout << "Result: " << n << "\n";
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">I/O Optimization Explained</div>
+                <p><strong>ios_base::sync_with_stdio(false)</strong>: Unties C++ streams from C streams for faster operation.<br>
+                <strong>cin.tie(NULL)</strong>: Unties cin from cout to avoid automatic flushing.<br>
+                <strong>cout.tie(NULL)</strong>: Ensures cout is not tied to any stream.</p>
+            </div>
+
+            <h3 class="subsection-title">Reading Multiple Values</h3>
+            <p>Common patterns for reading multiple inputs in competitive programming:</p>
+
+            <div class="code-block">
+                <div class="code-header">Multiple Input Patterns</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int n;
+    cin >> n;
+    
+    // Reading n integers into a vector
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    
+    // Reading pairs of integers
+    int a, b;
+    while (cin >> a >> b) {
+        cout << a + b << "\n";
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">File I/O</h3>
+            <p>Some contests require reading from files instead of standard input:</p>
+
+            <div class="code-block">
+                <div class="code-header">File I/O in C++</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+    
+    int n;
+    fin >> n;
+    fout << "Answer: " << n * 2 << endl;
+    
+    fin.close();
+    fout.close();
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Java I/O Methods</h2>
+            <p>Java provides several approaches for I/O operations, each with different performance characteristics.</p>
+
+            <h3 class="subsection-title">Scanner Class (Beginner-Friendly)</h3>
+            <p>The <span class="code-inline">Scanner</span> class is easy to use but can be slow for large inputs:</p>
+
+            <div class="code-block">
+                <div class="code-header">Java Scanner I/O</div>
+                <pre class="line-numbers"><code class="language-java">import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        int n = sc.nextInt();
+        System.out.println("You entered: " + n);
+        
+        sc.close();
+    }
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">BufferedReader (Fast I/O)</h3>
+            <p>For competitive programming, <span class="code-inline">BufferedReader</span> is much faster:</p>
+
+            <div class="code-block">
+                <div class="code-header">Fast Java I/O with BufferedReader</div>
+                <pre class="line-numbers"><code class="language-java">import java.io.*;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter pw = new PrintWriter(System.out);
+        
+        int n = Integer.parseInt(br.readLine());
+        pw.println("Result: " + n);
+        
+        br.close();
+        pw.close();
+    }
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Reading Multiple Integers per Line</h3>
+            <p>Using <span class="code-inline">StringTokenizer</span> for parsing multiple values:</p>
+
+            <div class="code-block">
+                <div class="code-header">Parsing Multiple Values in Java</div>
+                <pre class="line-numbers"><code class="language-java">import java.io.*;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter pw = new PrintWriter(System.out);
+        
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int a = Integer.parseInt(st.nextToken());
+        int b = Integer.parseInt(st.nextToken());
+        
+        pw.println(a + b);
+        
+        br.close();
+        pw.close();
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Python I/O Methods</h2>
+            <p>Python's I/O methods are generally straightforward but can be slower than C++ or Java for large inputs.</p>
+
+            <h3 class="subsection-title">Standard Input/Output</h3>
+            <p>Basic Python I/O using <span class="code-inline">input()</span> and <span class="code-inline">print()</span>:</p>
+
+            <div class="code-block">
+                <div class="code-header">Basic Python I/O</div>
+                <pre class="line-numbers"><code class="language-python">n = int(input())
+print(f"You entered: {n}")
+
+# Reading multiple integers from one line
+a, b = map(int, input().split())
+print(a + b)</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Fast I/O for Python</h3>
+            <p>For large inputs, use <span class="code-inline">sys.stdin</span> and <span class="code-inline">sys.stdout</span>:</p>
+
+            <div class="code-block">
+                <div class="code-header">Fast Python I/O</div>
+                <pre class="line-numbers"><code class="language-python">import sys
+input = sys.stdin.readline
+
+n = int(input())
+arr = list(map(int, input().split()))
+
+# Fast output
+sys.stdout.write(f"Sum: {sum(arr)}\n")</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Reading Lists and Arrays</h3>
+            <p>Common patterns for reading arrays in Python:</p>
+
+            <div class="code-block">
+                <div class="code-header">Reading Arrays in Python</div>
+                <pre class="line-numbers"><code class="language-python">import sys
+input = sys.stdin.readline
+
+n = int(input())
+
+# Method 1: Reading n integers from n lines
+arr1 = []
+for _ in range(n):
+    arr1.append(int(input()))
+
+# Method 2: Reading n integers from one line
+arr2 = list(map(int, input().split()))
+
+# Method 3: Reading multiple lines of pairs
+pairs = []
+for _ in range(n):
+    a, b = map(int, input().split())
+    pairs.append((a, b))
+
+print(f"Arrays: {arr1}, {arr2}, {pairs}")</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">I/O Performance Comparison</h2>
+            <p>Understanding the performance characteristics of different I/O methods helps you choose the right approach:</p>
+
+            <table class="io-comparison-table">
+                <thead>
+                    <tr>
+                        <th>Language</th>
+                        <th>Method</th>
+                        <th>Speed</th>
+                        <th>Ease of Use</th>
+                        <th>Best For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>C++</td>
+                        <td><span class="code-inline">cin/cout</span> (optimized)</td>
+                        <td>Fast</td>
+                        <td>Easy</td>
+                        <td>Most competitive programming</td>
+                    </tr>
+                    <tr>
+                        <td>C++</td>
+                        <td><span class="code-inline">scanf/printf</span></td>
+                        <td>Very Fast</td>
+                        <td>Medium</td>
+                        <td>Maximum performance needed</td>
+                    </tr>
+                    <tr>
+                        <td>Java</td>
+                        <td><span class="code-inline">BufferedReader</span></td>
+                        <td>Fast</td>
+                        <td>Medium</td>
+                        <td>Competitive programming</td>
+                    </tr>
+                    <tr>
+                        <td>Java</td>
+                        <td><span class="code-inline">Scanner</span></td>
+                        <td>Slow</td>
+                        <td>Very Easy</td>
+                        <td>Small inputs only</td>
+                    </tr>
+                    <tr>
+                        <td>Python</td>
+                        <td><span class="code-inline">sys.stdin</span></td>
+                        <td>Medium</td>
+                        <td>Easy</td>
+                        <td>Competitive programming</td>
+                    </tr>
+                    <tr>
+                        <td>Python</td>
+                        <td><span class="code-inline">input()</span></td>
+                        <td>Slow</td>
+                        <td>Very Easy</td>
+                        <td>Small inputs only</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Common I/O Patterns</h2>
+            <p>Recognizing and mastering common input/output patterns will help you solve problems more efficiently.</p>
+
+            <h3 class="subsection-title">Single Test Case</h3>
+            <p>The simplest pattern where you read input, process it, and output the result:</p>
+
+            <div class="input-output-demo">
+                <div class="demo-box">
+                    <div class="demo-title">Input Format</div>
+                    <div class="demo-content">5<br>1 2 3 4 5</div>
+                </div>
+                <div class="demo-box">
+                    <div class="demo-title">Expected Output</div>
+                    <div class="demo-content">15</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Single Test Case Implementation</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int n;
+    cin >> n;
+    
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        sum += x;
+    }
+    
+    cout << sum << "\n";
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Multiple Test Cases</h3>
+            <p>Many problems have multiple test cases in a single input:</p>
+
+            <div class="input-output-demo">
+                <div class="demo-box">
+                    <div class="demo-title">Input Format</div>
+                    <div class="demo-content">3<br>5 7<br>10 3<br>8 12</div>
+                </div>
+                <div class="demo-box">
+                    <div class="demo-title">Expected Output</div>
+                    <div class="demo-content">12<br>13<br>20</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Multiple Test Cases Implementation</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int t;
+    cin >> t;
+    
+    while (t--) {
+        int a, b;
+        cin >> a >> b;
+        cout << a + b << "\n";
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Reading Until EOF</h3>
+            <p>Some problems don't specify the number of test cases and require reading until end of file:</p>
+
+            <div class="code-block">
+                <div class="code-header">Reading Until EOF</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int a, b;
+    while (cin >> a >> b) {
+        cout << a + b << "\n";
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Advanced I/O Techniques</h2>
+            
+            <h3 class="subsection-title">Custom Fast I/O Templates</h3>
+            <p>For maximum performance in competitive programming, some contestants use custom I/O templates:</p>
+
+            <div class="code-block">
+                <div class="code-header">Custom Fast I/O Template</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+namespace FastIO {
+    inline int read() {
+        int x = 0, f = 1;
+        char c = getchar();
+        while (c < '0' || c > '9') {
+            if (c == '-') f = -1;
+            c = getchar();
+        }
+        while (c >= '0' && c <= '9') {
+            x = x * 10 + c - '0';
+            c = getchar();
+        }
+        return x * f;
+    }
+    
+    inline void write(int x) {
+        if (x < 0) {
+            putchar('-');
+            x = -x;
+        }
+        if (x >= 10) write(x / 10);
+        putchar(x % 10 + '0');
+    }
+}
+
+int main() {
+    int n = FastIO::read();
+    FastIO::write(n * 2);
+    putchar('\n');
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Handling Large Datasets</h3>
+            <p>When dealing with very large inputs (10^6+ elements), consider these strategies:</p>
+
+            <div class="io-methods-list">
+                <ul>
+                    <li>Use <span class="code-inline">reserve()</span> for vectors when you know the size in advance</li>
+                    <li>Avoid unnecessary string operations and conversions</li>
+                    <li>Consider using <span class="code-inline">scanf/printf</span> in C++ for maximum speed</li>
+                    <li>Minimize the number of I/O operations by batching when possible</li>
+                    <li>Use appropriate data types (avoid unnecessary long long when int suffices)</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Optimized Large Dataset Reading</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int n;
+    cin >> n;
+    
+    // Reserve space to avoid reallocations
+    vector<int> arr;
+    arr.reserve(n);
+    
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        arr.push_back(x);
+    }
+    
+    // Process and output efficiently
+    long long sum = 0;
+    for (int x : arr) {
+        sum += x;
+    }
+    
+    cout << sum << "\n";
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Common I/O Mistakes and Solutions</h2>
+            
+            <h3 class="subsection-title">Mixing Different I/O Methods</h3>
+            <div class="warning-box">
+                <div class="warning-title">Common Mistake</div>
+                <p>Never mix <span class="code-inline">scanf/printf</span> with <span class="code-inline">cin/cout</span> without proper synchronization. This can lead to unexpected behavior and wrong outputs.</p>
+            </div>
+
+            <h3 class="subsection-title">Forgetting to Flush Output</h3>
+            <p>In interactive problems, you need to flush output after each query:</p>
+
+            <div class="code-block">
+                <div class="code-header">Proper Output Flushing</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int main() {
+    int query = 5;
+    cout << "? " << query << endl;  // endl flushes automatically
+    // or
+    cout << "? " << query << "\n";
+    cout.flush();  // Manual flush
+    
+    int response;
+    cin >> response;
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Not Handling Edge Cases</h3>
+            <p>Always consider edge cases in I/O:</p>
+
+            <div class="io-methods-list">
+                <ul>
+                    <li>Empty input or zero test cases</li>
+                    <li>Very large numbers that might overflow</li>
+                    <li>Negative numbers when only positive are expected</li>
+                    <li>Leading/trailing whitespaces in string inputs</li>
+                    <li>Multiple spaces between numbers</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Platform-Specific Considerations</h2>
+            
+            <h3 class="subsection-title">Online Judge Differences</h3>
+            <p>Different competitive programming platforms may have varying I/O requirements:</p>
+
+            <table class="io-comparison-table">
+                <thead>
+                    <tr>
+                        <th>Platform</th>
+                        <th>Preferred Language</th>
+                        <th>I/O Notes</th>
+                        <th>Time Limits</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Codeforces</td>
+                        <td>C++/Java/Python</td>
+                        <td>Fast I/O recommended for large inputs</td>
+                        <td>1-2 seconds typical</td>
+                    </tr>
+                    <tr>
+                        <td>AtCoder</td>
+                        <td>C++/Python</td>
+                        <td>Standard I/O usually sufficient</td>
+                        <td>2 seconds typical</td>
+                    </tr>
+                    <tr>
+                        <td>USACO</td>
+                        <td>C++/Java/Python</td>
+                        <td>File I/O often required</td>
+                        <td>2-4 seconds</td>
+                    </tr>
+                    <tr>
+                        <td>TopCoder</td>
+                        <td>C++/Java</td>
+                        <td>Function-based, no explicit I/O</td>
+                        <td>2 seconds typical</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="tip-box">
+                <div class="tip-title">Best Practice</div>
+                <p>Always read the problem statement carefully to understand the specific I/O format required. Some contests use file I/O, while others use standard I/O.</p>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Practice Problems and Templates</h2>
+            
+            <h3 class="subsection-title">Essential I/O Template</h3>
+            <p>Here's a comprehensive template that covers most competitive programming scenarios:</p>
+
+            <div class="code-block">
+                <div class="code-header">Complete I/O Template</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    // Fast I/O setup
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    // Single test case
+    /*
+    int n;
+    cin >> n;
+    // Process single test case
+    */
+    
+    // Multiple test cases
+    int t;
+    cin >> t;
+    while (t--) {
+        // Read input for each test case
+        int n;
+        cin >> n;
+        
+        vector<int> arr(n);
+        for (int i = 0; i < n; i++) {
+            cin >> arr[i];
+        }
+        
+        // Process and output result
+        // Your solution logic here
+        
+        cout << "Result" << "\n";
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Interactive Problem Template</h3>
+            <p>For interactive problems where you need to communicate with a judge:</p>
+
+            <div class="code-block">
+                <div class="code-header">Interactive Problem Template</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int main() {
+    // Note: Don't use fast I/O for interactive problems
+    // ios_base::sync_with_stdio(false); // DON'T USE
+    // cin.tie(NULL); // DON'T USE
+    
+    int n;
+    cin >> n;
+    
+    int left = 1, right = n;
+    while (left < right) {
+        int mid = (left + right) / 2;
+        
+        cout << "? " << mid << endl;  // Query
+        cout.flush();  // Important: flush output
+        
+        string response;
+        cin >> response;
+        
+        if (response == "YES") {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    
+    cout << "! " << left << endl;  // Final answer
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Summary and Best Practices</h2>
+            <p>Mastering I/O operations is essential for competitive programming success. Here are the key takeaways:</p>
+
+            <div class="io-methods-list">
+                <ul>
+                    <li><span class="highlight">Choose the right method</span>: Use fast I/O for large datasets, standard I/O for small inputs</li>
+                    <li><span class="highlight">Optimize when necessary</span>: Add I/O optimizations in C++ for better performance</li>
+                    <li><span class="highlight">Practice common patterns</span>: Single test case, multiple test cases, reading until EOF</li>
+                    <li><span class="highlight">Handle edge cases</span>: Consider empty inputs, large numbers, and format variations</li>
+                    <li><span class="highlight">Know your platform</span>: Different judges may have different requirements</li>
+                    <li><span class="highlight">Test thoroughly</span>: Always test your I/O with sample inputs before submitting</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">Final Advice</div>
+                <p>Start with simple I/O methods and gradually move to faster techniques as you encounter larger datasets. Remember that correct logic is more important than fast I/O, but both are necessary for competitive programming success.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            document.getElementById('scrollProgress').style.width = scrollPercent + '%';
+        });
+
+        // Animate sections on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.content-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scrolling for better UX
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+</body>
+</html>

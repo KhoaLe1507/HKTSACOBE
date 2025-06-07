@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Complexity - Getting Started</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 600;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideDown 1s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1e293b, #475569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 10px;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            color: #475569;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            animation: fadeInScale 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .content-section:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        .content-section:nth-child(odd) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #3b82f6;
+            padding-bottom: 15px;
+        }
+
+        .subsection-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 40px 0 25px 0;
+        }
+
+        p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .math-expression {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            background: #f1f5f9;
+            padding: 3px 8px;
+            border-radius: 6px;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .code-block {
+            background: #1e293b !important;
+            border-radius: 15px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid #334155;
+        }
+
+        .code-header {
+            background: #334155;
+            padding: 15px 25px;
+            border-bottom: 1px solid #475569;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            margin: 0 !important;
+            background: transparent !important;
+            padding: 25px !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 500 !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 500 !important;
+        }
+
+        .line-numbers .line-numbers-rows {
+            border-right: 2px solid #475569 !important;
+            background: #2d3748 !important;
+        }
+
+        .line-numbers-rows > span:before {
+            color: #94a3b8 !important;
+            font-weight: 600 !important;
+        }
+
+        .complexity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .complexity-table th {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 20px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .complexity-table td {
+            padding: 18px 20px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .complexity-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .complexity-table tr:hover {
+            background: #e0f2fe;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+            }
+        }
+
+        .warning-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #92400e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .warning-title::before {
+            content: "⚠️";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .warning-box p {
+            color: #92400e;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #fbbf24 0%, #f59e0b 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .complexity-list {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            border-left: 6px solid #3b82f6;
+        }
+
+        .complexity-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .complexity-list li {
+            padding: 12px 0;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .complexity-list li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-weight: 800;
+        }
+
+        .complexity-list li:last-child {
+            border-bottom: none;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            z-index: 1000;
+        }
+
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .content-section {
+                padding: 30px 20px;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">Time Complexity</h1>
+            <p class="subtitle">Getting Started with Algorithmic Analysis</p>
+            <p class="description">Master the fundamentals of analyzing algorithm efficiency and understanding computational complexity in competitive programming.</p>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Introduction</h2>
+            <p>In programming contests, your program needs to finish running within a certain timeframe in order to receive credit. For USACO, this limit is <span class="math-expression">2</span> seconds for C++ submissions, and <span class="math-expression">4</span> seconds for Java/Python submissions. A conservative estimate for the number of <span class="highlight">operations</span> the grading server can handle per second is <span class="math-expression">10^8</span>, but it could be closer to <span class="math-expression">5 × 10^8</span> given good constant factors.</p>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Complexity Calculations</h2>
+            <p>We want a method to calculate how many operations it takes to run each algorithm, in terms of the input size <span class="math-expression">n</span>. Fortunately, this can be done relatively easily using <span class="highlight">Big O notation</span>, which expresses worst-case time complexity as a function of <span class="math-expression">n</span> as <span class="math-expression">n</span> gets arbitrarily large.</p>
+            
+            <p>Complexity is an upper bound for the number of steps an algorithm requires as a function of the input size. In Big O notation, we denote the complexity of a function as <span class="math-expression">O(f(n))</span>, where constant factors and lower-order terms are generally omitted from <span class="math-expression">f(n)</span>. We'll see some examples of how this works, as follows.</p>
+
+            <p>The following code is <span class="math-expression">O(1)</span>, because it executes a constant number of operations.</p>
+
+            <div class="code-block">
+                <div class="code-header">Constant Time - O(1)</div>
+                <pre class="line-numbers"><code class="language-cpp">int a = 5;
+int b = 7;
+int c = 4;
+int d = a + b + c + 153;</code></pre>
+            </div>
+
+            <p>Input and output operations are also assumed to be <span class="math-expression">O(1)</span>. In the following examples, we assume that the code inside the loops is <span class="math-expression">O(1)</span>.</p>
+
+            <p>The time complexity of loops is the number of iterations that the loop runs. For example, the following code examples are both <span class="math-expression">O(n)</span>.</p>
+
+            <div class="code-block">
+                <div class="code-header">Linear Time - O(n)</div>
+                <pre class="line-numbers"><code class="language-cpp">for (int i = 1; i <= n; i++) {
+    // constant time code here
+}</code></pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Linear Time - O(n) with While Loop</div>
+                <pre class="line-numbers"><code class="language-cpp">int i = 0;
+while (i < n) {
+    // constant time code here
+    i++;
+}</code></pre>
+            </div>
+
+            <p>Because we ignore constant factors and lower order terms, the following examples are also <span class="math-expression">O(n)</span>:</p>
+
+            <div class="code-block">
+                <div class="code-header">Still Linear Time - O(n)</div>
+                <pre class="line-numbers"><code class="language-cpp">for (int i = 1; i <= 5 * n + 17; i++) {
+    // constant time code here
+}</code></pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Still Linear Time - O(n)</div>
+                <pre class="line-numbers"><code class="language-cpp">for (int i = 1; i <= n + 457737; i++) {
+    // constant time code here
+}</code></pre>
+            </div>
+
+            <p>We can find the time complexity of multiple loops by multiplying together the time complexities of each loop. This example is <span class="math-expression">O(nm)</span>, because the outer loop runs <span class="math-expression">O(n)</span> iterations and the inner loop <span class="math-expression">O(m)</span>.</p>
+
+            <div class="code-block">
+                <div class="code-header">Nested Loops - O(nm)</div>
+                <pre class="line-numbers"><code class="language-cpp">for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= m; j++) {
+        // constant time code here
+    }
+}</code></pre>
+            </div>
+
+            <p>In this example, the outer loop runs <span class="math-expression">O(n)</span> iterations, and the inner loop runs anywhere between <span class="math-expression">1</span> and <span class="math-expression">n</span> iterations (which is a maximum of <span class="math-expression">n</span>). Since Big O notation calculates worst-case time complexity, we treat the inner loop as a factor of <span class="math-expression">n</span>. Thus, this code is <span class="math-expression">O(n²)</span>.</p>
+
+            <div class="code-block">
+                <div class="code-header">Quadratic Time - O(n²)</div>
+                <pre class="line-numbers"><code class="language-cpp">for (int i = 1; i <= n; i++) {
+    for (int j = i; j <= n; j++) {
+        // constant time code here
+    }
+}</code></pre>
+            </div>
+
+            <p>If an algorithm contains multiple blocks, then its time complexity is the worst time complexity out of any block. For example, the following code is <span class="math-expression">O(n²)</span>.</p>
+
+            <div class="code-block">
+                <div class="code-header">Multiple Blocks - O(n²)</div>
+                <pre class="line-numbers"><code class="language-cpp">for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= n; j++) {
+        // constant time code here
+    }
+}
+for (int i = 1; i <= n + 58834; i++) {
+    // more constant time code here
+}</code></pre>
+            </div>
+
+            <p>The following code is <span class="math-expression">O(n² + m)</span>, because it consists of two blocks of complexity <span class="math-expression">O(n²)</span> and <span class="math-expression">O(m)</span>, and neither of them is a lower order function with respect to the other.</p>
+
+            <div class="code-block">
+                <div class="code-header">Combined Complexity - O(n² + m)</div>
+                <pre class="line-numbers"><code class="language-cpp">for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= n; j++) {
+        // constant time code here
+    }
+}
+for (int i = 1; i <= m; i++) {
+    // more constant time code here
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Common Complexities and Constraints</h2>
+            <p>Complexity factors that come from some common algorithms and data structures are as follows:</p>
+
+            <div class="warning-box">
+                <div class="warning-title">Important Note</div>
+                <p>Don't worry if you don't recognize most of these! They will all be introduced later.</p>
+            </div>
+
+            <div class="complexity-list">
+                <ul>
+                    <li>Mathematical formulas that just calculate an answer: <span class="math-expression">O(1)</span></li>
+                    <li>Binary search: <span class="math-expression">O(log n)</span></li>
+                    <li>Sorted set/map or priority queue: <span class="math-expression">O(log n)</span> per operation</li>
+                    <li>Prime factorization of an integer, or checking primality or compositeness of an integer naively: <span class="math-expression">O(√n)</span></li>
+                    <li>Reading in <span class="math-expression">n</span> items of input: <span class="math-expression">O(n)</span></li>
+                    <li>Iterating through an array or a list of <span class="math-expression">n</span> elements: <span class="math-expression">O(n)</span></li>
+                    <li>Sorting: usually <span class="math-expression">O(n log n)</span> for default sorting algorithms (mergesort, Collections.sort, Arrays.sort)</li>
+                    <li>Java Quicksort Arrays.sort function on primitives: <span class="math-expression">O(n²)</span></li>
+                    <li>Iterating through all subsets of size <span class="math-expression">k</span> of the input elements: <span class="math-expression">O(n^k)</span>. For example, iterating through all triplets is <span class="math-expression">O(n³)</span></li>
+                    <li>Iterating through all subsets: <span class="math-expression">O(2^n)</span></li>
+                    <li>Iterating through all permutations: <span class="math-expression">O(n!)</span></li>
+                </ul>
+            </div>
+
+            <h3 class="subsection-title">Constraints and Viable Complexities</h3>
+            <p>Here are conservative upper bounds on the value of <span class="math-expression">n</span> for each time complexity. You might get away with more than this, but this should allow you to quickly check whether an algorithm is viable.</p>
+
+            <table class="complexity-table">
+                <thead>
+                    <tr>
+                        <th>n</th>
+                        <th>Possible Complexities</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="math-expression">n ≤ 10</span></td>
+                        <td><span class="math-expression">O(n!), O(n^7), O(n^6)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="math-expression">n ≤ 20</span></td>
+                        <td><span class="math-expression">O(2^n × n), O(n^5)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="math-expression">n ≤ 80</span></td>
+                        <td><span class="math-expression">O(n^4)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="math-expression">n ≤ 400</span></td>
+                        <td><span class="math-expression">O(n^3)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="math-expression">n ≤ 7500</span></td>
+                        <td><span class="math-expression">O(n^2)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="math-expression">n ≤ 7 × 10^4</span></td>
+                        <td><span class="math-expression">O(n√n)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="math-expression">n ≤ 5 × 10^5</span></td>
+                        <td><span class="math-expression">O(n log n)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="math-expression">n ≤ 5 × 10^6</span></td>
+                        <td><span class="math-expression">O(n)</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="math-expression">n ≤ 10^18</span></td>
+                        <td><span class="math-expression">O(log²n), O(log n), O(1)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="warning-box">
+                <div class="warning-title">Bronze Problems</div>
+                <p>A significant portion of Bronze problems will have n ≤ 100. This doesn't give much of a hint regarding the intended time complexity. The intended solution could still be O(n)!</p>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Constant Factor</h2>
+            <p>Constant factor refers to the idea that different operations with the same complexity take slightly different amounts of time to run. For example, three addition operations take a bit longer than a single addition operation. Another example is that although binary search on an array and insertion into an ordered set are both <span class="math-expression">O(log n)</span>, binary search is noticeably faster.</p>
+
+            <p>Constant factor is entirely ignored in Big O notation. This is fine most of the time, but if the time limit is particularly tight, you may receive time limit exceeded (TLE) with the intended complexity. When this happens, it is important to keep the constant factor in mind. For example, a piece of code that iterates through all ordered triplets runs in <span class="math-expression">O(n³)</span> time might be sped up by a factor of <span class="math-expression">6</span> if we only need to iterate through all unordered triplets.</p>
+
+            <p><span class="highlight">For now, don't worry about optimizing constant factors -- just be aware of them.</span></p>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Formal Definition of Big O Notation</h2>
+            <p>Let <span class="math-expression">f</span> and <span class="math-expression">g</span> be non-negative functions from <span class="math-expression">ℝ≥0</span> to <span class="math-expression">ℝ≥0</span>. If there exist positive constants <span class="math-expression">n₀</span> and <span class="math-expression">c</span> such that <span class="math-expression">f(n) ≤ c × g(n)</span> whenever <span class="math-expression">n ≥ n₀</span>, we say that <span class="math-expression">f(n) = O(g(n))</span>.</p>
+
+            <p>Therefore, we could say that the time complexity of a linear function, <span class="math-expression">O(n)</span>, is also <span class="math-expression">O(n/2)</span>, <span class="math-expression">O(2n)</span>, <span class="math-expression">O(n²)</span>, <span class="math-expression">O(2^n)</span>, <span class="math-expression">O(n^n)</span>, etc. However, we usually just write the simplest function out of those that are the most restrictive, which in the case of our linear function above, is <span class="math-expression">O(n)</span>.</p>
+        </div>
+    </div>
+
+    <script>
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            document.getElementById('scrollProgress').style.width = scrollPercent + '%';
+        });
+
+        // Animate sections on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.content-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scrolling for better UX
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+</body>
+</html>

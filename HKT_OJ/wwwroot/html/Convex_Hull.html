@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convex Hull</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            animation: slideInDown 1s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 300px;
+            height: 4px;
+            background: linear-gradient(90deg, #e67e22, #f39c12);
+            margin: 20px auto;
+            border-radius: 2px;
+            animation: expandLine 1.2s ease-out 0.5s both;
+        }
+
+        @keyframes expandLine {
+            from {
+                width: 0;
+            }
+            to {
+                width: 300px;
+            }
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #34495e;
+            margin-top: 60px;
+            margin-bottom: 25px;
+            border-left: 5px solid #e67e22;
+            padding-left: 20px;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h3::before {
+            content: '🔺';
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+
+        p {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: justify;
+            line-height: 1.8;
+        }
+
+        .code-container {
+            background: #1e1e1e;
+            border-radius: 12px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: 1px solid #333;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .code-header {
+            background: linear-gradient(90deg, #e67e22, #f39c12);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #444;
+        }
+
+        pre {
+            margin: 0 !important;
+            background: #1e1e1e !important;
+            border-radius: 0 !important;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+            font-weight: 500 !important;
+        }
+
+        .line-numbers-rows {
+            border-right: 1px solid #444 !important;
+            padding-right: 10px !important;
+            margin-right: 15px !important;
+        }
+
+        .complexity {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            margin: 25px 0;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.1);
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 35px;
+            background: #fafbfc;
+            border-radius: 15px;
+            border: 1px solid #e1e8ed;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hover-effect {
+            transition: all 0.3s ease;
+        }
+
+        .hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #e67e22 0%, #f39c12 100%);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 800;
+        }
+
+        .algorithm-box {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #28a745;
+            font-weight: 700;
+        }
+
+        .algorithm-box::before {
+            content: '⚡ Key Insight: ';
+            font-weight: 800;
+            color: #155724;
+        }
+
+        .convex-hull-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #ff9800;
+            font-weight: 700;
+        }
+
+        .convex-hull-box::before {
+            content: '🔺 Convex Hull Definition: ';
+            font-weight: 800;
+            color: #f57c00;
+        }
+
+        .graham-scan-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #2196f3;
+            font-weight: 700;
+        }
+
+        .graham-scan-box::before {
+            content: '🌀 Graham Scan: ';
+            font-weight: 800;
+            color: #1976d2;
+        }
+
+        .focus-problem {
+            background: linear-gradient(135deg, #fef9e7, #f9e79f);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #e67e22;
+            text-align: center;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(230, 126, 34, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(230, 126, 34, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(230, 126, 34, 0);
+            }
+        }
+
+        .math-formula {
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: #2d3748;
+            border: 1px solid #e9ecef;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+            margin: 25px 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 4px solid #e67e22;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -15px;
+            top: 15px;
+            background: #e67e22;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .introduction-box {
+            background: linear-gradient(135deg, #fef9e7, #f9e79f);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #e67e22;
+            font-weight: 700;
+        }
+
+        .introduction-box::before {
+            content: '🔺 Introduction: ';
+            font-weight: 800;
+            color: #e67e22;
+        }
+
+        .solution-header {
+            color: #e67e22;
+            font-weight: 800;
+            border-bottom: 3px solid #e67e22;
+            padding-bottom: 8px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #718096;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .rope-analogy-box {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #9c27b0;
+            font-weight: 700;
+        }
+
+        .rope-analogy-box::before {
+            content: '🪢 Rope Analogy: ';
+            font-weight: 800;
+            color: #7b1fa2;
+        }
+
+        .sorting-box {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #f44336;
+            font-weight: 700;
+        }
+
+        .sorting-box::before {
+            content: '📊 Sorting Strategy: ';
+            font-weight: 800;
+            color: #d32f2f;
+        }
+
+        .stack-invariant-box {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #28a745;
+            font-weight: 700;
+        }
+
+        .stack-invariant-box::before {
+            content: '📚 Stack Invariant: ';
+            font-weight: 800;
+            color: #155724;
+        }
+
+        .monotone-chain-box {
+            background: linear-gradient(135deg, #f0f4f8, #ddd6fe);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #8b5cf6;
+            font-weight: 700;
+        }
+
+        .monotone-chain-box::before {
+            content: '⛓️ Monotone Chain: ';
+            font-weight: 800;
+            color: #7c3aed;
+        }
+
+        .cross-product-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #ff9800;
+            font-weight: 700;
+        }
+
+        .cross-product-box::before {
+            content: '✖️ Cross Product Test: ';
+            font-weight: 800;
+            color: #f57c00;
+        }
+
+        .resource-list {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #28a745;
+            font-weight: 700;
+        }
+
+        .resource-list::before {
+            content: '📖 Resources: ';
+            font-weight: 800;
+            color: #155724;
+        }
+
+        .implementation-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #2196f3;
+            font-weight: 700;
+        }
+
+        .implementation-box::before {
+            content: '⚙️ Implementation: ';
+            font-weight: 800;
+            color: #1976d2;
+        }
+
+        .worked-example-box {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #9c27b0;
+            font-weight: 700;
+        }
+
+        .worked-example-box::before {
+            content: '📝 Worked Example: ';
+            font-weight: 800;
+            color: #7b1fa2;
+        }
+
+        .hull-construction-box {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #f44336;
+            font-weight: 700;
+        }
+
+        .hull-construction-box::before {
+            content: '🏗️ Hull Construction: ';
+            font-weight: 800;
+            color: #d32f2f;
+        }
+
+        ul {
+            margin: 25px 0;
+            padding-left: 0;
+        }
+
+        li {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            list-style: none;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        li::before {
+            content: '🔸';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .applications-box {
+            background: linear-gradient(135deg, #f0f4f8, #ddd6fe);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #8b5cf6;
+            font-weight: 700;
+        }
+
+        .applications-box::before {
+            content: '📖 Applications: ';
+            font-weight: 800;
+            color: #7c3aed;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+            
+            code {
+                font-size: 0.85rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Convex Hull</h1>
+        <p class="subtitle">Finding the Smallest Convex Polygon Enclosing All Points</p>
+        
+        <div class="section hover-effect">
+            <h2>Introduction</h2>
+            
+            <div class="introduction-box">
+                The Convex Hull is the subset of points that forms the smallest convex polygon which encloses all points in the set. This fundamental concept in computational geometry has numerous applications in computer graphics, pattern recognition, and optimization problems.
+            </div>
+
+            <div class="rope-analogy-box">
+                To visualize this, imagine that each point is a pole. Then, imagine what happens if you were to wrap a rope around the outside of all the poles, and then pull infinitely hard, such that the connections between any two points that lie on the edge of the rope are lines. The set of points that touch the rope is the convex hull.
+            </div>
+
+            <div class="convex-hull-box">
+                <strong>Mathematical Definition:</strong> A convex hull of a set of points S is the smallest convex polygon (or polytope in higher dimensions) that contains all points in S. The hull is unique and consists of the extreme points of the set.
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Key Properties:</strong><br>
+                • The convex hull is always a convex polygon<br>
+                • It contains all original points either inside or on the boundary<br>
+                • Hull vertices are a subset of the original point set<br>
+                • The hull has the minimum perimeter among all enclosing convex polygons<br>
+                • Any line segment between two points inside the hull lies entirely within the hull
+            </div>
+
+            <div class="applications-box">
+                <strong>Real-World Applications:</strong><br>
+                • <strong>Computer Graphics:</strong> Collision detection, shape approximation<br>
+                • <strong>Pattern Recognition:</strong> Object boundary detection, clustering<br>
+                • <strong>Optimization:</strong> Linear programming, computational geometry<br>
+                • <strong>Robotics:</strong> Path planning, obstacle avoidance<br>
+                • <strong>GIS Systems:</strong> Geographic boundary computation<br>
+                • <strong>Image Processing:</strong> Shape analysis, feature extraction
+            </div>
+
+            <div class="focus-problem">
+                <strong>🎯 Convex Hull</strong><br>
+                <em>Kattis - Easy</em><br>
+                Focus Problem – try your best to solve this problem before continuing!
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Graham Scan Algorithm</h2>
+
+            <div class="resource-list">
+                <strong>Learning Resources:</strong><br>
+                • <strong>Wikipedia</strong> - Graham Scan<br>
+                • <strong>VisuAlgo</strong> - Graham Scan Visualization<br>
+                • <strong>UCSD</strong> - Original Graham Scan Paper
+            </div>
+
+            <h3 class="solution-header">Solution</h3>
+
+            <div class="resource-list">
+                <strong>Implementation Reference:</strong><br>
+                • <strong>Benq</strong> - Graham Scan Implementation
+            </div>
+
+            <div class="graham-scan-box">
+                The Graham Scan algorithm works in 3 steps. First, it sorts all of the <span class="math-formula">n</span> points by their counterclockwise angle around a pivot <span class="math-formula">P₀</span>, breaking ties by distance. This algorithm uses the leftmost (and bottommost if there is a tie) point as <span class="math-formula">P₀</span>.
+            </div>
+
+            <div class="stack-invariant-box">
+                We maintain a stack containing the points such that the following invariant holds: every three consecutive points <span class="math-formula">a, b, c</span> of the stack form a counterclockwise turn. In other words, <span class="math-formula">c</span> lies to the left of the line from <span class="math-formula">a</span> to <span class="math-formula">b</span>. This condition implies that the points of the stack form the vertices of a convex polygon.
+            </div>
+
+            <div class="hull-construction-box">
+                To start the creation of the convex hull, we choose 2 points. The pivot (first point), and the second point based on our initial sorting. After that, we attempt to add each point in <span class="math-formula">cand</span> to the stack.
+            </div>
+
+            <p>Denote our stack as <span class="math-formula">hull</span>, the top element of <span class="math-formula">hull</span> as <span class="math-formula">hull[i]</span> and <span class="math-formula">cand[j]</span> as the <span class="math-formula">j</span>-th sorted candidate point. Before adding <span class="math-formula">cand[j]</span> to the stack, we check whether <span class="math-formula">hull[i-1] → hull[i] → cand[j]</span> forms a counterclockwise turn.</p>
+
+            <ol class="step-list">
+                <li>If so, then we add <span class="math-formula">cand[j]</span> to the stack and the invariant holds. Continue with <span class="math-formula">cand[j+1]</span>.</li>
+                <li>Otherwise, <span class="math-formula">hull[i]</span> lies within the convex hull of the other points in the stack along with <span class="math-formula">cand[j]</span>, so we pop <span class="math-formula">hull[i]</span> from the stack and continue with <span class="math-formula">cand[j]</span>.</li>
+            </ol>
+
+            <h3 class="solution-header">Worked Example</h3>
+
+            <div class="worked-example-box">
+                Find the convex hull of the points <span class="math-formula">(1,2), (2,3), (5,3), (3,2), (2,0), (6,2)</span>.
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Animation Reference:</strong> This example can be visualized with various online tools. Interactive animations help understand the step-by-step process of Graham Scan.
+            </div>
+
+            <p><strong>Using the steps from our Graham Scan:</strong></p>
+
+            <div class="sorting-box">
+                <strong>1. Sorting the points by counterclockwise angle:</strong> Our leftmost point is <span class="math-formula">(1,2)</span>, so we then sort all the points by their counterclockwise angle. If the angles are the same, we can tiebreak by distance. Our resulting sorted points are <span class="math-formula">(2,0), (6,2), (3,2), (5,3), (2,3)</span> with initial pivot <span class="math-formula">(1,2)</span>. Note that <span class="math-formula">(6,2), (3,2)</span> are collinear but since <span class="math-formula">(6,2)</span> is further away it breaks the tie, thus placing it before <span class="math-formula">(3,2)</span>.
+            </div>
+
+            <div class="stack-invariant-box">
+                <strong>2. Maintaining the stack:</strong> Our initial stack elements are <span class="math-formula">(1,2), (2,0)</span>. Then, starting from <span class="math-formula">cand[2]</span>, we process each point.
+            </div>
+
+            <ol class="step-list">
+                <li>First, we check if the turn between <span class="math-formula">(1,2), (2,0)</span>, and <span class="math-formula">(3,2)</span> is counterclockwise, which it is. Hence, the point <span class="math-formula">cand[2]=(3,2)</span> is inserted on our stack. Our stack now corresponds to the points: <span class="math-formula">(1,2), (2,0), (3,2)</span>.</li>
+                
+                <li>Then, we check the turn <span class="math-formula">(2,0), (3,2), (6,2)</span>, which is clockwise. Hence, we pop the stack until the counterclockwise property can be satisfied. In this case, only <span class="math-formula">(3,2)</span> is popped. Afterwards, we push <span class="math-formula">(6,2)</span> to our stack because it satisfies the counterclockwise property. Our stack now corresponds to the points: <span class="math-formula">(1,2), (2,0), (6,2)</span>.</li>
+                
+                <li>Then, we check whether the turn between <span class="math-formula">(2,0), (6,2), (5,3)</span> is counterclockwise, which it is, so we push <span class="math-formula">(5,3)</span> to our stack. Our stack now corresponds to the points: <span class="math-formula">(1,2), (2,0), (6,2), (5,3)</span>.</li>
+                
+                <li>Then, we check whether the turn between <span class="math-formula">(6,2), (5,3), (2,3)</span> is counterclockwise, which it is, so we push <span class="math-formula">(2,3)</span> to our stack. Since we have processed all points, we have completed the cycle, and our convex hull is complete.</li>
+            </ol>
+
+            <div class="algorithm-box">
+                Our stack now is then <span class="math-formula">(1,2), (2,0), (6,2), (5,3), (2,3)</span>, which are the vertices of the convex hull.
+            </div>
+
+            <div class="complexity">
+                <strong>Time Complexity: $\mathcal{O}(n \log n)$ for sorting + $\mathcal{O}(n)$ for scanning = $\mathcal{O}(n \log n)$</strong><br>
+                <strong>Space Complexity: $\mathcal{O}(n)$ for the stack</strong>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    C++ - Graham Scan Implementation
+                </div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+#define FOR(i, a, b) for (int i = (a); i &lt; (b); i++)
+#define FORE(i, a, b) for (int i = (a); i &lt;= (b); i++)
+#define F0R(i, a) for (int i = 0; i &lt; (a); i++)
+#define trav(a, x) for (auto &amp;a : x)
+
+#define f first
+#define s second
+#define bk back()
+#define pb push_back
+
+#define sz(x) int((x).size())
+#define bg(x) begin(x)
+#define all(x) bg(x), end(x)
+
+int N, Q;
+
+const int MX = 2e5 + 5;
+
+using T = long long;
+const T EPS = 1e-9;
+using P = pair&lt;T, T&gt;;
+using vP = vector&lt;P&gt;;
+using Line = pair&lt;P, P&gt;;
+
+T sq(T a) { return a * a; }
+T norm(const P &amp;p) { return sq(p.f) + sq(p.s); }
+
+P operator-(const P &amp;l, const P &amp;r) { return P(l.f - r.f, l.s - r.s); }
+
+T cross(const P &amp;a, const P &amp;b) { return a.f * b.s - a.s * b.f; }
+T cross(const P &amp;p, const P &amp;a, const P &amp;b) {
+    return cross(a - p, b - p);
+}
+
+using vi = vector&lt;int&gt;;
+using vP = vector&lt;P&gt;;
+
+vi hullInd(const vP &amp;v) {
+    int ind = int(min_element(all(v)) - begin(v));
+    vi cand, hull{ind};
+    F0R(i, sz(v)) if (v[i] != v[ind]) cand.pb(i);
+
+    sort(all(cand), [&](int a, int b) {
+        P x = v[a] - v[ind], y = v[b] - v[ind];
+        T t = cross(x, y);
+        return t != 0 ? t &gt; 0 : norm(x) &lt; norm(y);
+    });
+
+    trav(c, cand) {
+        while (sz(hull) &gt; 1 &amp;&amp; cross(v[end(hull)[-2]], v[hull.bk], v[c]) &lt;= 0) {
+            hull.pop_back();
+        }
+        hull.pb(c);
+    }
+
+    return hull;
+}
+
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    for (;;) {
+        int n;
+        cin &gt;&gt; n;
+        if (!n) break;
+        vP pts(n);
+
+        F0R(i, n) {
+            long long a, b;
+            cin &gt;&gt; a &gt;&gt; b;
+            pts[i] = P(a, b);
+        }
+
+        vi ret = hullInd(pts);
+
+        cout &lt;&lt; sz(ret) &lt;&lt; '\n';
+        trav(a, ret) {
+            cout &lt;&lt; pts[a].first &lt;&lt; " " &lt;&lt; pts[a].second &lt;&lt; '\n';
+        }
+    }
+}
+</code></pre>
+
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Monotone Chain Algorithm</h2>
+
+            <div class="resource-list">
+                <strong>Learning Resources:</strong><br>
+                • <strong>CPH</strong> - Monotone Chain<br>
+                • <strong>Wikipedia</strong> - Monotone Chain<br>
+                • <strong>Benq</strong> - Monotone Chain Implementation
+            </div>
+
+            <h3 class="solution-header">Solution</h3>
+
+            <div class="monotone-chain-box">
+                With the Monotone Chain algorithm, we start by sorting the given <span class="math-formula">n</span> points in ascending order with respect to their <span class="math-formula">x</span> coordinates. If two points have the same <span class="math-formula">x</span> coordinate, then we will look at the <span class="math-formula">y</span> coordinate.
+            </div>
+
+            <div class="hull-construction-box">
+                Next, we will calculate the convex hull in two parts - the upper and the lower hull. Firstly, we observe that the starting and ending points of both upper and lower hulls are the same. They are the points with the lowest and highest <span class="math-formula">x</span> value respectively, <span class="math-formula">P₀</span> and <span class="math-formula">Pₙ₋₁</span>.
+            </div>
+
+            <p>We start by adding <span class="math-formula">P₀</span> and <span class="math-formula">P₁</span> to the hull. (Note that <span class="math-formula">P₁</span> doesn't necessarily have to be on the convex hull at the end). Then, starting from <span class="math-formula">P₂</span>, we iterate through the sorted points and add them to the hull. Let's denote the current point being added as <span class="math-formula">Pₖ</span> and the last point still on the hull as <span class="math-formula">Pᵢ</span>.</p>
+
+            <div class="cross-product-box">
+                When adding new points, we want to make sure that there is no right turn among all segments of the hull, just like in the Graham Scan algorithm discussed above. To achieve this, the segment <span class="math-formula">Pᵢ₋₁Pᵢ</span> should always be on the right side of the segment <span class="math-formula">Pᵢ₋₁Pₖ</span>. This can be calculated by using a cross-product:
+            </div>
+
+            <ol class="step-list">
+                <li>If <span class="math-formula">(Pᵢ - Pᵢ₋₁) × (Pₖ - Pᵢ₋₁) < 0</span>, the point <span class="math-formula">Pᵢ</span> lies on the left side of the segment <span class="math-formula">Pᵢ₋₁Pₖ</span>. In this case, we have to remove point <span class="math-formula">Pᵢ</span> from the hull and repeat this check.</li>
+                
+                <li>If <span class="math-formula">(Pᵢ - Pᵢ₋₁) × (Pₖ - Pᵢ₋₁) = 0</span>, the point <span class="math-formula">Pᵢ</span> lies on the segment <span class="math-formula">Pᵢ₋₁Pₖ</span>. Whether to include multiple collinear points depends on the question, but for the given question above, we will remove the point <span class="math-formula">Pᵢ</span> as well and repeat the check.</li>
+                
+                <li>Otherwise, the point <span class="math-formula">Pᵢ</span> lies on the right side of the segment <span class="math-formula">Pᵢ₋₁Pₖ</span>. In this case, we can add <span class="math-formula">Pₖ</span> to the hull and process the next point <span class="math-formula">Pₖ₊₁</span> from the given point list.</li>
+            </ol>
+
+            <div class="algorithm-box">
+                After all the points have been processed, we have found the lower hull and will begin to find the upper hull in the same manner. This time, we add point <span class="math-formula">Pₙ₋₂</span> to the hull and iterate from the end of the points, <span class="math-formula">Pₙ₋₃</span>, to the starting point <span class="math-formula">P₀</span>. (The point <span class="math-formula">Pₙ₋₂</span> also doesn't necessarily have to be the convex hull and could be removed if it causes a right turn).
+            </div>
+
+            <div class="implementation-box">
+                At the end, we have got all points of the convex hull in the counterclockwise order. To do this in the clockwise order, one only has to change the condition for <span class="math-formula">(Pᵢ - Pᵢ₋₁) × (Pₖ - Pᵢ₋₁)</span> from more than 0 to less than 0. In this case, the upper hull will be found first and then the lower hull.
+            </div>
+
+            <div class="complexity">
+                <strong>Time Complexity: $\mathcal{O}(n \log n)$ to sort the points + $\mathcal{O}(n)$ to calculate the hull = $\mathcal{O}(n \log n)$</strong><br>
+                <strong>Space Complexity: $\mathcal{O}(n)$</strong>
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Animation Reference:</strong> An animation of how the Monotone Chain algorithm works can help visualize the construction of both lower and upper hulls systematically.
+            </div>
+
+            <h3 class="solution-header">Worked Example</h3>
+
+            <div class="worked-example-box">
+                Let's consider the same example from the Graham Scan algorithm. Find the convex hull of the points <span class="math-formula">(1,2), (2,3), (5,3), (3,2), (2,0), (6,2)</span>.
+            </div>
+
+            <p><strong>Following the steps of the Monotone Chain algorithm:</strong></p>
+
+            <div class="sorting-box">
+                <strong>1. Sorting the given points</strong> primarily by their <span class="math-formula">x</span> coordinates and secondarily by their <span class="math-formula">y</span> coordinates. The sorted list would be <span class="math-formula">(1,2), (2,0), (2,3), (3,2), (5,3), (6,2)</span>
+            </div>
+
+            <div class="hull-construction-box">
+                <strong>2. Find the lower hull:</strong>
+            </div>
+
+            <ol class="step-list">
+                <li>Firstly, we add the first two points into the hull. The list representing the hull would now contain these two elements <span class="math-formula">[(1,2), (2,0)]</span>. Let's start iterate through the rest of the points. Our <span class="math-formula">Pₖ</span> now is <span class="math-formula">(2,3)</span>. The cross product, <span class="math-formula">((2,0) - (1,2)) × ((2,3) - (1,2)) = (1,-2) × (1,1) = (1 · 1) - (-2 · 1) = 3</span>, is more than 0, which tells us that there is no right turn, and we can move to our next point, <span class="math-formula">(3,2)</span>. The list now contains <span class="math-formula">[(1,2), (2,0), (2,3)]</span>.</li>
+
+                <li>The cross product <span class="math-formula">((2,3) - (2,0)) × ((3,2) - (2,0)) = (0,3) × (1,2) = (0 · 2) - (3 · 1) = -3</span> is less than zero, meaning there is a right turn from <span class="math-formula">(2,0)(2,3)</span> to <span class="math-formula">(2,3)(3,2)</span>. Therefore, we remove point <span class="math-formula">(2,3)</span> from our hull. The hull now contains <span class="math-formula">[(1,2), (2,0)]</span>. We then test the cross product <span class="math-formula">((2,0) - (1,2)) × ((3,2) - (1,2)) = (1,-2) × (2,0) = (1 · 0) - (-2 · 2) = 4</span>, which is positive, so we add point <span class="math-formula">(3,2)</span> to our hull. The hull now contains <span class="math-formula">[(1,2), (2,0), (3,2)]</span>.</li>
+
+                <li>We keep testing the remaining points. We want to know if there is a right turn from <span class="math-formula">(2,0)(3,2)</span> to <span class="math-formula">(3,2)(5,3)</span>, and the cross product <span class="math-formula">((3,2) - (2,0)) × ((5,3) - (2,0)) = (1,2) × (3,3) = (1 · 3) - (2 · 3) = -3</span> is negative, so there is a right turn. We remove point <span class="math-formula">(3,2)</span>. Next, we test the two segments, <span class="math-formula">(1,2)(2,0)</span> and <span class="math-formula">(2,0)(5,3)</span>. The cross product is <span class="math-formula">((2,0) - (1,2)) × ((5,3) - (1,2)) = (1,-2) × (4,1) = (1 · 1) - (-2 · 4) = 9</span>, which is positive, so there is a left turn. We add point <span class="math-formula">(5,3)</span> and move to the next point. Our list looks now like this: <span class="math-formula">[(1,2), (2,0), (5,3)]</span>.</li>
+
+                <li>Then, we test the segments <span class="math-formula">(2,0)(5,3)</span> and <span class="math-formula">(5,3)(6,2)</span>. The cross product <span class="math-formula">((5,3) - (2,0)) × ((6,2) - (2,0)) = (3,3) × (4,2) = (3 · 2) - (3 · 4) = -6</span> is negative, so there is a right turn. We remove <span class="math-formula">(5,3)</span> from the list and now test the segments <span class="math-formula">(1,2)(2,0)</span> and <span class="math-formula">(2,0)(6,2)</span>. The cross product is <span class="math-formula">((2,0) - (1,2)) × ((6,2) - (1,2)) = (1,-2) × (5,0) = (1 · 0) - (-2 · 5) = 10</span>, which is positive, so there is a left turn. We add point <span class="math-formula">(6,2)</span> to our hull. The hull now contains <span class="math-formula">[(1,2), (2,0), (6,2)]</span>. As point <span class="math-formula">(6,2)</span> is the last element in the list, we have found the lower hull of the given set of points.</li>
+            </ol>
+
+            <div class="hull-construction-box">
+                <strong>3. Find the upper hull:</strong>
+            </div>
+
+            <ol class="step-list">
+                <li>We first add the point <span class="math-formula">(5,3)</span> to the end of the list and process the point <span class="math-formula">(3,2)</span>. The cross product for <span class="math-formula">((6,2) - (5,3)) × ((3,2) - (5,3)) = (1,-1) × (-2,-1) = (1 · (-1)) - (-1 · (-2)) = -3</span> is negative, meaning there is a right turn, so we remove point <span class="math-formula">(5,3)</span> from the list. We then test <span class="math-formula">((6,2) - (6,2)) × ((3,2) - (6,2))</span>, but since there aren't enough points left in the upper hull, we add point <span class="math-formula">(3,2)</span> to the list. The hull contains <span class="math-formula">[(1,2), (2,0), (6,2), (3,2)]</span>.</li>
+
+                <li>Then we process the next point <span class="math-formula">(2,3)</span>. The cross product for segments <span class="math-formula">(6,2)(3,2)</span> and <span class="math-formula">(3,2)(2,3)</span> is <span class="math-formula">((3,2) - (6,2)) × ((2,3) - (6,2)) = (-3,0) × (-4,1) = (-3 · 1) - (0 · (-4)) = -3</span>, which is negative, so there is a right turn. We remove point <span class="math-formula">(3,2)</span>. Testing again with <span class="math-formula">(6,2)</span> and <span class="math-formula">(2,3)</span>, we need a point before <span class="math-formula">(6,2)</span> which is <span class="math-formula">(2,0)</span>. The cross product <span class="math-formula">((6,2) - (2,0)) × ((2,3) - (2,0)) = (4,2) × (0,3) = (4 · 3) - (2 · 0) = 12</span> is positive, so there is a left turn. We can add point <span class="math-formula">(2,3)</span> to our hull. The list contains <span class="math-formula">[(1,2), (2,0), (6,2), (2,3)]</span>.</li>
+
+                <li>The next point is <span class="math-formula">(2,0)</span>. The segments <span class="math-formula">(6,2)(2,3)</span> and <span class="math-formula">(2,3)(2,0)</span> have cross product <span class="math-formula">((2,3) - (6,2)) × ((2,0) - (6,2)) = (-4,1) × (-4,-2) = (-4 · (-2)) - (1 · (-4)) = 12</span>, which is positive, so there is a left turn. We can add point <span class="math-formula">(2,0)</span> to our hull. The list contains <span class="math-formula">[(1,2), (2,0), (6,2), (2,3), (2,0)]</span>.</li>
+
+                <li>The next point is <span class="math-formula">(1,2)</span>. There is a right turn from <span class="math-formula">(2,3)(2,0)</span> to <span class="math-formula">(2,0)(1,2)</span>, so we remove point <span class="math-formula">(2,0)</span> from the list. We test again for segments <span class="math-formula">(6,2)(2,3)</span> and <span class="math-formula">(2,3)(1,2)</span>. The cross product is <span class="math-formula">((2,3) - (6,2)) × ((1,2) - (6,2)) = (-4,1) × (-5,0) = (-4 · 0) - (1 · (-5)) = 5</span>, which is positive, so there is a left turn. We add point <span class="math-formula">(1,2)</span> to the list. We have reached the beginning of our list so we can terminate here. As <span class="math-formula">(1,2)</span> was added while calculating the lower hull, we then remove the last element, i.e. the added point <span class="math-formula">(1,2)</span>, from the list.</li>
+            </ol>
+
+            <div class="algorithm-box">
+                Now, we have the upper hull calculated as well. The final result is <span class="math-formula">[(1,2), (2,0), (6,2), (2,3)]</span>. These are the vertices of our convex hull in counterclockwise order.
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    C++ - Monotone Chain Implementation
+                </div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+using pii = pair&lt;int, int&gt;;
+
+vector&lt;pii&gt; points;
+vector&lt;pii&gt; hull;
+
+// cross product, the signed area of these three points
+int area(pii O, pii P, pii Q) {
+    return (P.first - O.first) * (Q.second - O.second) -
+           (P.second - O.second) * (Q.first - O.first);
+}
+
+void monotone_chain() {
+    sort(points.begin(), points.end());
+    points.erase(unique(points.begin(), points.end()), points.end());
+    int n = points.size();
+
+    if (n &lt; 3) {
+        hull = points;
+        return;
+    }
+
+    for (int i = 0; i &lt; n; i++) {
+        while (hull.size() &gt; 1 &amp;&amp;
+               area(hull[hull.size() - 2], hull.back(), points[i]) &lt;= 0)
+            hull.pop_back();
+        hull.push_back(points[i]);
+    }
+
+    auto lower_hull_length = hull.size();
+    for (int i = n - 2; i &gt;= 0; i--) {
+        while (hull.size() &gt; lower_hull_length &amp;&amp;
+               area(hull[hull.size() - 2], hull.back(), points[i]) &lt;= 0)
+            hull.pop_back();
+        hull.push_back(points[i]);
+    }
+
+    hull.pop_back();
+}
+
+int main() {
+    cin.tie(0)-&gt;sync_with_stdio(false);
+
+    int n;
+    cin &gt;&gt; n;
+    while (n != 0) {
+        points.assign(n, {});
+        hull = {};
+        for (auto &amp;p : points) cin &gt;&gt; p.first &gt;&gt; p.second;
+        monotone_chain();
+
+        cout &lt;&lt; hull.size() &lt;&lt; "\n";
+        for (auto &amp;p : hull) cout &lt;&lt; p.first &lt;&lt; " " &lt;&lt; p.second &lt;&lt; "\n";
+
+        cin &gt;&gt; n;
+    }
+
+    return 0;
+}
+</code></pre>
+
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Advanced Concepts and Comparisons</h2>
+
+            <h3 class="solution-header">Algorithm Comparison</h3>
+
+            <div class="algorithm-box">
+                <strong>Graham Scan vs Monotone Chain:</strong><br>
+                • <strong>Graham Scan:</strong> Requires polar angle sorting, handles collinear points differently<br>
+                • <strong>Monotone Chain:</strong> Uses Cartesian coordinate sorting, more stable numerically<br>
+                • <strong>Both:</strong> O(n log n) time complexity, O(n) space complexity<br>
+                • <strong>Practical:</strong> Monotone Chain is often preferred for its simplicity and robustness
+            </div>
+
+            <div class="implementation-box">
+                <strong>Implementation Considerations:</strong><br>
+                • Use integer coordinates when possible to avoid floating-point precision issues<br>
+                • Handle degenerate cases: collinear points, duplicate points, single points<br>
+                • Consider whether to include collinear points based on problem requirements<br>
+                • Ensure correct handling of tie-breaking in sorting<br>
+                • Test with edge cases: all points collinear, points forming a line, etc.
+            </div>
+
+            <h3 class="solution-header">Optimization Techniques</h3>
+
+            <div class="cross-product-box">
+                <strong>Cross Product Optimization:</strong> Use integer arithmetic for cross products when dealing with integer coordinates. The cross product <span class="math-formula">(a × b) = aₓbᵧ - aᵧbₓ</span> can be computed efficiently without floating-point operations.
+            </div>
+
+            <div class="sorting-box">
+                <strong>Sorting Optimization:</strong> For large datasets, consider using radix sort or other linear-time sorting algorithms when coordinates have limited range. For typical competitive programming problems, standard O(n log n) sorting is sufficient.
+            </div>
+
+            <h3 class="solution-header">Extensions and Variations</h3>
+
+            <div class="applications-box">
+                <strong>3D Convex Hull:</strong> The concepts extend to higher dimensions, but algorithms become more complex. QuickHull and other algorithms are used for 3D and higher-dimensional convex hulls.
+            </div>
+
+            <div class="convex-hull-box">
+                <strong>Dynamic Convex Hull:</strong> For applications requiring insertion and deletion of points, specialized data structures maintain the convex hull dynamically with better amortized complexity.
+            </div>
+
+            <div class="graham-scan-box">
+                <strong>Approximate Convex Hull:</strong> For very large datasets, approximate algorithms can provide near-optimal solutions with better performance characteristics.
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Summary and Key Takeaways</h2>
+
+            <div class="algorithm-box">
+                Convex hull algorithms are fundamental tools in computational geometry. Both Graham Scan and Monotone Chain provide efficient O(n log n) solutions with different strengths and implementation characteristics.
+            </div>
+
+            <div class="introduction-box">
+                <strong>What You've Mastered:</strong><br>
+                • Understanding the convex hull concept and geometric intuition<br>
+                • Graham Scan algorithm with polar angle sorting and stack maintenance<br>
+                • Monotone Chain algorithm with coordinate sorting and two-pass construction<br>
+                • Cross product applications for orientation testing<br>
+                • Handling edge cases and degenerate configurations<br>
+                • Performance analysis and optimization techniques
+            </div>
+
+            <div class="focus-problem">
+                <strong>🎯 Practice Challenge:</strong><br>
+                Implement both Graham Scan and Monotone Chain algorithms. Test them with various datasets including edge cases like collinear points, duplicate points, and different polygon shapes. Compare their performance and robustness!
+            </div>
+
+            <div class="convex-hull-box">
+                <strong>Key Geometric Insights:</strong><br>
+                • Cross product determines orientation (left turn, right turn, collinear)<br>
+                • Stack/hull maintenance ensures convexity throughout construction<br>
+                • Sorting strategy affects algorithm complexity and implementation<br>
+                • Edge case handling is crucial for robust implementations<br>
+                • Both algorithms achieve optimal O(n log n) complexity
+            </div>
+
+            <div class="complexity">
+                <strong>Performance Summary:</strong><br>
+                • <strong>Time Complexity:</strong> <span class="math-formula">$\mathcal{O}(n \log n)$</span> for both algorithms<br>
+                • <strong>Space Complexity:</strong> <span class="math-formula">$\mathcal{O}(n)$</span> for storing points and hull<br>
+                • <strong>Practical Performance:</strong> Monotone Chain often faster due to simpler sorting<br>
+                • <strong>Numerical Stability:</strong> Integer arithmetic preferred when possible
+            </div>
+
+            <div class="applications-box">
+                <strong>Real-World Impact:</strong><br>
+                • <strong>Computer Graphics:</strong> Shape simplification, collision detection, rendering optimization<br>
+                • <strong>Pattern Recognition:</strong> Object boundary detection, feature extraction<br>
+                • <strong>GIS and Mapping:</strong> Geographic boundary computation, spatial analysis<br>
+                • <strong>Robotics:</strong> Path planning, obstacle representation, workspace analysis<br>
+                • <strong>Manufacturing:</strong> CAD/CAM applications, quality control, material optimization<br>
+                • <strong>Data Analysis:</strong> Outlier detection, clustering, dimensional reduction
+            </div>
+
+            <div class="rope-analogy-box">
+                <strong>Final Thoughts:</strong> The convex hull is one of the most fundamental concepts in computational geometry. The "rope around poles" analogy provides intuitive understanding, while the algorithms demonstrate elegant solutions to geometric problems. These techniques form the foundation for more advanced geometric algorithms and applications.
+            </div>
+
+            <div class="hull-construction-box">
+                <strong>Next Steps:</strong> Explore applications like Delaunay triangulation, Voronoi diagrams, and linear programming that build upon convex hull concepts. Consider 3D extensions and dynamic algorithms for more advanced computational geometry challenges.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+</body>
+</html>

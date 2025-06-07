@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Data Structures - Getting Started</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 600;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideDown 1s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 10px;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            color: #475569;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            animation: fadeInScale 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .content-section:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        .content-section:nth-child(odd) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #7c3aed;
+            padding-bottom: 15px;
+        }
+
+        .subsection-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 40px 0 25px 0;
+        }
+
+        p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .code-inline {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            background: #f1f5f9;
+            padding: 3px 8px;
+            border-radius: 6px;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .code-block {
+            background: #1e293b !important;
+            border-radius: 15px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid #334155;
+        }
+
+        .code-header {
+            background: #334155;
+            padding: 15px 25px;
+            border-bottom: 1px solid #475569;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            margin: 0 !important;
+            background: transparent !important;
+            padding: 25px !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 500 !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 500 !important;
+        }
+
+        .line-numbers .line-numbers-rows {
+            border-right: 2px solid #475569 !important;
+            background: #2d3748 !important;
+        }
+
+        .line-numbers-rows > span:before {
+            color: #94a3b8 !important;
+            font-weight: 600 !important;
+        }
+
+        .data-structure-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-structure-table th {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: white;
+            padding: 20px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .data-structure-table td {
+            padding: 18px 20px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .data-structure-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .data-structure-table tr:hover {
+            background: #f3e8ff;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #ddd6fe, #c4b5fd);
+            border: 2px solid #7c3aed;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(124, 58, 237, 0);
+            }
+        }
+
+        .tip-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #5b21b6;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tip-title::before {
+            content: "💡";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .tip-box p {
+            color: #5b21b6;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            animation: pulse 2s infinite;
+        }
+
+        .warning-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #92400e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .warning-title::before {
+            content: "⚠️";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .warning-box p {
+            color: #92400e;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #c084fc 0%, #a855f7 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .ds-features-list {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            border-left: 6px solid #7c3aed;
+        }
+
+        .ds-features-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ds-features-list li {
+            padding: 12px 0;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .ds-features-list li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #7c3aed;
+            font-weight: 800;
+        }
+
+        .ds-features-list li:last-child {
+            border-bottom: none;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            z-index: 1000;
+        }
+
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #7c3aed, #a855f7);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .operations-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .demo-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .demo-title {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .demo-content {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            color: #374151;
+        }
+
+        .memory-calculation {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 2px solid #0ea5e9;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .memory-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #0c4a6e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .memory-title::before {
+            content: "🧮";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .memory-calculation p {
+            color: #0c4a6e;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .content-section {
+                padding: 30px 20px;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+
+            .operations-demo {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">Introduction to Data Structures</h1>
+            <p class="subtitle">Getting Started with Organizing and Managing Data</p>
+            <p class="description">Master the fundamental data structures used in competitive programming to efficiently store, access, and manipulate data.</p>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">What are Data Structures?</h2>
+            <p>A data structure determines how data is organized so that information can be used efficiently. Each data structure supports some operations efficiently, while other operations are either inefficient or not supported at all. Since different operations are supported by each data structure, you should carefully evaluate which data structure will work best for your particular problem.</p>
+            
+            <p>The <span class="highlight">C++ standard library</span> data structures are designed to store any type of data. We put the desired data type within the <span class="code-inline">&lt;&gt;</span> brackets when declaring the data structure, as follows:</p>
+
+            <div class="code-block">
+                <div class="code-header">Generic Data Structure Declaration</div>
+                <pre class="line-numbers"><code class="language-cpp">vector<string> v;  // Creates a vector that stores strings</code></pre>
+            </div>
+
+            <p>This creates a vector structure that only stores objects of type <span class="code-inline">string</span>. For our examples below, we will primarily use the <span class="code-inline">int</span> data type, but note that you can use any data type including <span class="code-inline">string</span> and user-defined structures.</p>
+
+            <p>Nearly every standard library data structure supports the <span class="code-inline">size()</span> method, which returns the number of elements in the data structure, and the <span class="code-inline">empty()</span> method, which returns <span class="code-inline">true</span> if the data structure is empty, and <span class="code-inline">false</span> otherwise.</p>
+
+            <div class="tip-box">
+                <div class="tip-title">Key Principle</div>
+                <p>Choose the right data structure based on the operations you need to perform most frequently. Different data structures excel at different operations.</p>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Arrays</h2>
+            <p>You already know one of the simplest data structures: the array! Arrays are fundamental to programming and provide constant-time access to elements by index.</p>
+
+            <div class="warning-box">
+                <div class="warning-title">Bronze Level Note</div>
+                <p>One can solve all Bronze problems without using anything from this module aside from arrays. The rest of this module isn't strictly necessary for Bronze (although it is highly recommended).</p>
+            </div>
+
+            <h3 class="subsection-title">C++ STL Arrays</h3>
+            <p>In C++11, in addition to normal arrays, there exists an <span class="code-inline">array</span> class in the STL. For example, an array of 25 ints can be initialized using the following line of code:</p>
+
+            <div class="code-block">
+                <div class="code-header">STL Array Declaration</div>
+                <pre class="line-numbers"><code class="language-cpp">array<int, 25> arr;
+// Access elements using square brackets
+arr[5] = 10;  // Sets the element at index 5 to 10</code></pre>
+            </div>
+
+            <p>The array class supports STL operations (such as <span class="code-inline">.empty()</span> or <span class="code-inline">.size()</span>) as well as the normal square-bracket access operator.</p>
+
+            <h3 class="subsection-title">Array Initialization</h3>
+            <p>In C++, arrays initialized locally using either the default syntax (i.e. <span class="code-inline">int arr[25];</span>) or the array class are initialized to random numbers because C++ doesn't have built-in memory management. In order to initialize an array to zero, you have several options:</p>
+
+            <div class="ds-features-list">
+                <ul>
+                    <li>Use a for loop (or nested for loops)</li>
+                    <li>Declare the array globally</li>
+                    <li>Declare the array with an empty initializer list (i.e. <span class="code-inline">int arr[25]{};</span>)</li>
+                    <li>Use a built-in function such as <span class="code-inline">std::fill_n(arr, 25, 0)</span> or <span class="code-inline">std::fill(arr, arr+25, 0)</span></li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Array Initialization Methods</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <array>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    // Method 1: Zero initialization with {}
+    int arr1[10]{};
+    
+    // Method 2: Using fill
+    int arr2[10];
+    fill(arr2, arr2 + 10, 0);
+    
+    // Method 3: STL array with initialization
+    array<int, 10> arr3{};
+    
+    // Method 4: For loop initialization
+    int arr4[10];
+    for (int i = 0; i < 10; i++) {
+        arr4[i] = 0;
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-title">memset Warning</div>
+                <p><span class="code-inline">memset(arr, 0, sizeof arr)</span> will zero-initialize an array. However, <span class="code-inline">memset(arr, 1, sizeof arr)</span> will set each byte to 1, resulting in each element becoming 0x01010101 (i.e. 16843009 in decimal), not 1. Use with caution!</p>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Dynamic Arrays (Vectors)</h2>
+            <p>Dynamic arrays (<span class="code-inline">vector</span> in C++) support all the functions that a normal array does, and can resize itself to accommodate more elements. In a dynamic array, we can also add and delete elements at the end in <span class="code-inline">O(1)</span> time.</p>
+
+            <h3 class="subsection-title">Basic Vector Operations</h3>
+            <p>For example, the following code creates a dynamic array and adds the numbers 1 through 10 to it:</p>
+
+            <div class="code-block">
+                <div class="code-header">Creating and Populating a Vector</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v;
+    for (int i = 1; i <= 10; i++) {
+        v.push_back(i);
+    }
+    
+    // Print the vector
+    for (int x : v) {
+        cout << x << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Vector Declaration Methods</h3>
+            <p>While g++ will allow you to create an array of variable length, variable-length arrays are not part of the C++ standard. We recommend that you use a vector for this purpose instead:</p>
+
+            <div class="code-block">
+                <div class="code-header">Vector Declaration Options</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    
+    // Method 1: Declare with size
+    vector<int> v1(n);
+    
+    // Method 2: Declare empty and resize
+    vector<int> v2;
+    v2.resize(n);
+    
+    // Method 3: Declare with size and initial value
+    vector<int> v3(n, 0);  // n elements, all initialized to 0
+    
+    // Method 4: Initialize with values
+    vector<int> v4{1, 2, 3, 4, 5};
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Multi-dimensional Arrays</h3>
+            <p>In array-based contest problems, we'll use one-, two-, and three-dimensional static arrays much of the time. However, we can also have dynamic arrays of dynamic arrays, static arrays of dynamic arrays, dynamic arrays of static arrays, and so on.</p>
+
+            <div class="code-block">
+                <div class="code-header">Multi-dimensional Array Examples</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <array>
+using namespace std;
+
+int main() {
+    // 2D vector (dynamic array of dynamic arrays)
+    vector<vector<int>> matrix2D(5, vector<int>(5, 0));
+    
+    // Static array of dynamic arrays
+    array<vector<int>, 5> hybrid1;
+    
+    // Dynamic array of static arrays
+    vector<array<int, 5>> hybrid2;
+    
+    // 3D vector
+    vector<vector<vector<int>>> matrix3D(10, 
+        vector<vector<int>>(10, vector<int>(10, 0)));
+    
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Iterating Through Containers</h2>
+            <p>There are several ways to iterate through all elements of a static or dynamic array. Each method has its own advantages and use cases.</p>
+
+            <h3 class="subsection-title">Traditional For Loop</h3>
+            <p>One way to iterate through all elements is to use a regular for loop:</p>
+
+            <div class="code-block">
+                <div class="code-header">Traditional For Loop Iteration</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v{1, 7, 4, 5, 2};
+    
+    for (int i = 0; i < int(v.size()); i++) {
+        cout << v[i] << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Iterator-based Iteration</h3>
+            <p>We can also use iterators. An iterator allows you to traverse a container by pointing to an object within the container. However, they are not the same thing as pointers.</p>
+
+            <div class="code-block">
+                <div class="code-header">Iterator Examples</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v{1, 7, 4, 5, 2};
+    
+    // Method 1: Explicit iterator type
+    for (vector<int>::iterator it = v.begin(); it != v.end(); ++it) {
+        cout << *it << " ";
+    }
+    cout << endl;
+    
+    // Method 2: Auto keyword (C++11)
+    for (auto it = v.begin(); it != v.end(); it++) {
+        cout << *it << " ";
+    }
+    cout << endl;
+    
+    // Method 3: Using begin/end functions
+    for (auto it = begin(v); it != end(v); it = next(it)) {
+        cout << *it << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Range-based For Loop</h3>
+            <p>We can also use a for-each loop, which is often the most convenient:</p>
+
+            <div class="code-block">
+                <div class="code-header">Range-based For Loop</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v{1, 7, 4, 5, 2};
+    
+    // Read-only iteration
+    for (int element : v) {
+        cout << element << " ";
+    }
+    cout << endl;
+    
+    // Modifying elements (use reference)
+    for (int& element : v) {
+        element *= 2;  // Double each element
+    }
+    
+    // Print modified vector
+    for (const int& element : v) {
+        cout << element << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Vector Operations</h2>
+            <p>Vectors support various operations for inserting and erasing elements. Keep in mind that insertion and erasure in the middle of a vector are <span class="code-inline">O(n)</span> operations.</p>
+
+            <div class="code-block">
+                <div class="code-header">Common Vector Operations</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v;
+    
+    // Adding elements
+    v.push_back(2);          // [2]
+    v.push_back(3);          // [2, 3]
+    v.push_back(7);          // [2, 3, 7]
+    v.push_back(5);          // [2, 3, 7, 5]
+    
+    // Modifying elements
+    v[1] = 4;                // [2, 4, 7, 5]
+    
+    // Removing elements (O(n) operation)
+    v.erase(v.begin() + 1);  // [2, 7, 5] - removes element at index 1
+    
+    v.push_back(8);          // [2, 7, 5, 8]
+    v.pop_back();            // [2, 7, 5] - removes last element (O(1))
+    
+    // Print final vector
+    for (int x : v) {
+        cout << x << " ";
+    }
+    cout << endl;
+    
+    // Useful properties
+    cout << "Size: " << v.size() << endl;
+    cout << "Empty: " << (v.empty() ? "Yes" : "No") << endl;
+    cout << "First element: " << v.front() << endl;
+    cout << "Last element: " << v.back() << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="operations-demo">
+                <div class="demo-box">
+                    <div class="demo-title">Efficient Operations (O(1))</div>
+                    <div class="demo-content">• push_back()<br>• pop_back()<br>• size()<br>• empty()<br>• front()<br>• back()<br>• Random access v[i]</div>
+                </div>
+                <div class="demo-box">
+                    <div class="demo-title">Expensive Operations (O(n))</div>
+                    <div class="demo-content">• insert() in middle<br>• erase() in middle<br>• find()<br>• Copying vectors<br>• Resizing (sometimes)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Strings</h2>
+            <p>Strings are essentially dynamic arrays of characters with additional functionality. Introductory problems might involve various string operations.</p>
+
+            <h3 class="subsection-title">Essential String Operations</h3>
+            <p>Common string operations you'll need in competitive programming:</p>
+
+            <div class="ds-features-list">
+                <ul>
+                    <li>Reading in strings from standard input</li>
+                    <li>Knowing how to use <span class="code-inline">getline</span> and <span class="code-inline">cin</span> together</li>
+                    <li>Sorting strings, concatenating strings, looping through a string's characters</li>
+                    <li>Getting the i-th character of a string</li>
+                    <li>Getting substrings with <span class="code-inline">string::substr</span></li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">String Operations Examples</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    string s1 = "Hello";
+    string s2 = "World";
+    
+    // Concatenation
+    string s3 = s1 + " " + s2;  // "Hello World"
+    cout << s3 << endl;
+    
+    // Character access
+    cout << "First character: " << s3[0] << endl;  // 'H'
+    cout << "Length: " << s3.length() << endl;     // 11
+    
+    // Substring
+    string sub = s3.substr(6, 5);  // "World" (start at index 6, length 5)
+    cout << "Substring: " << sub << endl;
+    
+    // Character iteration
+    for (char c : s3) {
+        cout << c << " ";
+    }
+    cout << endl;
+    
+    // String modification
+    s3[0] = 'h';  // "hello World"
+    cout << s3 << endl;
+    
+    // String comparison
+    if (s1 < s2) {
+        cout << s1 << " comes before " << s2 << " lexicographically" << endl;
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Advanced String Operations</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    string text = "programming";
+    
+    // Find substring
+    size_t pos = text.find("gram");
+    if (pos != string::npos) {
+        cout << "Found 'gram' at position: " << pos << endl;
+    }
+    
+    // Replace part of string
+    text.replace(3, 4, "GRAM");  // "proGRAMming"
+    cout << text << endl;
+    
+    // Insert and erase
+    text.insert(0, "C++ ");      // "C++ proGRAMming"
+    text.erase(4, 3);            // "C++ GRAMming"
+    cout << text << endl;
+    
+    // Convert to uppercase
+    transform(text.begin(), text.end(), text.begin(), ::toupper);
+    cout << text << endl;  // "C++ GRAMMING"
+    
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Pairs</h2>
+            <p>If we want to store a collection of points on the 2D plane, then we can use a dynamic array of pairs. Both <span class="code-inline">vector&lt;vector&lt;int&gt;&gt;</span> and <span class="code-inline">vector&lt;array&lt;int,2&gt;&gt;</span> would suffice for this case, but a pair can also store two elements of different types.</p>
+
+            <h3 class="subsection-title">C++ Pairs</h3>
+            <div class="ds-features-list">
+                <ul>
+                    <li><span class="code-inline">pair&lt;type1, type2&gt; p</span>: Creates a pair p with two elements</li>
+                    <li><span class="code-inline">make_pair(a, b)</span>: Returns a pair with values a, b</li>
+                    <li><span class="code-inline">{a, b}</span>: With C++11 and above, this can be used to create a pair</li>
+                    <li><span class="code-inline">pair.first</span>: The first value of the pair</li>
+                    <li><span class="code-inline">pair.second</span>: The second value of the pair</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Pair Examples and Usage</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <utility>
+using namespace std;
+
+int main() {
+    // Different ways to create pairs
+    pair<int, string> p1 = make_pair(123, "Testing");
+    pair<int, string> p2{456, "Curly braces"};
+    pair<int, string> p3(789, "Parentheses");
+    
+    cout << p1.first << " " << p1.second << endl;
+    
+    // Modifying pairs
+    p1.first = 999;
+    p1.second = "Modified";
+    cout << p1.first << " " << p1.second << endl;
+    
+    // Vector of pairs for 2D points
+    vector<pair<int, int>> points;
+    points.push_back({1, 2});
+    points.push_back({3, 4});
+    points.push_back({5, 6});
+    
+    // Iterate through points
+    for (const auto& point : points) {
+        cout << "(" << point.first << ", " << point.second << ") ";
+    }
+    cout << endl;
+    
+    // Pair comparison (lexicographic order)
+    pair<int, int> a{1, 5};
+    pair<int, int> b{1, 3};
+    if (a > b) {
+        cout << "a is greater than b" << endl;
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">Pair Sorting</div>
+                <p>Pairs are automatically sorted lexicographically: first by the first element, then by the second element if the first elements are equal. This makes them very useful for coordinate problems!</p>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Tuples</h2>
+            <p>We can hold more than two values with something like <span class="code-inline">pair&lt;int, pair&lt;int, int&gt;&gt;</span>, but it gets messy when you need a lot of elements. In this case, using tuples might be more convenient.</p>
+
+            <h3 class="subsection-title">C++ Tuples</h3>
+            <div class="ds-features-list">
+                <ul>
+                    <li><span class="code-inline">tuple&lt;type1, type2, ..., typeN&gt; t</span>: Creates a tuple with N elements</li>
+                    <li><span class="code-inline">make_tuple(a, b, c, ..., d)</span>: Returns a tuple with specified values</li>
+                    <li><span class="code-inline">get&lt;i&gt;(t)</span>: Returns the i-th element of the tuple t (constant i only)</li>
+                    <li><span class="code-inline">tie(a, b, c, ..., d) = t</span>: Assigns tuple elements to variables</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Tuple Examples and Usage</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+int main() {
+    // Create a tuple
+    tuple<int, int, int> coordinates{3, 4, 5};
+    
+    // Access elements using get
+    cout << get<0>(coordinates) << " ";  // 3
+    cout << get<1>(coordinates) << " ";  // 4
+    cout << get<2>(coordinates) << endl; // 5
+    
+    // Modify tuple elements
+    get<0>(coordinates) = 7;
+    cout << get<0>(coordinates) << endl; // 7
+    
+    // Using tie to unpack tuple
+    int x, y, z;
+    tie(x, y, z) = coordinates;
+    cout << "x=" << x << ", y=" << y << ", z=" << z << endl;
+    
+    // Mixed type tuple
+    tuple<string, int, double> student{"Alice", 100, 95.5};
+    
+    string name;
+    int score;
+    double grade;
+    tie(name, score, grade) = student;
+    
+    cout << "Student: " << name << ", Score: " << score 
+         << ", Grade: " << grade << endl;
+    
+    // Using structured bindings (C++17)
+    // auto [name2, score2, grade2] = student;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="warning-box">
+                <div class="warning-title">get&lt;&gt; Limitation</div>
+                <p>The <span class="code-inline">get&lt;i&gt;(t)</span> operation only works for constant i. You cannot use a variable for the index like <span class="code-inline">get&lt;variable&gt;(t)</span>.</p>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Memory Allocation</h2>
+            <p>One thing to keep in mind when using arrays is the memory limit. Usually the USACO memory limit is 256 MB. Understanding memory constraints is crucial for competitive programming.</p>
+
+            <div class="memory-calculation">
+                <div class="memory-title">Memory Calculation Guide</div>
+                <p><strong>Step 1:</strong> Calculate the total memory size in bytes: for 256 MB, that's 256 × 10⁶ bytes.</p>
+                <p><strong>Step 2:</strong> Divide by the size, in bytes, of your data type:</p>
+                <p>• <span class="code-inline">int</span> (4 bytes): 256 × 10⁶ ÷ 4 = 64 × 10⁶ integers</p>
+                <p>• <span class="code-inline">long long</span> (8 bytes): 256 × 10⁶ ÷ 8 = 32 × 10⁶ long longs</p>
+                <p>• <span class="code-inline">double</span> (8 bytes): 256 × 10⁶ ÷ 8 = 32 × 10⁶ doubles</p>
+                <p><strong>Note:</strong> Program overhead (especially with recursive functions) will reduce available memory.</p>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Memory Usage Examples</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    // Memory usage calculations
+    cout << "Size of int: " << sizeof(int) << " bytes" << endl;
+    cout << "Size of long long: " << sizeof(long long) << " bytes" << endl;
+    cout << "Size of double: " << sizeof(double) << " bytes" << endl;
+    
+    // Example: 2D array memory usage
+    int rows = 1000, cols = 1000;
+    // This uses: 1000 * 1000 * 4 = 4,000,000 bytes = ~4 MB
+    vector<vector<int>> matrix(rows, vector<int>(cols, 0));
+    
+    cout << "2D matrix memory usage: approximately " 
+         << (rows * cols * sizeof(int)) / (1024 * 1024) << " MB" << endl;
+    
+    // For very large arrays, consider if you really need them all in memory
+    // Sometimes you can process data in chunks or use more memory-efficient algorithms
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <table class="data-structure-table">
+                <thead>
+                    <tr>
+                        <th>Data Type</th>
+                        <th>Size (bytes)</th>
+                        <th>Max Elements (256 MB)</th>
+                        <th>Typical Use</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="code-inline">bool</span></td>
+                        <td>1</td>
+                        <td>256 × 10⁶</td>
+                        <td>Flags, visited arrays</td>
+                    </tr>
+                    <tr>
+                        <td><span class="code-inline">char</span></td>
+                        <td>1</td>
+                        <td>256 × 10⁶</td>
+                        <td>Characters, small integers</td>
+                    </tr>
+                    <tr>
+                        <td><span class="code-inline">int</span></td>
+                        <td>4</td>
+                        <td>64 × 10⁶</td>
+                        <td>Most integer problems</td>
+                    </tr>
+                    <tr>
+                        <td><span class="code-inline">long long</span></td>
+                        <td>8</td>
+                        <td>32 × 10⁶</td>
+                        <td>Large integer problems</td>
+                    </tr>
+                    <tr>
+                        <td><span class="code-inline">double</span></td>
+                        <td>8</td>
+                        <td>32 × 10⁶</td>
+                        <td>Floating-point problems</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Data Structure Performance Summary</h2>
+            <p>Understanding the time complexity of operations for different data structures helps you choose the right tool for each problem.</p>
+
+            <table class="data-structure-table">
+                <thead>
+                    <tr>
+                        <th>Data Structure</th>
+                        <th>Access</th>
+                        <th>Search</th>
+                        <th>Insertion</th>
+                        <th>Deletion</th>
+                        <th>Best Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="code-inline">array</span></td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>Fixed-size collections</td>
+                    </tr>
+                    <tr>
+                        <td><span class="code-inline">vector</span></td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                        <td>O(1) end, O(n) middle</td>
+                        <td>O(1) end, O(n) middle</td>
+                        <td>Dynamic arrays</td>
+                    </tr>
+                    <tr>
+                        <td><span class="code-inline">string</span></td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                        <td>O(1) end, O(n) middle</td>
+                        <td>O(1) end, O(n) middle</td>
+                        <td>Text processing</td>
+                    </tr>
+                    <tr>
+                        <td><span class="code-inline">pair</span></td>
+                        <td>O(1)</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>Two related values</td>
+                    </tr>
+                    <tr>
+                        <td><span class="code-inline">tuple</span></td>
+                        <td>O(1)</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>Multiple related values</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Practical Tips and Best Practices</h2>
+            
+            <h3 class="subsection-title">Choosing the Right Data Structure</h3>
+            <div class="ds-features-list">
+                <ul>
+                    <li><span class="highlight">Use arrays</span> when you know the exact size and need fastest access</li>
+                    <li><span class="highlight">Use vectors</span> when size varies or you need dynamic resizing</li>
+                    <li><span class="highlight">Use pairs</span> for coordinate problems or when you need to sort by two criteria</li>
+                    <li><span class="highlight">Use tuples</span> when you need to group more than two related values</li>
+                    <li><span class="highlight">Use strings</span> for text processing and character manipulation</li>
+                </ul>
+            </div>
+
+            <h3 class="subsection-title">Performance Optimization Tips</h3>
+            <div class="tip-box">
+                <div class="tip-title">Optimization Strategies</div>
+                <p><strong>Reserve memory:</strong> Use <span class="code-inline">vector.reserve(n)</span> when you know the approximate final size.<br>
+                <strong>Avoid frequent resizing:</strong> Pre-allocate vectors with known size using <span class="code-inline">vector&lt;int&gt; v(n)</span>.<br>
+                <strong>Use references:</strong> In range-based loops, use <span class="code-inline">const auto&</span> to avoid copying.<br>
+                <strong>Choose appropriate types:</strong> Don't use <span class="code-inline">long long</span> when <span class="code-inline">int</span> suffices.</p>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Optimization Examples</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n = 1000000;
+    
+    // Good: Reserve memory to avoid reallocations
+    vector<int> v1;
+    v1.reserve(n);
+    for (int i = 0; i < n; i++) {
+        v1.push_back(i);
+    }
+    
+    // Better: Pre-allocate with known size
+    vector<int> v2(n);
+    for (int i = 0; i < n; i++) {
+        v2[i] = i;
+    }
+    
+    // Best: Use efficient iteration
+    for (const auto& element : v2) {
+        // Process element (no copying)
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Summary</h2>
+            <p>Data structures are the foundation of efficient programming. Understanding when and how to use arrays, vectors, strings, pairs, and tuples will give you a solid foundation for competitive programming and algorithm design.</p>
+
+            <div class="ds-features-list">
+                <ul>
+                    <li><span class="highlight">Master the basics:</span> Arrays and vectors are your most important tools</li>
+                    <li><span class="highlight">Understand complexity:</span> Know the time and space costs of your operations</li>
+                    <li><span class="highlight">Consider memory limits:</span> Plan your data structures within contest constraints</li>
+                    <li><span class="highlight">Practice different iteration methods:</span> Range-based loops, iterators, and traditional loops all have their place</li>
+                    <li><span class="highlight">Use the STL:</span> The standard library provides well-tested, efficient implementations</li>
+                </ul>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">Next Steps</div>
+                <p>Once you're comfortable with these basic data structures, you'll be ready to learn about more advanced structures like sets, maps, stacks, queues, and specialized contest data structures like segment trees and Fenwick trees.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            document.getElementById('scrollProgress').style.width = scrollPercent + '%';
+        });
+
+        // Animate sections on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.content-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scrolling for better UX
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+</body>
+</html>

@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Search</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            animation: slideInDown 1s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, #16a085, #1abc9c);
+            margin: 20px auto;
+            border-radius: 2px;
+            animation: expandLine 1.2s ease-out 0.5s both;
+        }
+
+        @keyframes expandLine {
+            from {
+                width: 0;
+            }
+            to {
+                width: 150px;
+            }
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #34495e;
+            margin-top: 60px;
+            margin-bottom: 25px;
+            border-left: 5px solid #16a085;
+            padding-left: 20px;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h3::before {
+            content: '🎯';
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+
+        p {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: justify;
+            line-height: 1.8;
+        }
+
+        ul {
+            margin: 25px 0;
+            padding-left: 0;
+        }
+
+        li {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            list-style: none;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .code-container {
+            background: #1e1e1e;
+            border-radius: 12px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: 1px solid #333;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .code-header {
+            background: linear-gradient(90deg, #2c3e50, #34495e);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #444;
+        }
+
+        pre {
+            margin: 0 !important;
+            background: #1e1e1e !important;
+            border-radius: 0 !important;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+            font-weight: 500 !important;
+        }
+
+        .line-numbers-rows {
+            border-right: 1px solid #444 !important;
+            padding-right: 10px !important;
+            margin-right: 15px !important;
+        }
+
+        .complexity {
+            background: linear-gradient(135deg, #e8f8f5, #d1f2eb);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 4px solid #16a085;
+            margin: 25px 0;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(22, 160, 133, 0.1);
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 4px solid #ffc107;
+            margin: 25px 0;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.1);
+        }
+
+        .warning::before {
+            content: '⚠️ ';
+            font-size: 1.2em;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 35px;
+            background: #fafbfc;
+            border-radius: 15px;
+            border: 1px solid #e1e8ed;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .focus-problem {
+            background: linear-gradient(135deg, #e8f8f5, #d1f2eb);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #16a085;
+            text-align: center;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(22, 160, 133, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(22, 160, 133, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(22, 160, 133, 0);
+            }
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8e6cf 0%, #88d8a3 100%);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 800;
+        }
+
+        .hover-effect {
+            transition: all 0.3s ease;
+        }
+
+        .hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .algorithm-box {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #ff9800;
+            font-weight: 700;
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #2196f3;
+            font-weight: 700;
+        }
+
+        .solution-header {
+            color: #16a085;
+            font-weight: 800;
+            border-bottom: 3px solid #16a085;
+            padding-bottom: 8px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .monotonic-box {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #9c27b0;
+            font-weight: 700;
+        }
+
+        .monotonic-box::before {
+            content: '📊 Monotonic Property: ';
+            font-weight: 800;
+            color: #7b1fa2;
+        }
+
+        .implementation-variants {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .variant-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid #16a085;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .variant-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .variant-title {
+            font-weight: 800;
+            color: #16a085;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .function-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .function-table th, .function-table td {
+            padding: 12px 15px;
+            text-align: center;
+            font-weight: 700;
+            border: 1px solid #e1e8ed;
+            font-size: 1rem;
+        }
+
+        .function-table th {
+            background: linear-gradient(90deg, #16a085, #1abc9c);
+            color: white;
+        }
+
+        .function-table .true-value {
+            background: #d5f4e6;
+            color: #1e8449;
+        }
+
+        .function-table .false-value {
+            background: #fadbd8;
+            color: #c0392b;
+        }
+
+        .mistake-box {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #f44336;
+            font-weight: 700;
+        }
+
+        .mistake-box::before {
+            content: '🚫 Common Mistake: ';
+            font-weight: 800;
+            color: #c62828;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #6c757d;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .lambda-note {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 3px solid #ff9800;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .lambda-note::before {
+            content: '💡 Note: ';
+            font-weight: 800;
+            color: #f57c00;
+        }
+
+        .binary-search-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .step {
+            background: white;
+            border-radius: 8px;
+            padding: 15px 20px;
+            border-left: 4px solid #16a085;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .step-number {
+            font-weight: 800;
+            color: #16a085;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Binary Search</h1>
+        
+        <div class="section hover-effect">
+            <h2>Core Concepts</h2>
+            
+            <p>When we <span class="highlight">binary search</span>, we start with a search space of size $N$ which we know the answer lies in. Then each iteration of the binary search cuts the search space in half, so the algorithm tests $\mathcal{O}(\log N)$ values. This is efficient and much better than testing each possible value in the search space.</p>
+
+            <div class="complexity">
+                <strong>Efficiency Comparison:</strong><br>
+                • Linear Search: $\mathcal{O}(N)$ - tests each value one by one<br>
+                • Binary Search: $\mathcal{O}(\log N)$ - cuts search space in half each iteration<br>
+                • For N = 1,000,000: Linear needs ~1M operations, Binary needs ~20 operations!
+            </div>
+
+            <div class="binary-search-steps">
+                <div class="step">
+                    <span class="step-number">1.</span>
+                    <strong>Initialize bounds:</strong> Set the search range [lo, hi] containing the answer
+                </div>
+                <div class="step">
+                    <span class="step-number">2.</span>
+                    <strong>Check middle:</strong> Calculate mid = (lo + hi) / 2 and evaluate condition
+                </div>
+                <div class="step">
+                    <span class="step-number">3.</span>
+                    <strong>Update bounds:</strong> Based on the result, discard half of the search space
+                </div>
+                <div class="step">
+                    <span class="step-number">4.</span>
+                    <strong>Repeat:</strong> Continue until the search space converges to the answer
+                </div>
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Binary Search on Monotonic Functions</h2>
+            
+            <p>Let's say we have a boolean function f(x). Usually, in such problems, we want to find the maximum or minimum value of $x$ such that f(x) is true. Similarly to how binary search on an array only works on a sorted array, <span class="highlight">binary search on the answer</span> only works if the answer function is monotonic, meaning that it is always non-decreasing or always non-increasing.</p>
+
+            <div class="monotonic-box">
+                A function is monotonic if once it changes from true to false (or false to true), it never changes back. This property allows us to use binary search to find the transition point efficiently.
+            </div>
+
+            <h3>Finding The Maximum x Such That f(x) = true</h3>
+            
+            <p>We want to construct a function <code>lastTrue</code> such that <code>lastTrue(lo, hi, f)</code> returns the last x in the range [lo,hi] such that f(x) = true. If no such x exists, then <code>lastTrue</code> should return lo-1.</p>
+
+            <div class="algorithm-box">
+                <h3>Conditions for lastTrue</h3>
+                <p>This can be done with binary search if f(x) satisfies both of the following conditions:</p>
+                <ul>
+                    <li>If f(x) = true, then f(y) = true for all $y \leq x$</li>
+                    <li>If f(x) = false, then f(y) = false for all $y \geq x$</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Example Function Values</h3>
+                <p>For example, if f(x) is given by the following function:</p>
+                
+                <table class="function-table">
+                    <tr>
+                        <th>x</th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>5</th>
+                        <th>6</th>
+                        <th>7</th>
+                        <th>8</th>
+                    </tr>
+                    <tr>
+                        <td><strong>f(x)</strong></td>
+                        <td class="true-value">true</td>
+                        <td class="true-value">true</td>
+                        <td class="true-value">true</td>
+                        <td class="true-value">true</td>
+                        <td class="true-value">true</td>
+                        <td class="false-value">false</td>
+                        <td class="false-value">false</td>
+                        <td class="false-value">false</td>
+                    </tr>
+                </table>
+                
+                <p>then <code>lastTrue(1, 8, f) = 5</code> and <code>lastTrue(7, 8, f) = 6</code>.</p>
+            </div>
+
+            <h3 class="solution-header">Implementation 1: Standard Approach</h3>
+            
+            <div class="warning">
+                Verify that this implementation doesn't call f on any values outside of the range [lo, hi].
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Last True Implementation (Standard)</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int last_true(int lo, int hi, function&lt;bool(int)&gt; f) {
+    // if none of the values in the range work, return lo - 1
+    lo--;
+    while (lo &lt; hi) {
+        // find the middle of the current range (rounding up)
+        int mid = lo + (hi - lo + 1) / 2;
+        if (f(mid)) {
+            // if mid works, then all numbers smaller than mid also work
+            lo = mid;
+        } else {
+            // if mid does not work, greater values would not work either
+            hi = mid - 1;
+        }
+    }
+    return lo;
+}
+
+int main() {
+    // all numbers satisfy the condition (outputs 10)
+    cout &lt;&lt; last_true(2, 10, [](int x) { return true; }) &lt;&lt; endl;
+    
+    // outputs 5
+    cout &lt;&lt; last_true(2, 10, [](int x) { return x * x &lt;= 30; }) &lt;&lt; endl;
+    
+    // no numbers satisfy the condition (outputs 1)
+    cout &lt;&lt; last_true(2, 10, [](int x) { return false; }) &lt;&lt; endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="lambda-note">
+                See Lambda Expressions if you're not familiar with the syntax used in the main function.
+            </div>
+
+            <h3 class="solution-header">Implementation 2: Interval Jumping</h3>
+            
+            <p>This approach is based on interval jumping. Essentially, we start from the beginning of the array, make jumps, and reduce the jump length as we get closer to the target element. We use powers of 2, very similar to Binary Jumping.</p>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Last True Implementation (Jumping)</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int last_true(int lo, int hi, function&lt;bool(int)&gt; f) {
+    lo--;
+    for (int dif = hi - lo; dif &gt; 0; dif /= 2) {
+        while (lo + dif &lt;= hi &amp;&amp; f(lo + dif)) { 
+            lo += dif; 
+        }
+    }
+    return lo;
+}
+
+int main() {
+    // Example usage with the same test cases
+    cout &lt;&lt; last_true(2, 10, [](int x) { return x * x &lt;= 30; }) &lt;&lt; endl;
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="algorithm-box">
+                <h3>How Interval Jumping Works</h3>
+                <ul>
+                    <li>Start with the largest possible jump size (power of 2)</li>
+                    <li>Keep jumping while the condition remains true</li>
+                    <li>When a jump would make the condition false, halve the jump size</li>
+                    <li>Continue until jump size becomes 0</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Finding The Minimum x Such That f(x) = true</h2>
+            
+            <p>We want to construct a function <code>firstTrue</code> such that <code>firstTrue(lo, hi, f)</code> returns the first x in the range [lo,hi] such that f(x) = true. If no such x exists, then <code>firstTrue</code> should return hi+1.</p>
+
+            <div class="algorithm-box">
+                <h3>Conditions for firstTrue</h3>
+                <p>Similarly to the previous part, this can be done with binary search if f(x) satisfies both of the following conditions:</p>
+                <ul>
+                    <li>If f(x) is true, then f(y) is true for all $y \geq x$</li>
+                    <li>If f(x) is false, then f(y) is false for all $y \leq x$</li>
+                </ul>
+            </div>
+
+            <p>We will need to do the same thing, but when the condition is satisfied, we will cut the right part, and when it's not, the left part will be cut.</p>
+
+            <div class="code-container">
+                <div class="code-header">C++ - First True Implementation</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int first_true(int lo, int hi, function&lt;bool(int)&gt; f) {
+    hi++;
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (f(mid)) {
+            hi = mid;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    return lo;
+}
+
+int main() {
+    // outputs 2
+    cout &lt;&lt; first_true(2, 10, [](int x) { return true; }) &lt;&lt; endl;
+    
+    // outputs 6
+    cout &lt;&lt; first_true(2, 10, [](int x) { return x * x &gt;= 30; }) &lt;&lt; endl;
+    
+    // outputs 11
+    cout &lt;&lt; first_true(2, 10, [](int x) { return false; }) &lt;&lt; endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="implementation-variants">
+                <div class="variant-card">
+                    <div class="variant-title">lastTrue Usage</div>
+                    <p>Use when you want to find the rightmost position where a condition is true. Common in "maximum value that satisfies constraint" problems.</p>
+                </div>
+                <div class="variant-card">
+                    <div class="variant-title">firstTrue Usage</div>
+                    <p>Use when you want to find the leftmost position where a condition is true. Common in "minimum value that satisfies constraint" problems.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Example Problem: Maximum Median</h2>
+            
+            <div class="focus-problem">
+                <strong>🎯 Focus Problem:</strong> Div 2 C - Maximum Median (CF - Easy)<br>
+                Try your best to solve this problem before continuing!
+            </div>
+
+            <h3>Problem Statement</h3>
+            <p><strong>Statement:</strong> Given an array $\texttt{arr}$ of $n$ integers, where $n$ is odd, we can perform the following operation on it $k$ times: take any element of the array and increase it by $1$. We want to make the median of the array as large as possible after $k$ operations.</p>
+
+            <p><strong>Constraints:</strong> $1 \leq n \leq 2 \cdot 10^5, 1 \leq k \leq 10^9$ and $n$ is odd.</p>
+
+            <h3>Solution Approach</h3>
+            <p>To get the current median, we first sort the array in ascending order.</p>
+
+            <p>Now, notice that to increase the current median to a value, say $x$, all values currently greater than or equal to the median must remain greater than or equal to the median.</p>
+
+            <div class="example-box">
+                <h3>Example Analysis</h3>
+                <p>Say we have the sorted array $[1,1,2,3,4,4,5,5,6,8,8]$. The current median is $4$, so to increase the median to $6$, we have to increase the current median by $2$ and we also have to increase the $5$'s to $6$.</p>
+                
+                <p>Following this idea, to increase the median to $x$, we need to increase all values in the second half of the array to some value greater than or equal to $x$.</p>
+            </div>
+
+            <div class="algorithm-box">
+                <h3>Binary Search Strategy</h3>
+                <p>We binary search for the maximum possible median. We know that the number of operations required to raise the median to $x$ increases monotonically as $x$ increases, so we can use binary search.</p>
+                
+                <p>For a given median value $x$, the number of operations required to raise the median to $x$ is:</p>
+                
+                <div class="formula-box">
+                    $$\sum_{i=(n+1)/2}^{n} \max(0, x - \texttt{arr}[i])$$
+                </div>
+                
+                <p>If this value is less than or equal to $k$, then $x$ can be the median, so our check function returns true. Otherwise, $x$ cannot be the median, so our check function returns false.</p>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Maximum Median Solution</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int last_true(int lo, int hi, function&lt;bool(int)&gt; f) {
+    lo--;
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo + 1) / 2;
+        if (f(mid)) {
+            lo = mid;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return lo;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int n, k;
+    cin &gt;&gt; n &gt;&gt; k;
+    
+    vector&lt;int&gt; arr(n);
+    for (int i = 0; i &lt; n; i++) {
+        cin &gt;&gt; arr[i];
+    }
+    
+    sort(arr.begin(), arr.end());
+    
+    // Check if we can achieve median x with k operations
+    auto canAchieve = [&amp;](long long x) {
+        long long operations = 0;
+        int median_pos = n / 2;  // 0-indexed median position
+        
+        for (int i = median_pos; i &lt; n; i++) {
+            if (arr[i] &lt; x) {
+                operations += x - arr[i];
+                if (operations &gt; k) return false;
+            }
+        }
+        return operations &lt;= k;
+    };
+    
+    // Binary search for maximum achievable median
+    int result = last_true(0, 2000000000, canAchieve);
+    cout &lt;&lt; result &lt;&lt; endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="lambda-note">
+                Here we write the check function as a lambda expression for clarity and to capture the necessary variables.
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Common Mistakes</h2>
+
+            <h3>Mistake 1 - Off By One</h3>
+            <div class="mistake-box">
+                Consider the code from CSAcademy's Binary Search on Functions:
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Problematic Implementation</div>
+                <pre class="line-numbers"><code class="language-cpp">long long f(int x) { 
+    return (long long)x * x; 
+}
+
+int sqrt(int x) {
+    int lo = 0;
+    int hi = x;
+    while (lo &lt; hi) {
+        int mid = (lo + hi) / 2;
+        if (f(mid) &lt;= x) {
+            lo = mid;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return lo;
+}</code></pre>
+            </div>
+
+            <div class="warning">
+                This results in an infinite loop if left=0 and right=1! To fix this, set middle = (left+right+1)/2 instead.
+            </div>
+
+            <div class="algorithm-box">
+                <h3>Why This Happens</h3>
+                <p>When we have lo=0, hi=1, and mid=(0+1)/2=0, if f(0)≤x is true, we set lo=mid=0. This creates an infinite loop because the bounds don't change!</p>
+                <p><strong>Solution:</strong> Use <code>mid = lo + (hi - lo + 1) / 2</code> when updating <code>lo = mid</code>.</p>
+            </div>
+
+            <h3>Mistake 2 - Not Accounting for Negative Bounds</h3>
+            <div class="mistake-box">
+                Consider a slightly modified version of firstTrue:
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Problematic with Negative Numbers</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;functional&gt;
+using namespace std;
+
+int first_true(int lo, int hi, function&lt;bool(int)&gt; f) {
+    hi++;
+    while (lo &lt; hi) {
+        int mid = (lo + hi) / 2;  // Problem line!
+        if (f(mid)) {
+            hi = mid;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    return lo;
+}</code></pre>
+            </div>
+
+            <p>This code does not necessarily work if lo is negative! Consider the following example:</p>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Problematic Cases</div>
+                <pre class="line-numbers"><code class="language-cpp">int main() {
+    // outputs -8 instead of -9
+    cout &lt;&lt; first_true(-10, -10, [](int x) { return false; }) &lt;&lt; "\n";
+    
+    // causes an infinite loop
+    cout &lt;&lt; first_true(-10, -10, [](int x) { return true; }) &lt;&lt; "\n";
+}</code></pre>
+            </div>
+
+            <div class="warning">
+                This is because dividing an odd negative integer by two will round it up instead of down. For example, (-1)/2 = 0 in C++, not -1.
+            </div>
+
+            <div class="algorithm-box">
+                <h3>Correct Implementation</h3>
+                <p>Always use <code>mid = lo + (hi - lo) / 2</code> instead of <code>mid = (lo + hi) / 2</code> to avoid issues with negative numbers and integer overflow.</p>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Fixed Implementation</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;functional&gt;
+using namespace std;
+
+int first_true(int lo, int hi, function&lt;bool(int)&gt; f) {
+    hi++;
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2;  // Fixed!
+        if (f(mid)) {
+            hi = mid;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    return lo;
+}</code></pre>
+            </div>
+
+            <h3>Mistake 3 - Integer Overflow</h3>
+            <div class="mistake-box">
+                The first version of firstTrue won't work if hi-lo initially exceeds INT_MAX, while the second version of firstTrue won't work if lo+hi exceeds INT_MAX at any point during execution. If this is an issue, use long longs instead of ints.
+            </div>
+
+            <div class="algorithm-box">
+                <h3>Safe Implementation for Large Numbers</h3>
+                <div class="code-container">
+                    <div class="code-header">C++ - Overflow-Safe Implementation</div>
+                    <pre class="line-numbers"><code class="language-cpp">#include &lt;functional&gt;
+using namespace std;
+
+long long first_true(long long lo, long long hi, function&lt;bool(long long)&gt; f) {
+    hi++;
+    while (lo &lt; hi) {
+        long long mid = lo + (hi - lo) / 2;  // Safe from overflow
+        if (f(mid)) {
+            hi = mid;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    return lo;
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="warning">
+                <strong>Key Takeaways:</strong><br>
+                • Always use <code>lo + (hi - lo) / 2</code> for calculating mid<br>
+                • Use appropriate rounding: <code>lo + (hi - lo + 1) / 2</code> when updating <code>lo = mid</code><br>
+                • Consider using <code>long long</code> for large number ranges<br>
+                • Test your implementation with edge cases and negative numbers
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Best Practices and Templates</h2>
+
+            <div class="algorithm-box">
+                <h3>Universal Binary Search Template</h3>
+                <p>Here's a robust template that handles most binary search scenarios:</p>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Universal Binary Search Template</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+// Find last position where condition is true
+template&lt;typename T&gt;
+T last_true(T lo, T hi, function&lt;bool(T)&gt; f) {
+    lo--;
+    while (lo &lt; hi) {
+        T mid = lo + (hi - lo + 1) / 2;
+        if (f(mid)) {
+            lo = mid;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return lo;
+}
+
+// Find first position where condition is true
+template&lt;typename T&gt;
+T first_true(T lo, T hi, function&lt;bool(T)&gt; f) {
+    hi++;
+    while (lo &lt; hi) {
+        T mid = lo + (hi - lo) / 2;
+        if (f(mid)) {
+            hi = mid;
+        } else {
+            lo = mid + 1;
+        }
+    }
+    return lo;
+}
+
+// Example usage
+int main() {
+    // Find last value &lt;= 30 when squared
+    auto result1 = last_true&lt;long long&gt;(1, 1000000, 
+        [](long long x) { return x * x &lt;= 30; });
+    
+    // Find first value &gt;= 30 when squared
+    auto result2 = first_true&lt;long long&gt;(1, 1000000, 
+        [](long long x) { return x * x &gt;= 30; });
+    
+    cout &lt;&lt; "Last value where x^2 &lt;= 30: " &lt;&lt; result1 &lt;&lt; endl;
+    cout &lt;&lt; "First value where x^2 &gt;= 30: " &lt;&lt; result2 &lt;&lt; endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="example-box">
+                <h3>When to Use Each Template</h3>
+                <ul>
+                    <li><strong>lastTrue:</strong> "What's the maximum X such that condition(X) is true?"</li>
+                    <li><strong>firstTrue:</strong> "What's the minimum X such that condition(X) is true?"</li>
+                    <li><strong>Both:</strong> Finding boundaries in monotonic functions</li>
+                </ul>
+            </div>
+
+            <div class="complexity">
+                <strong>Performance Characteristics:</strong><br>
+                • Time Complexity: $\mathcal{O}(\log(\text{search space}))$ per query<br>
+                • Space Complexity: $\mathcal{O}(1)$ auxiliary space<br>
+                • Works for any monotonic condition on ordered data<br>
+                • Handles negative numbers and large ranges safely
+            </div>
+
+            <div class="algorithm-box">
+                <h3>Problem-Solving Checklist</h3>
+                <ul>
+                    <li><strong>Identify monotonicity:</strong> Does the condition have a clear true/false boundary?</li>
+                    <li><strong>Choose the right template:</strong> Do you need first true or last true?</li>
+                    <li><strong>Handle edge cases:</strong> Empty ranges, all true, all false</li>
+                    <li><strong>Verify bounds:</strong> Are your initial lo and hi values correct?</li>
+                    <li><strong>Test thoroughly:</strong> Check with small examples and edge cases</li>
+                </ul>
+            </div>
+
+            <div class="monotonic-box">
+                Remember: Binary search is not just about finding elements in arrays. The key insight is recognizing when a problem has a monotonic structure that can be exploited with the divide-and-conquer approach.
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Advanced Applications</h2>
+
+            <div class="algorithm-box">
+                <h3>Real-World Binary Search Applications</h3>
+                <ul>
+                    <li><strong>Optimization Problems:</strong> Finding optimal resource allocation</li>
+                    <li><strong>Physics Simulations:</strong> Finding collision points and equilibrium states</li>
+                    <li><strong>Computer Graphics:</strong> Ray tracing and spatial subdivision</li>
+                    <li><strong>Machine Learning:</strong> Hyperparameter tuning and model selection</li>
+                    <li><strong>Networking:</strong> Load balancing and bandwidth allocation</li>
+                    <li><strong>Game Development:</strong> AI decision making and pathfinding optimization</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Competition Programming Patterns</h3>
+                <ul>
+                    <li><strong>Binary Search on Answer:</strong> When the answer space is continuous and monotonic</li>
+                    <li><strong>Parametric Search:</strong> Optimizing a parameter subject to constraints</li>
+                    <li><strong>Ternary Search:</strong> For unimodal functions (single peak/valley)</li>
+                    <li><strong>Fractional Cascading:</strong> Multiple binary searches on related data</li>
+                    <li><strong>Parallel Binary Search:</strong> Processing multiple queries simultaneously</li>
+                </ul>
+            </div>
+
+            <div class="complexity">
+                <strong>Key Insights for Mastery:</strong><br>
+                • Practice identifying monotonic properties in diverse problem contexts<br>
+                • Master both templates until implementation becomes automatic<br>
+                • Learn to transform non-obvious problems into binary search scenarios<br>
+                • Understand the relationship between binary search and other algorithms<br>
+                • Develop intuition for when binary search provides optimal solutions
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+</body>
+</html>

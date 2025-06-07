@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Sorting - Getting Started</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 600;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideDown 1s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 10px;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            color: #475569;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            animation: fadeInScale 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .content-section:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        .content-section:nth-child(odd) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #f59e0b;
+            padding-bottom: 15px;
+        }
+
+        .subsection-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 40px 0 25px 0;
+        }
+
+        p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .code-inline {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            background: #f1f5f9;
+            padding: 3px 8px;
+            border-radius: 6px;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .code-block {
+            background: #1e293b !important;
+            border-radius: 15px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid #334155;
+        }
+
+        .code-header {
+            background: #334155;
+            padding: 15px 25px;
+            border-bottom: 1px solid #475569;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            margin: 0 !important;
+            background: transparent !important;
+            padding: 25px !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 500 !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-weight: 500 !important;
+        }
+
+        .line-numbers .line-numbers-rows {
+            border-right: 2px solid #475569 !important;
+            background: #2d3748 !important;
+        }
+
+        .line-numbers-rows > span:before {
+            color: #94a3b8 !important;
+            font-weight: 600 !important;
+        }
+
+        .sorting-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .sorting-table th {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 20px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .sorting-table td {
+            padding: 18px 20px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .sorting-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .sorting-table tr:hover {
+            background: #fef3c7;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+            }
+        }
+
+        .tip-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #92400e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tip-title::before {
+            content: "💡";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .tip-box p {
+            color: #92400e;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border: 2px solid #ef4444;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            animation: pulse 2s infinite;
+        }
+
+        .warning-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #991b1b;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .warning-title::before {
+            content: "⚠️";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .warning-box p {
+            color: #991b1b;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #fbbf24 0%, #f59e0b 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .sorting-features-list {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            border-left: 6px solid #f59e0b;
+        }
+
+        .sorting-features-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sorting-features-list li {
+            padding: 12px 0;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .sorting-features-list li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #f59e0b;
+            font-weight: 800;
+        }
+
+        .sorting-features-list li:last-child {
+            border-bottom: none;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            z-index: 1000;
+        }
+
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .sorting-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .demo-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .demo-title {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .demo-content {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            color: #374151;
+        }
+
+        .complexity-comparison {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 2px solid #0ea5e9;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .complexity-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #0c4a6e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .complexity-title::before {
+            content: "⚡";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .complexity-comparison p {
+            color: #0c4a6e;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .problem-list {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            border: 2px solid #e2e8f0;
+        }
+
+        .problem-item {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr 2fr;
+            gap: 15px;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            font-weight: 600;
+        }
+
+        .problem-source {
+            color: #7c3aed;
+            font-weight: 700;
+        }
+
+        .problem-name {
+            color: #1e293b;
+        }
+
+        .problem-difficulty {
+            color: #059669;
+            font-weight: 700;
+        }
+
+        .problem-tags {
+            color: #dc2626;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .content-section {
+                padding: 30px 20px;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+
+            .sorting-demo {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">Introduction to Sorting</h1>
+            <p class="subtitle">Master the Art of Arranging Data Efficiently</p>
+            <p class="description">Learn fundamental sorting techniques, understand time complexities, and master C++ STL sorting functions for competitive programming success.</p>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">What is Sorting?</h2>
+            <p>Sorting is one of the most fundamental operations in computer science and competitive programming. It involves arranging elements in a specific order, typically ascending or descending. Understanding sorting is crucial because many algorithms and data structures rely on sorted data to work efficiently.</p>
+            
+            <p>In competitive programming, <span class="highlight">sorting</span> is often a preprocessing step that enables more efficient solutions. Whether you're working with arrays, vectors, pairs, or custom objects, mastering sorting techniques will significantly improve your problem-solving capabilities.</p>
+
+            <div class="complexity-comparison">
+                <div class="complexity-title">Time Complexity Overview</div>
+                <p><strong>C++ STL sort():</strong> O(n log n) average and worst case</p>
+                <p><strong>Comparison with other approaches:</strong></p>
+                <p>• Bubble Sort: O(n²) - Too slow for competitive programming</p>
+                <p>• Selection Sort: O(n²) - Also too slow for large inputs</p>
+                <p>• Quick Sort: O(n log n) average, O(n²) worst case</p>
+                <p>• Merge Sort: O(n log n) guaranteed</p>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">Key Principle</div>
+                <p>Always use the STL sort() function in competitive programming. It's highly optimized, reliable, and saves you from implementing sorting algorithms from scratch.</p>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Sorting Static Arrays</h2>
+            <p>To sort static arrays, use <span class="code-inline">sort(arr, arr + N)</span> where N is the number of elements to be sorted. The range can also be specified by replacing arr and arr + N with the intended range. For example, <span class="code-inline">sort(arr + 1, arr + 4)</span> sorts indices [1, 4).</p>
+
+            <div class="code-block">
+                <div class="code-header">Static Array Sorting Examples</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    // Example 1: Sort entire array
+    int arr[] = {5, 1, 3, 2, 4};
+    int N = 5;
+    sort(arr, arr + N);
+    
+    cout << "Sorted array: ";
+    for (int i = 0; i < N; i++) {
+        cout << arr[i] << " ";  // Output: 1 2 3 4 5
+    }
+    cout << endl;
+    
+    // Example 2: Sort partial range
+    int arr2[] = {5, 1, 3, 2, 4};
+    sort(arr2 + 1, arr2 + 4);  // Sort elements from index 1 to 3
+    
+    cout << "Partially sorted: ";
+    for (int i = 0; i < N; i++) {
+        cout << arr2[i] << " ";  // Output: 5 1 2 3 4
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Understanding Array Pointers</h3>
+            <p>When working with static arrays, it's important to understand how pointer arithmetic works:</p>
+
+            <div class="sorting-features-list">
+                <ul>
+                    <li><span class="code-inline">arr</span> points to the first element (index 0)</li>
+                    <li><span class="code-inline">arr + N</span> points to one past the last element</li>
+                    <li><span class="code-inline">arr + 1</span> points to the second element (index 1)</li>
+                    <li>The range [start, end) is half-open: includes start, excludes end</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Range Sorting Examples</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int data[] = {9, 2, 8, 1, 7, 3, 6, 4, 5};
+    int size = 9;
+    
+    // Sort first 5 elements
+    sort(data, data + 5);
+    cout << "First 5 sorted: ";
+    for (int i = 0; i < size; i++) {
+        cout << data[i] << " ";
+    }
+    cout << endl;
+    
+    // Reset array
+    int data2[] = {9, 2, 8, 1, 7, 3, 6, 4, 5};
+    
+    // Sort middle elements (indices 2 to 6)
+    sort(data2 + 2, data2 + 7);
+    cout << "Middle sorted: ";
+    for (int i = 0; i < size; i++) {
+        cout << data2[i] << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Sorting Dynamic Arrays (Vectors)</h2>
+            <p>In order to sort a dynamic array, use <span class="code-inline">sort(v.begin(), v.end())</span> or <span class="code-inline">sort(begin(v), end(v))</span>. The default sort function sorts the array in ascending order. Similarly, we can specify the range. For example, <span class="code-inline">sort(v.begin() + 1, v.begin() + 4)</span> sorts indices [1, 4).</p>
+
+            <div class="code-block">
+                <div class="code-header">Vector Sorting Examples</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    // Example 1: Sort entire vector
+    vector<int> v{5, 1, 3, 2, 4};
+    sort(v.begin(), v.end());
+    
+    cout << "Sorted vector: ";
+    for (int i : v) {
+        cout << i << " ";  // Output: 1 2 3 4 5
+    }
+    cout << endl;
+    
+    // Example 2: Sort with different methods
+    vector<int> v2{9, 2, 8, 1, 7, 3, 6, 4, 5};
+    
+    // Method 1: Using begin() and end()
+    sort(v2.begin(), v2.end());
+    
+    // Method 2: Using global begin() and end() (C++11)
+    vector<int> v3{9, 2, 8, 1, 7, 3, 6, 4, 5};
+    sort(begin(v3), end(v3));
+    
+    cout << "Both methods give same result: ";
+    for (int x : v3) {
+        cout << x << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Vector Range Sorting</h3>
+            <p>Just like with arrays, you can sort specific ranges of a vector:</p>
+
+            <div class="code-block">
+                <div class="code-header">Vector Range Sorting</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<int> data{9, 2, 8, 1, 7, 3, 6, 4, 5};
+    
+    cout << "Original: ";
+    for (int x : data) cout << x << " ";
+    cout << endl;
+    
+    // Sort first 4 elements (indices 0-3)
+    sort(data.begin(), data.begin() + 4);
+    cout << "First 4 sorted: ";
+    for (int x : data) cout << x << " ";
+    cout << endl;
+    
+    // Reset and sort last 3 elements
+    data = {9, 2, 8, 1, 7, 3, 6, 4, 5};
+    sort(data.end() - 3, data.end());
+    cout << "Last 3 sorted: ";
+    for (int x : data) cout << x << " ";
+    cout << endl;
+    
+    // Sort middle range (indices 2 to 6)
+    data = {9, 2, 8, 1, 7, 3, 6, 4, 5};
+    sort(data.begin() + 2, data.begin() + 7);
+    cout << "Middle sorted: ";
+    for (int x : data) cout << x << " ";
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Sorting Pairs and Tuples</h2>
+            <p>By default, C++ pairs are sorted by first element and then second element in case of a tie. This lexicographic ordering is incredibly useful for coordinate problems and multi-criteria sorting.</p>
+
+            <h3 class="subsection-title">Sorting Arrays of Pairs</h3>
+            <div class="code-block">
+                <div class="code-header">Pair Sorting Examples</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<pair<int, int>> v{{1, 5}, {2, 3}, {1, 2}};
+    sort(v.begin(), v.end());
+    
+    cout << "Sorted pairs:" << endl;
+    /*
+     * Output:
+     * 1 2
+     * 1 5  
+     * 2 3
+     */
+    for (pair<int, int> p : v) {
+        cout << p.first << " " << p.second << endl;
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Advanced Pair Sorting</h3>
+            <p>Here are more complex examples demonstrating different pair sorting scenarios:</p>
+
+            <div class="code-block">
+                <div class="code-header">Complex Pair Sorting</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    // Example 1: Coordinates sorting
+    vector<pair<int, int>> coordinates{
+        {3, 7}, {1, 4}, {3, 2}, {1, 9}, {2, 5}
+    };
+    
+    sort(coordinates.begin(), coordinates.end());
+    cout << "Sorted coordinates:" << endl;
+    for (auto [x, y] : coordinates) {
+        cout << "(" << x << ", " << y << ") ";
+    }
+    cout << endl;
+    
+    // Example 2: Name and score pairs
+    vector<pair<string, int>> students{
+        {"Alice", 95}, {"Bob", 87}, {"Alice", 92}, {"Charlie", 95}
+    };
+    
+    sort(students.begin(), students.end());
+    cout << "\nSorted students:" << endl;
+    for (auto [name, score] : students) {
+        cout << name << ": " << score << endl;
+    }
+    
+    // Example 3: Different data types
+    vector<pair<double, string>> items{
+        {3.14, "pi"}, {2.71, "e"}, {1.41, "sqrt2"}, {1.61, "phi"}
+    };
+    
+    sort(items.begin(), items.end());
+    cout << "\nSorted mathematical constants:" << endl;
+    for (auto [value, name] : items) {
+        cout << name << ": " << value << endl;
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Tuple Sorting</h3>
+            <p>Tuples are sorted similarly to pairs, but with more elements. The sorting is lexicographic: first by the first element, then by the second if the first elements are equal, and so on.</p>
+
+            <div class="code-block">
+                <div class="code-header">Tuple Sorting Examples</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    // 3D coordinates
+    vector<tuple<int, int, int>> points{
+        {1, 2, 3}, {1, 2, 1}, {1, 1, 5}, {2, 1, 1}
+    };
+    
+    sort(points.begin(), points.end());
+    
+    cout << "Sorted 3D points:" << endl;
+    for (auto [x, y, z] : points) {
+        cout << "(" << x << ", " << y << ", " << z << ")" << endl;
+    }
+    
+    // Student records: name, grade, age
+    vector<tuple<string, char, int>> records{
+        {"Alice", 'A', 20}, {"Bob", 'B', 19}, {"Alice", 'A', 19}, {"Charlie", 'A', 20}
+    };
+    
+    sort(records.begin(), records.end());
+    
+    cout << "\nSorted student records:" << endl;
+    for (auto [name, grade, age] : records) {
+        cout << name << " (Grade: " << grade << ", Age: " << age << ")" << endl;
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Custom Sorting</h2>
+            <p>Sometimes you need to sort elements in a different order than the default. C++ provides several ways to customize sorting behavior.</p>
+
+            <h3 class="subsection-title">Sorting in Descending Order</h3>
+            <div class="code-block">
+                <div class="code-header">Descending Order Sorting</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<int> v{5, 1, 3, 2, 4};
+    
+    // Method 1: Using greater<int>()
+    sort(v.begin(), v.end(), greater<int>());
+    cout << "Descending order: ";
+    for (int x : v) {
+        cout << x << " ";  // Output: 5 4 3 2 1
+    }
+    cout << endl;
+    
+    // Method 2: Sort ascending then reverse
+    vector<int> v2{5, 1, 3, 2, 4};
+    sort(v2.begin(), v2.end());
+    reverse(v2.begin(), v2.end());
+    cout << "Reversed: ";
+    for (int x : v2) {
+        cout << x << " ";  // Output: 5 4 3 2 1
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Custom Comparator Functions</h3>
+            <p>For more complex sorting criteria, you can write custom comparator functions:</p>
+
+            <div class="code-block">
+                <div class="code-header">Custom Comparator Examples</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+// Comparator for sorting by absolute value
+bool compareByAbs(int a, int b) {
+    return abs(a) < abs(b);
+}
+
+// Comparator for sorting pairs by second element
+bool compareBySecond(const pair<int, int>& a, const pair<int, int>& b) {
+    return a.second < b.second;
+}
+
+// Comparator for sorting strings by length
+bool compareByLength(const string& a, const string& b) {
+    return a.length() < b.length();
+}
+
+int main() {
+    // Example 1: Sort by absolute value
+    vector<int> numbers{-3, 1, -5, 2, 4, -1};
+    sort(numbers.begin(), numbers.end(), compareByAbs);
+    cout << "Sorted by absolute value: ";
+    for (int x : numbers) {
+        cout << x << " ";  // Output: 1 -1 2 -3 4 -5
+    }
+    cout << endl;
+    
+    // Example 2: Sort pairs by second element
+    vector<pair<int, int>> pairs{{1, 5}, {3, 2}, {2, 8}, {4, 1}};
+    sort(pairs.begin(), pairs.end(), compareBySecond);
+    cout << "Sorted pairs by second element:" << endl;
+    for (auto [first, second] : pairs) {
+        cout << first << " " << second << endl;
+    }
+    
+    // Example 3: Sort strings by length
+    vector<string> words{"apple", "hi", "programming", "code", "algorithm"};
+    sort(words.begin(), words.end(), compareByLength);
+    cout << "Sorted strings by length:" << endl;
+    for (const string& word : words) {
+        cout << word << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Lambda Functions for Sorting</h3>
+            <p>Modern C++ allows you to use lambda functions for inline custom sorting:</p>
+
+            <div class="code-block">
+                <div class="code-header">Lambda Function Sorting</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    // Example 1: Sort by absolute value using lambda
+    vector<int> numbers{-3, 1, -5, 2, 4, -1};
+    sort(numbers.begin(), numbers.end(), [](int a, int b) {
+        return abs(a) < abs(b);
+    });
+    cout << "Lambda - absolute value: ";
+    for (int x : numbers) {
+        cout << x << " ";
+    }
+    cout << endl;
+    
+    // Example 2: Sort pairs by sum of elements
+    vector<pair<int, int>> pairs{{1, 5}, {3, 2}, {2, 8}, {4, 1}};
+    sort(pairs.begin(), pairs.end(), [](const auto& a, const auto& b) {
+        return (a.first + a.second) < (b.first + b.second);
+    });
+    cout << "Pairs sorted by sum:" << endl;
+    for (auto [first, second] : pairs) {
+        cout << first << " " << second << " (sum: " << first + second << ")" << endl;
+    }
+    
+    // Example 3: Sort students by grade, then by name
+    vector<pair<string, int>> students{
+        {"Alice", 95}, {"Bob", 87}, {"Charlie", 95}, {"David", 87}
+    };
+    sort(students.begin(), students.end(), [](const auto& a, const auto& b) {
+        if (a.second == b.second) {
+            return a.first < b.first;  // Same grade, sort by name
+        }
+        return a.second > b.second;  // Different grades, sort by grade desc
+    });
+    cout << "Students sorted by grade (desc), then name:" << endl;
+    for (auto [name, grade] : students) {
+        cout << name << ": " << grade << endl;
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Sorting Performance and Complexity</h2>
+            <p>Understanding the performance characteristics of sorting is crucial for competitive programming, especially when dealing with large datasets.</p>
+
+            <table class="sorting-table">
+                <thead>
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Best Case</th>
+                        <th>Average Case</th>
+                        <th>Worst Case</th>
+                        <th>Space Complexity</th>
+                        <th>Stable?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="code-inline">std::sort</span></td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(log n)</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td><span class="code-inline">std::stable_sort</span></td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(n)</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Quick Sort</td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(n²)</td>
+                        <td>O(log n)</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>Merge Sort</td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(n)</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Heap Sort</td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(1)</td>
+                        <td>No</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="complexity-comparison">
+                <div class="complexity-title">When to Use Different Sorting Methods</div>
+                <p><strong>std::sort:</strong> Use for most competitive programming problems. Fast and reliable.</p>
+                <p><strong>std::stable_sort:</strong> Use when you need to preserve the relative order of equal elements.</p>
+                <p><strong>std::partial_sort:</strong> Use when you only need the first k smallest elements.</p>
+                <p><strong>std::nth_element:</strong> Use when you need the kth smallest element but don't need full sorting.</p>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">Alternative Sorting Functions</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<int> data{9, 2, 8, 1, 7, 3, 6, 4, 5};
+    
+    // Example 1: std::partial_sort - sort first 3 elements
+    vector<int> v1 = data;
+    partial_sort(v1.begin(), v1.begin() + 3, v1.end());
+    cout << "Partial sort (first 3): ";
+    for (int x : v1) {
+        cout << x << " ";  // First 3 are smallest: 1 2 3 ...
+    }
+    cout << endl;
+    
+    // Example 2: std::nth_element - find 4th smallest
+    vector<int> v2 = data;
+    nth_element(v2.begin(), v2.begin() + 3, v2.end());
+    cout << "4th smallest element: " << v2[3] << endl;
+    
+    // Example 3: std::stable_sort - preserves relative order
+    vector<pair<int, char>> pairs{
+        {3, 'a'}, {1, 'x'}, {3, 'b'}, {2, 'y'}, {3, 'c'}
+    };
+    stable_sort(pairs.begin(), pairs.end(), 
+                [](const auto& a, const auto& b) {
+                    return a.first < b.first;
+                });
+    cout << "Stable sort (preserves order for equal keys):" << endl;
+    for (auto [num, ch] : pairs) {
+        cout << num << ch << " ";  // 1x 2y 3a 3b 3c
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Common Sorting Patterns in Competitive Programming</h2>
+            <p>Here are some frequently used sorting patterns that appear in competitive programming problems:</p>
+
+            <h3 class="subsection-title">Sorting with Indices</h3>
+            <p>Sometimes you need to know the original positions of elements after sorting:</p>
+
+            <div class="code-block">
+                <div class="code-header">Sorting with Index Tracking</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<int> arr{30, 10, 40, 20};
+    int n = arr.size();
+    
+    // Create pairs of (value, original_index)
+    vector<pair<int, int>> indexed_arr;
+    for (int i = 0; i < n; i++) {
+        indexed_arr.push_back({arr[i], i});
+    }
+    
+    // Sort by value
+    sort(indexed_arr.begin(), indexed_arr.end());
+    
+    cout << "Value -> Original Index:" << endl;
+    for (auto [value, index] : indexed_arr) {
+        cout << value << " was at index " << index << endl;
+    }
+    
+    // Alternative: Create index array and sort by values
+    vector<int> indices(n);
+    iota(indices.begin(), indices.end(), 0);  // Fill with 0, 1, 2, ...
+    
+    sort(indices.begin(), indices.end(), [&](int i, int j) {
+        return arr[i] < arr[j];
+    });
+    
+    cout << "\nSorted indices: ";
+    for (int idx : indices) {
+        cout << idx << "(" << arr[idx] << ") ";
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Coordinate Sorting</h3>
+            <p>A common pattern in geometry problems:</p>
+
+            <div class="code-block">
+                <div class="code-header">Coordinate Sorting Patterns</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<pair<int, int>> points{
+        {1, 3}, {4, 1}, {2, 5}, {1, 1}, {3, 2}
+    };
+    
+    // Pattern 1: Sort by x-coordinate, then by y-coordinate
+    sort(points.begin(), points.end());
+    cout << "Sorted by x, then y:" << endl;
+    for (auto [x, y] : points) {
+        cout << "(" << x << ", " << y << ") ";
+    }
+    cout << endl;
+    
+    // Pattern 2: Sort by y-coordinate, then by x-coordinate
+    sort(points.begin(), points.end(), [](const auto& a, const auto& b) {
+        if (a.second == b.second) {
+            return a.first < b.first;
+        }
+        return a.second < b.second;
+    });
+    cout << "Sorted by y, then x:" << endl;
+    for (auto [x, y] : points) {
+        cout << "(" << x << ", " << y << ") ";
+    }
+    cout << endl;
+    
+    // Pattern 3: Sort by distance from origin
+    sort(points.begin(), points.end(), [](const auto& a, const auto& b) {
+        int dist_a = a.first * a.first + a.second * a.second;
+        int dist_b = b.first * b.first + b.second * b.second;
+        return dist_a < dist_b;
+    });
+    cout << "Sorted by distance from origin:" << endl;
+    for (auto [x, y] : points) {
+        int dist_sq = x * x + y * y;
+        cout << "(" << x << ", " << y << ") dist²=" << dist_sq << endl;
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="subsection-title">Event Sorting</h3>
+            <p>Useful for interval and scheduling problems:</p>
+
+            <div class="code-block">
+                <div class="code-header">Event-Based Sorting</div>
+                <pre class="line-numbers"><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+struct Event {
+    int time;
+    int type;  // 0 = start, 1 = end
+    int id;    // which interval this event belongs to
+};
+
+int main() {
+    // Intervals: [start, end]
+    vector<pair<int, int>> intervals{{1, 4}, {2, 6}, {3, 5}, {7, 9}};
+    
+    // Create events
+    vector<Event> events;
+    for (int i = 0; i < intervals.size(); i++) {
+        events.push_back({intervals[i].first, 0, i});   // start event
+        events.push_back({intervals[i].second + 1, 1, i}); // end event (+1 for exclusive end)
+    }
+    
+    // Sort events by time, with start events before end events at same time
+    sort(events.begin(), events.end(), [](const Event& a, const Event& b) {
+        if (a.time == b.time) {
+            return a.type < b.type;  // start (0) before end (1)
+        }
+        return a.time < b.time;
+    });
+    
+    cout << "Event timeline:" << endl;
+    int active_intervals = 0;
+    for (const Event& e : events) {
+        if (e.type == 0) {
+            active_intervals++;
+            cout << "Time " << e.time << ": Start interval " << e.id 
+                 << " (active: " << active_intervals << ")" << endl;
+        } else {
+            active_intervals--;
+            cout << "Time " << e.time << ": End interval " << e.id 
+                 << " (active: " << active_intervals << ")" << endl;
+        }
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Sorting in Different Contexts</h2>
+            
+            <h3 class="subsection-title">Bronze Level Considerations</h3>
+            <div class="warning-box">
+                <div class="warning-title">Important Note</div>
+                <p>Bronze problems are designed so that you shouldn't need an O(n log n) time sort (repeatedly extracting the minimum in O(n²) time will always suffice).</p>
+            </div>
+
+            <p>However, learning sorting is still valuable because:</p>
+            <div class="sorting-features-list">
+                <ul>
+                    <li>It prepares you for Silver and Gold level problems</li>
+                    <li>It often simplifies problem-solving even when not strictly necessary</li>
+                    <li>It's a fundamental algorithmic technique used everywhere</li>
+                    <li>Many Bronze problems become much easier with sorting</li>
+                </ul>
+            </div>
+
+            <h3 class="subsection-title">When NOT to Sort</h3>
+            <p>Sometimes sorting can actually hurt your solution:</p>
+
+            <div class="sorting-features-list">
+                <ul>
+                    <li>When you need to maintain original order of elements</li>
+                    <li>When the problem specifically asks for first occurrence</li>
+                    <li>When sorting changes the problem constraints</li>
+                    <li>When a linear O(n) solution exists (like counting sort for small ranges)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section fade-in">
+            <h2 class="section-title">Summary and Best Practices</h2>
+            <p>Sorting is a fundamental skill in competitive programming that opens doors to many advanced techniques. Here are the key takeaways:</p>
+
+            <div class="sorting-features-list">
+                <ul>
+                    <li><span class="highlight">Master STL sort():</span> Always use std::sort() for O(n log n) performance</li>
+                    <li><span class="highlight">Understand default behavior:</span> Pairs and tuples sort lexicographically</li>
+                    <li><span class="highlight">Learn custom sorting:</span> Lambda functions and comparators for complex criteria</li>
+                    <li><span class="highlight">Practice common patterns:</span> Coordinate sorting, event processing, index tracking</li>
+                    <li><span class="highlight">Know alternatives:</span> partial_sort, nth_element, stable_sort for special cases</li>
+                    <li><span class="highlight">Consider complexity:</span> O(n log n) is usually acceptable for n ≤ 10^6</li>
+                </ul>
+            </div>
+
+            <div class="complexity-comparison">
+                <div class="complexity-title">Final Performance Tips</div>
+                <p><strong>For large datasets:</strong> Reserve vector space with vector.reserve() before adding elements</p>
+                <p><strong>For frequent sorting:</strong> Consider if the data can be kept sorted during insertion</p>
+                <p><strong>For partial results:</strong> Use partial_sort or nth_element when you don't need full sorting</p>
+                <p><strong>For stability:</strong> Use stable_sort when relative order of equal elements matters</p>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">Next Steps</div>
+                <p>Once you're comfortable with basic sorting, explore binary search on sorted arrays, coordinate compression, and sweep line algorithms. These advanced techniques build directly on sorting fundamentals.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            document.getElementById('scrollProgress').style.width = scrollPercent + '%';
+        });
+
+        // Animate sections on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.content-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scrolling for better UX
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+</body>
+</html>

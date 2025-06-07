@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HKT_OJ")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+60d967ca619be363af0df70cbaa210d2cfbd9ce6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c28b95b4ef1d754a972d8044d4800e0120cdfb63")]
 [assembly: System.Reflection.AssemblyProductAttribute("HKT_OJ")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HKT_OJ")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

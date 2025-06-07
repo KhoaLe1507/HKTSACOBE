@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System;
 using HKT_OJ.Models;
@@ -101,8 +100,29 @@ namespace HKT_OJ.Controllers
         // ===== MODULE CONTENT =====
         [Authorize(Roles = "2")]
         [HttpPost("AddModuleContent")]
-        public IActionResult AddModuleContent([FromBody] AddModuleContentRequest request)
+        public async Task<IActionResult> AddModuleContent([FromForm] AddModuleContentRequest request, IFormFile? file)
         {
+            // ✅ Xử lý file .html nếu có
+            if (file == null || file.Length == 0)
+                return BadRequest("HTML file is required.");
+
+            var fileName = Path.GetFileName(file.FileName);
+            var htmlFolder = Path.Combine("wwwroot", "html");
+
+            if (!Directory.Exists(htmlFolder))
+                Directory.CreateDirectory(htmlFolder);
+
+            var filePath = Path.Combine(htmlFolder, fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            // ✅ Gán đường dẫn vào HtmlContentPath như yêu cầu
+            request.HtmlContentPath = "/html/" + fileName;
+
+            // ======= GIỮ NGUYÊN PHẦN XỬ LÝ GỐC =======
+
             var reference = _context.ModuleContent.FirstOrDefault(mc => mc.Id == request.ReferenceId && mc.ModuleId == request.ModuleId);
             int newOrder = 0;
 
@@ -141,6 +161,7 @@ namespace HKT_OJ.Controllers
 
             return Ok("ModuleContent added successfully.");
         }
+
 
         // ===== GET: Select Section for Dropdown =====
         [Authorize(Roles = "1,2")]
@@ -320,7 +341,7 @@ namespace HKT_OJ.Controllers
         }
 
         //============== List All Module Contents By Module Id Detail===========
-        [Authorize(Roles = "2")]
+        [Authorize(Roles = "1,2")]
         [HttpGet("ListAllModuleContentsByModuleIdDetails/{moduleId}")]
         public IActionResult ListAllModuleContentsByModuleIdDetails(int moduleId)
         {
@@ -594,34 +615,61 @@ namespace HKT_OJ.Controllers
         // ===== EDIT MODULE CONTENT =====
         [Authorize(Roles = "1,2")]
         [HttpPut("EditModuleContent/{id}")]
-        public IActionResult EditModuleContent(int id, [FromBody] AddModuleContentRequest request)
+        public async Task<IActionResult> EditModuleContent(int id, [FromForm] AddModuleContentRequest request, IFormFile? file)
         {
-            if (request.Position == "At the end") request.ReferenceId = -1;
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var role = int.Parse(User.FindFirstValue(ClaimTypes.Role));
 
             var mc = _context.ModuleContent.FirstOrDefault(m => m.Id == id);
             if (mc == null)
                 return NotFound("ModuleContent not found");
 
+            // ✅ Kiểm tra quyền truy cập
+            if (!(role == 2 || mc.AuthorId == userId))
+                return Forbid("You do not have permission to edit this ModuleContent.");
+
+            // ✅ Nếu có file mới thì ghi đè
+            if (file != null && file.Length > 0)
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                var htmlFolder = Path.Combine("wwwroot", "html");
+
+                if (!Directory.Exists(htmlFolder))
+                    Directory.CreateDirectory(htmlFolder);
+
+                var filePath = Path.Combine(htmlFolder, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                request.HtmlContentPath = "/html/" + fileName;
+            }
+
+            if (request.Position == "At the end")
+                request.ReferenceId = -1;
+
+            // ✅ Cập nhật các trường
+            mc.Title = request.Title;
+            mc.Description = request.Description;
+            mc.Frequent = request.Frequent;
+            if (!string.IsNullOrEmpty(request.HtmlContentPath))
+                mc.HtmlContentPath = request.HtmlContentPath;
+
+            // ✅ Chỉ Admin mới được sửa AuthorId
+            if (role == 2)
+                mc.AuthorId = request.AuthorId;
+
+            mc.ModuleId = request.ModuleId;
+
+            // Không thay đổi vị trí
             if (string.IsNullOrEmpty(request.Position) || request.ReferenceId == 0)
             {
-                mc.Title = request.Title;
-                mc.Description = request.Description;
-                mc.Frequent = request.Frequent;
-                mc.HtmlContentPath = request.HtmlContentPath;
-                mc.AuthorId = request.AuthorId;
-                mc.ModuleId = request.ModuleId;
-
                 _context.SaveChanges();
                 return Ok("ModuleContent updated (no position change).");
             }
 
-            mc.Title = request.Title;
-            mc.Description = request.Description;
-            mc.Frequent = request.Frequent;
-            mc.HtmlContentPath = request.HtmlContentPath;
-            mc.AuthorId = request.AuthorId;
-            mc.ModuleId = request.ModuleId;
-
+            // ✅ Xử lý thay đổi vị trí
             var contents = _context.ModuleContent
                 .Where(c => c.ModuleId == request.ModuleId)
                 .OrderBy(c => c.Order)
@@ -635,8 +683,7 @@ namespace HKT_OJ.Controllers
             if (request.Position == "Front")
             {
                 insertIndex = contents.FindIndex(c => c.Id == request.ReferenceId);
-                if (currentIndex < insertIndex)
-                    insertIndex--;
+                if (currentIndex < insertIndex) insertIndex--;
             }
             else if (request.Position == "Behind")
             {
@@ -646,22 +693,14 @@ namespace HKT_OJ.Controllers
                 else
                     insertIndex++;
             }
-            else if (request.Position == "At the end")
-            {
-                insertIndex = contents.Count;
-            }
 
             contents.Insert(insertIndex, mc);
-
             for (int i = 0; i < contents.Count; i++)
-            {
                 contents[i].Order = i + 1;
-            }
 
             _context.SaveChanges();
             return Ok("ModuleContent updated successfully.");
         }
-
 
 
         // ===== Delete Section =====
@@ -680,19 +719,19 @@ namespace HKT_OJ.Controllers
         }
 
         // ===== Delete Module =====
-        [Authorize(Roles = "2")]
-        [HttpDelete("DeleteModule/{id}")]
-        public IActionResult DeleteModule(int id)
-        {
-            var module = _context.Modules.FirstOrDefault(m => m.Id == id);
-            if (module == null)
-                return NotFound("Module not found");
+            [Authorize(Roles = "2")]
+            [HttpDelete("DeleteModule/{id}")]
+            public IActionResult DeleteModule(int id)
+            {
+                var module = _context.Modules.FirstOrDefault(m => m.Id == id);
+                if (module == null)
+                    return NotFound("Module not found");
 
-            RemoveModuleAndUpdateOrder(module);
-            _context.SaveChanges();
+                RemoveModuleAndUpdateOrder(module);
+                _context.SaveChanges();
 
-            return Ok("Module deleted successfully.");
-        }
+                return Ok("Module deleted successfully.");
+            }
 
         // ===== Delete Module Content =====
         [Authorize(Roles = "2")]
@@ -708,6 +747,92 @@ namespace HKT_OJ.Controllers
 
             return Ok("ModuleContent deleted successfully.");
         }
+
+        //=====GetDetailSection=====
+        [Authorize(Roles = "2")]
+        [HttpGet("GetSectionDetail/{id}")]
+        public IActionResult GetSectionById(int id)
+        {
+            var section = _context.Sections.FirstOrDefault(s => s.Id == id);
+            if (section == null)
+                return NotFound("Section not found");
+
+            return Ok(new
+            {
+                section.Id,
+                section.Name,
+                section.Description
+            });
+        }
+
+        [Authorize(Roles = "2")]
+        [HttpGet("GetModuleDetail/{id}")]
+        public IActionResult GetModuleDetail(int id)
+        {
+            var module = _context.Modules.FirstOrDefault(m => m.Id == id);
+            if (module == null)
+                return NotFound("Module not found");
+
+            return Ok(new
+            {
+                module.Id,
+                module.Name,
+                module.SectionId
+            });
+        }
+
+        [Authorize(Roles = "2,1")]
+        [HttpGet("GetModuleContentDetail/{id}")]
+        public IActionResult GetModuleContentDetail(int id)
+        {
+            var mc = _context.ModuleContent.FirstOrDefault(m => m.Id == id);
+            if (mc == null)
+                return NotFound("ModuleContent not found");
+
+            return Ok(new
+            {
+                mc.Id,
+                mc.Title,
+                mc.Description,
+                mc.Frequent,
+                mc.HtmlContentPath,
+                mc.AuthorId,
+                mc.ModuleId,
+                mc.Order
+            });
+        }
+
+        [Authorize(Roles = "1")] // Chỉ giáo viên
+        [HttpGet("ListMyModuleContents")]
+        public IActionResult ListMyModuleContents()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                return Unauthorized("User not logged in.");
+
+            int currentUserId = int.Parse(userIdClaim.Value);
+
+            var contents = (from mc in _context.ModuleContent
+                            join m in _context.Modules on mc.ModuleId equals m.Id
+                            join s in _context.Sections on m.SectionId equals s.Id
+                            where mc.AuthorId == currentUserId
+                            orderby mc.CreatedAt descending
+                            select new
+                            {
+                                mc.Id,
+                                SectionName = s.Name,     // ✅ thêm SectionName rõ ràng
+                                ModuleName = m.Name,
+                                ModuleId = m.Id,          // ✅ thêm ModuleId
+                                Content = mc.Title,
+                                CreatedAt = mc.CreatedAt,
+                                AuthorId = mc.AuthorId
+                            }).ToList();
+
+            return Ok(contents);
+        }
+
+
+
 
 
     }

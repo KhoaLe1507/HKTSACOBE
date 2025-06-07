@@ -215,6 +215,67 @@ namespace HKT_OJ.Controllers
             return Ok(new { message = "Problem created successfully", problemId = problem.ProblemId });
         }
 
+        [Authorize]
+        [HttpDelete("delete/{problemId}")]
+        public async Task<IActionResult> DeleteProblem(int problemId)
+        {
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var roleClaim = User.FindFirstValue(ClaimTypes.Role);
+
+            if (userIdClaim == null || roleClaim == null)
+                return Unauthorized("User not logged in.");
+
+            int userId = int.Parse(userIdClaim);
+            int role = int.Parse(roleClaim);
+
+            var problem = await _context.Problem.FindAsync(problemId);
+            if (problem == null)
+                return NotFound("Problem not found.");
+
+            //Phân quyền: chỉ Admin hoặc Professor là tác giả mới được xoá
+            if (role != 2 && (role != 1 || problem.AuthorId != userId))
+                return Forbid("You do not have permission to delete this problem.");
+
+            //Xoá toàn bộ file testcase liên quan
+            var testcases = _context.Testcase.Where(t => t.ProblemId == problemId).ToList();
+            foreach (var tc in testcases)
+            {
+                if (!string.IsNullOrEmpty(tc.InputPath))
+                {
+                    var inputFile = Path.Combine("wwwroot", tc.InputPath.TrimStart('/'));
+                    if (System.IO.File.Exists(inputFile))
+                        System.IO.File.Delete(inputFile);
+                }
+
+                if (!string.IsNullOrEmpty(tc.OutputPath))
+                {
+                    var outputFile = Path.Combine("wwwroot", tc.OutputPath.TrimStart('/'));
+                    if (System.IO.File.Exists(outputFile))
+                        System.IO.File.Delete(outputFile);
+                }
+            }
+
+            _context.Testcase.RemoveRange(testcases);
+            _context.ProblemConstraint.RemoveRange(_context.ProblemConstraint.Where(c => c.ProblemId == problemId));
+            _context.Solution.RemoveRange(_context.Solution.Where(s => s.ProblemId == problemId));
+            _context.Submission.RemoveRange(_context.Submission.Where(s => s.ProblemId == problemId));
+            _context.Problem.Remove(problem);
+
+            //Xoá luôn thư mục chứa testcase và output
+            var testcaseFolder = Path.Combine("wwwroot", "testcases", $"Problem_{problemId}");
+            if (Directory.Exists(testcaseFolder))
+                Directory.Delete(testcaseFolder, true);
+
+            var outputFolder = Path.Combine("wwwroot", "submission_outputs", $"Problem_{problemId}");
+            if (Directory.Exists(outputFolder))
+                Directory.Delete(outputFolder, true);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Problem deleted successfully." });
+        }
+
+
 
         [Authorize(Roles ="0")]
         [HttpPost("submit/{problemId}")]
@@ -400,7 +461,6 @@ namespace HKT_OJ.Controllers
 
 
         [HttpGet("getallsubmission/{problemId}")]
-        [Authorize]
         public async Task<IActionResult> GetAllSubmissionsForProblem(int problemId)
         {
             var problem = await _context.Problem.FindAsync(problemId);
@@ -456,11 +516,13 @@ namespace HKT_OJ.Controllers
         }
 
         [HttpGet("details/{problemId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetProblemDetails(int problemId)
         {
+            int? userId = null;
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            if (userIdClaim == null) return Unauthorized("User not logged in.");
-            int userId = int.Parse(userIdClaim.Value);
+            if (userIdClaim != null)
+                userId = int.Parse(userIdClaim.Value);
 
             var problem = await _context.Problem.FindAsync(problemId);
             if (problem == null) return NotFound("Problem not found.");
@@ -471,15 +533,20 @@ namespace HKT_OJ.Controllers
             var section = await _context.Sections.FindAsync(module.SectionId);
 
             // 🔍 Xác định Status của bài với user hiện tại
-            var userSubmissions = _context.Submission
-                .Where(s => s.ProblemId == problemId && s.UserId == userId)
-                .ToList();
-
             string status = "Not Started";
-            if (userSubmissions.Any(s => s.Result == "Accepted"))
-                status = "Completed";
-            else if (userSubmissions.Any())
-                status = "In Progress";
+
+            if (userId != null)
+            {
+                var userSubmissions = _context.Submission
+                    .Where(s => s.ProblemId == problemId && s.UserId == userId)
+                    .ToList();
+
+                if (userSubmissions.Any(s => s.Result == "Accepted"))
+                    status = "Completed";
+                else if (userSubmissions.Any())
+                    status = "In Progress";
+            }
+
 
             // 🔍 Constraints
             var constraints = await _context.ProblemConstraint

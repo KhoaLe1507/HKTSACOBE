@@ -477,6 +477,22 @@
   },
   {
     "ContainingType": "HKT_OJ.Controllers.ProblemController",
+    "Method": "DeleteProblem",
+    "RelativePath": "api/Problem/delete/{problemId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "problemId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.ProblemController",
     "Method": "GetProblemDetails",
     "RelativePath": "api/Problem/details/{problemId}",
     "HttpMethod": "GET",
@@ -794,9 +810,49 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "HKT_OJ.ViewModels.AddModuleContentRequest",
-        "IsRequired": true
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Frequent",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "HtmlContentPath",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "AuthorId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ModuleId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Position",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ReferenceId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -900,9 +956,49 @@
         "IsRequired": true
       },
       {
-        "Name": "request",
-        "Type": "HKT_OJ.ViewModels.AddModuleContentRequest",
-        "IsRequired": true
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Frequent",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "HtmlContentPath",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "AuthorId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ModuleId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Position",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ReferenceId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -966,6 +1062,22 @@
   },
   {
     "ContainingType": "HKT_OJ.Controllers.RoadmapController",
+    "Method": "GetModuleContentDetail",
+    "RelativePath": "api/Roadmap/GetModuleContentDetail/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.RoadmapController",
     "Method": "GetModuleContentsByModule",
     "RelativePath": "api/Roadmap/GetModuleContentsByModule/{moduleId}",
     "HttpMethod": "GET",
@@ -982,6 +1094,22 @@
   },
   {
     "ContainingType": "HKT_OJ.Controllers.RoadmapController",
+    "Method": "GetModuleDetail",
+    "RelativePath": "api/Roadmap/GetModuleDetail/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.RoadmapController",
     "Method": "GetModulesBySection",
     "RelativePath": "api/Roadmap/GetModulesBySection/{sectionId}",
     "HttpMethod": "GET",
@@ -990,6 +1118,22 @@
     "Parameters": [
       {
         "Name": "sectionId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.RoadmapController",
+    "Method": "GetSectionById",
+    "RelativePath": "api/Roadmap/GetSectionDetail/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -1066,12 +1210,43 @@
   },
   {
     "ContainingType": "HKT_OJ.Controllers.RoadmapController",
+    "Method": "ListMyModuleContents",
+    "RelativePath": "api/Roadmap/ListMyModuleContents",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.RoadmapController",
     "Method": "GetMyModuleContents",
     "RelativePath": "api/Roadmap/MyModuleContents",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.StatisticsController",
+    "Method": "GetProfessorDashboardStats",
+    "RelativePath": "api/Statistics/professor-dashboard",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "startDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {

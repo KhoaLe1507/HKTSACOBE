@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kruskal Reconstruction Tree</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            animation: slideInDown 1s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 350px;
+            height: 4px;
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            margin: 20px auto;
+            border-radius: 2px;
+            animation: expandLine 1.2s ease-out 0.5s both;
+        }
+
+        @keyframes expandLine {
+            from {
+                width: 0;
+            }
+            to {
+                width: 350px;
+            }
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #34495e;
+            margin-top: 60px;
+            margin-bottom: 25px;
+            border-left: 5px solid #27ae60;
+            padding-left: 20px;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h3::before {
+            content: '🌲';
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+
+        p {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: justify;
+            line-height: 1.8;
+        }
+
+        .code-container {
+            background: #1e1e1e;
+            border-radius: 12px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: 1px solid #333;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .code-header {
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #444;
+        }
+
+        pre {
+            margin: 0 !important;
+            background: #1e1e1e !important;
+            border-radius: 0 !important;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+            font-weight: 500 !important;
+        }
+
+        .line-numbers-rows {
+            border-right: 1px solid #444 !important;
+            padding-right: 10px !important;
+            margin-right: 15px !important;
+        }
+
+        .complexity {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            margin: 25px 0;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.1);
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 35px;
+            background: #fafbfc;
+            border-radius: 15px;
+            border: 1px solid #e1e8ed;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hover-effect {
+            transition: all 0.3s ease;
+        }
+
+        .hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 800;
+        }
+
+        .algorithm-box {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #28a745;
+            font-weight: 700;
+        }
+
+        .algorithm-box::before {
+            content: '⚡ Key Insight: ';
+            font-weight: 800;
+            color: #155724;
+        }
+
+        .construction-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #2196f3;
+            font-weight: 700;
+        }
+
+        .construction-box::before {
+            content: '🔧 Construction Algorithm: ';
+            font-weight: 800;
+            color: #1976d2;
+        }
+
+        .proof-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #ff9800;
+            font-weight: 700;
+        }
+
+        .proof-box::before {
+            content: '📐 Proof of Correctness: ';
+            font-weight: 800;
+            color: #f57c00;
+        }
+
+        .focus-problem {
+            background: linear-gradient(135deg, #fef9e7, #f9e79f);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #27ae60;
+            text-align: center;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(39, 174, 96, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(39, 174, 96, 0);
+            }
+        }
+
+        .math-formula {
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: #2d3748;
+            border: 1px solid #e9ecef;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+            margin: 25px 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 4px solid #27ae60;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -15px;
+            top: 15px;
+            background: #27ae60;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .tutorial-box {
+            background: linear-gradient(135deg, #fef9e7, #f9e79f);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #27ae60;
+            font-weight: 700;
+        }
+
+        .tutorial-box::before {
+            content: '📚 Tutorial Overview: ';
+            font-weight: 800;
+            color: #e67e22;
+        }
+
+        .solution-header {
+            color: #27ae60;
+            font-weight: 800;
+            border-bottom: 3px solid #27ae60;
+            padding-bottom: 8px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #718096;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #9c27b0;
+            font-weight: 700;
+        }
+
+        .example-box::before {
+            content: '💡 Example Problem: ';
+            font-weight: 800;
+            color: #7b1fa2;
+        }
+
+        .solution-approach-box {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #28a745;
+            font-weight: 700;
+        }
+
+        .solution-approach-box::before {
+            content: '🔍 Solution Approach: ';
+            font-weight: 800;
+            color: #155724;
+        }
+
+        .implementation-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #2196f3;
+            font-weight: 700;
+        }
+
+        .implementation-box::before {
+            content: '⚙️ Implementation Details: ';
+            font-weight: 800;
+            color: #1976d2;
+        }
+
+        .optimization-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #ff9800;
+            font-weight: 700;
+        }
+
+        .optimization-box::before {
+            content: '⚡ Optimization Notes: ';
+            font-weight: 800;
+            color: #f57c00;
+        }
+
+        .kruskal-tree-box {
+            background: linear-gradient(135deg, #f0f4f8, #ddd6fe);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #8b5cf6;
+            font-weight: 700;
+        }
+
+        .kruskal-tree-box::before {
+            content: '🌳 Kruskal Reconstruction Tree: ';
+            font-weight: 800;
+            color: #7c3aed;
+        }
+
+        ul {
+            margin: 25px 0;
+            padding-left: 0;
+        }
+
+        li {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            list-style: none;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        li::before {
+            content: '🌿';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .query-box {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #f44336;
+            font-weight: 700;
+        }
+
+        .query-box::before {
+            content: '❓ Query Processing: ';
+            font-weight: 800;
+            color: #d32f2f;
+        }
+
+        .applications-box {
+            background: linear-gradient(135deg, #f0f4f8, #ddd6fe);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #8b5cf6;
+            font-weight: 700;
+        }
+
+        .applications-box::before {
+            content: '📖 Applications: ';
+            font-weight: 800;
+            color: #7c3aed;
+        }
+
+        .tree-properties-box {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #28a745;
+            font-weight: 700;
+        }
+
+        .tree-properties-box::before {
+            content: '🏗️ Tree Properties: ';
+            font-weight: 800;
+            color: #155724;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+            
+            code {
+                font-size: 0.85rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kruskal Reconstruction Tree</h1>
+        <p class="subtitle">Advanced Tree Data Structure for Static Path Queries</p>
+        
+        <div class="section hover-effect">
+            <h2>Tutorial</h2>
+            
+            <div class="tutorial-box">
+                Suppose we want to support static path queries on a tree of size <span class="math-formula">N</span> for the minimum edge between two vertices. Advanced readers may think of techniques like binary lifting, HLD, or even LCT to support operations in logarithmic complexity. A Kruskal Reconstruction Tree (KRT) can answer such queries in <span class="math-formula">$\mathcal{O}(1)$</span> with <span class="math-formula">$\mathcal{O}(N \log N)$</span> construction.
+            </div>
+
+            <div class="kruskal-tree-box">
+                <strong>What is a Kruskal Reconstruction Tree?</strong><br>
+                A Kruskal Reconstruction Tree is an auxiliary binary tree built from the original graph that enables efficient path queries. It's particularly useful for answering queries about minimum/maximum edge weights on paths between vertices in the original tree.
+            </div>
+
+            <h3 class="solution-header">Construction Algorithm</h3>
+
+            <div class="construction-box">
+                We can build a KRT as follows:
+            </div>
+
+            <ol class="step-list">
+                <li>We start with <span class="math-formula">N</span> components each representing each node</li>
+                <li>Process each edge in sorted order. For an edge connecting <span class="math-formula">(u,v)</span>, create an auxiliary node <span class="math-formula">f</span> that is the parent of the topmost nodes in the components of <span class="math-formula">u</span> and <span class="math-formula">v</span>. Now, <span class="math-formula">f</span> is the new topmost node in the merged component.</li>
+            </ol>
+
+            <div class="implementation-box">
+                Note that maintaining the relationships of components can be done in amortized logarithmic complexity using path compression similar to a DSU.
+            </div>
+
+            <div class="tree-properties-box">
+                <strong>Resulting Structure:</strong><br>
+                We end up with a binary tree of size <span class="math-formula">2N - 1</span>. We can support queries by returning the edge weight of the node corresponding to <span class="math-formula">$\texttt{lca}(u, v)$</span>.
+            </div>
+
+            <h3 class="solution-header">Proof of Correctness</h3>
+
+            <div class="proof-box">
+                For a rough proof of correctness, consider the following:
+            </div>
+
+            <p>Consider the KRT right before adding the node corresponding to <span class="math-formula">$\texttt{lca}(u, v)$</span>. By definition of LCA, <span class="math-formula">u</span> and <span class="math-formula">v</span> are not connected, implying that the minimum weight edge can not be weighted less than <span class="math-formula">$\texttt{lca}(u, v)$</span>. Additionally, because all edges added after the one corresponding to <span class="math-formula">$\texttt{lca}(u, v)$</span> are of greater weight, our answer is indeed the edge corresponding to <span class="math-formula">$\texttt{lca}(u, v)$</span>.</p>
+
+            <div class="query-box">
+                Thus, by using <span class="math-formula">$\mathcal{O}(1)$</span> LCA methods, we can answer our queries with the aforementioned complexity.
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Key Observation:</strong> The LCA of two nodes in the Kruskal Reconstruction Tree corresponds to the heaviest edge on the path between those nodes in the original graph. This property enables constant-time path queries after preprocessing.
+            </div>
+
+            <div class="applications-box">
+                <strong>Common Applications:</strong><br>
+                • <strong>Minimum Bottleneck Path:</strong> Find the path with maximum minimum edge weight<br>
+                • <strong>Path Queries:</strong> Answer min/max edge queries on tree paths<br>
+                • <strong>Connectivity Queries:</strong> Determine if path exists with edges above threshold<br>
+                • <strong>MST Queries:</strong> Efficiently query properties of minimum spanning trees<br>
+                • <strong>Graph Optimization:</strong> Solve various optimization problems on trees
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Example - Qpwoeirut and Vertices</h2>
+            
+            <div class="focus-problem">
+                <strong>🎯 Qpwoeirut and Vertices</strong><br>
+                <em>CF - Normal</em><br>
+                Focus Problem – try your best to solve this problem before continuing!
+            </div>
+
+            <div class="example-box">
+                To solve this task, we can assign edge weights based on their index in the input order. Then, we can construct the Kruskal Tree, only processing edges between nodes that aren't already connected (similar to the Kruskal Tree's namesake, Kruskal's Algorithm).
+            </div>
+
+            <div class="solution-approach-box">
+                <strong>Solution Strategy:</strong><br>
+                From here, we need a fast way to query the <span class="math-formula">$\text{LCA}$</span> of a range of nodes. One way to do this is to maintain the DFS order of the nodes, and take the <span class="math-formula">$\text{LCA}$</span> of the nodes with the earliest and latest traversal within the range. This can be done with any range query data structure, such as a sparse table or segment tree.
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Range LCA Technique:</strong> By using DFS ordering and range minimum/maximum queries, we can efficiently find the LCA of any contiguous range of vertices. This reduces the problem to standard range query operations.
+            </div>
+
+            <h3 class="solution-header">Implementation</h3>
+
+            <div class="optimization-box">
+                An optimal time complexity for this problem would be <span class="math-formula">$\mathcal{O}(N+M+Q)$</span>, using <span class="math-formula">$\mathcal{O}(1)/\mathcal{O}(N)$</span> LCA and RMQ methods. However, we present an <span class="math-formula">$\mathcal{O}((N+Q)\log N + M)$</span> solution for simplicity.
+            </div>
+
+            <div class="complexity">
+                <strong>Time Complexity: $\mathcal{O}((N+Q)\log N + M)$</strong><br>
+                <strong>Space Complexity: $\mathcal{O}(N)$</strong>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    C++ Implementation
+                </div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+constexpr int MAX_N = 4e5 + 5;
+constexpr int LG = 20;
+
+int n, m, q, va[MAX_N], f[MAX_N], nx;
+int trace(int v) { return f[v] == v ? v : f[v] = trace(f[v]); }
+
+/** Implements LCA with binary lifting */
+namespace LCA {
+int lift[MAX_N][LG], ch[MAX_N][2], t, tin[MAX_N], tout[MAX_N], tour[2 * MAX_N];
+
+bool is_ancestor(int u, int v) { return tin[u] &lt;= tin[v] &amp;&amp; tout[u] &gt;= tout[v]; }
+
+int lca(int u, int v) {
+    if (is_ancestor(u, v)) return u;
+    if (is_ancestor(v, u)) return v;
+    for (int i = LG - 1; i &gt;= 0; --i) {
+        if (!is_ancestor(lift[u][i], v)) u = lift[u][i];
+    }
+    return lift[u][0];
+}
+
+void dfs(int v) {
+    if (v == -1) return;
+    tour[t] = v;
+    tin[v] = t;
+    for (int i = 1; i &lt; LG; i++) {
+        lift[v][i] = lift[lift[v][i - 1]][i - 1];
+    }
+    dfs(ch[v][0]);
+    dfs(ch[v][1]);
+    tout[v] = t++;
+}
+}  // namespace LCA
+
+/** Point Update / Range Min/Max Segment Tree */
+namespace SGT {
+int sg_min[1 &lt;&lt; LG + 1], sg_max[1 &lt;&lt; LG + 1];
+
+void point_set(int i, int v) {
+    sg_min[i + (1 &lt;&lt; LG)] = sg_max[i + (1 &lt;&lt; LG)] = v;
+    for (int j = (i + (1 &lt;&lt; LG)) / 2; j; j /= 2) {
+        sg_min[j] = min(sg_min[2 * j], sg_min[2 * j + 1]);
+        sg_max[j] = max(sg_max[2 * j], sg_max[2 * j + 1]);
+    }
+}
+
+/** @return edge (LCA of nodes w/ lowest and highest traversal time in [l, r]) */
+int query(int l, int r) {
+    int lift = MAX_N, rt = -1;
+    for (l += 1 &lt;&lt; LG, r += 1 &lt;&lt; LG; l &lt; r; l &gt;&gt;= 1, r &gt;&gt;= 1) {
+        if (l &amp; 1) {
+            lift = min(lift, sg_min[l]);
+            rt = max(rt, sg_max[l++]);
+        }
+        if (r &amp; 1) {
+            lift = min(lift, sg_min[--r]);
+            rt = max(rt, sg_max[r]);
+        }
+    }
+    return va[LCA::lca(LCA::tour[lift], LCA::tour[rt])];
+}
+}  // namespace SGT
+
+void solve() {
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; q;
+    iota(f, f + 2 * n, 0);
+    nx = n;
+    memset(LCA::ch, -1, sizeof(LCA::ch));
+
+    for (int i = 0; i &lt; m; i++) {
+        int u, v;
+        cin &gt;&gt; u &gt;&gt; v;
+        u = trace(--u), v = trace(--v);
+        if (u == v) continue;
+        va[nx] = i;
+        LCA::ch[nx][0] = u;
+        LCA::ch[nx][1] = v;
+        f[u] = f[v] = LCA::lift[u][0] = LCA::lift[v][0] = nx++;
+    }
+
+    LCA::lift[2 * n - 2][0] = 2 * n - 2;
+    LCA::dfs(2 * n - 2);
+
+    for (int i = 0; i &lt; 2 * n - 1; i++) {
+        SGT::point_set(i, LCA::tin[i]);
+    }
+
+    while (q--) {
+        int l, r;
+        cin &gt;&gt; l &gt;&gt; r;
+        if (l == r) {
+            cout &lt;&lt; \"0 \";
+        } else {
+            cout &lt;&lt; SGT::query(l - 1, r) + 1 &lt;&lt; \" \";
+        }
+    }
+
+    cout &lt;&lt; \"\\n\";
+}
+
+int main() {
+    int test_num;
+    cin &gt;&gt; test_num;
+    for (int t = 0; t &lt; test_num; t++) {
+        solve();
+    }
+}
+</code></pre>
+
+            </div>
+
+            <div class="implementation-box">
+                <strong>Implementation Details:</strong><br>
+                • <strong>Edge Processing:</strong> Sort edges by weight (or input order for this problem)<br>
+                • <strong>Union-Find:</strong> Use DSU with path compression for efficient component merging<br>
+                • <strong>Tree Construction:</strong> Build auxiliary nodes as you merge components<br>
+                • <strong>LCA Preprocessing:</strong> Use binary lifting or other efficient LCA methods<br>
+                • <strong>Query Processing:</strong> Answer queries using LCA on the reconstruction tree
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Advanced Concepts and Variations</h2>
+
+            <h3 class="solution-header">Alternative Construction Methods</h3>
+
+            <div class="construction-box">
+                <strong>Bottom-Up Construction:</strong> Instead of processing edges in sorted order, we can build the tree bottom-up by starting with individual vertices and progressively merging components based on edge weights.
+            </div>
+
+            <div class="tree-properties-box">
+                <strong>Tree Properties:</strong><br>
+                • The reconstruction tree has exactly <span class="math-formula">2N - 1</span> nodes<br>
+                • Original vertices are leaves in the reconstruction tree<br>
+                • Internal nodes represent merge operations during construction<br>
+                • Each internal node stores the weight of the edge that caused the merge<br>
+                • The tree height is at most <span class="math-formula">N - 1</span>
+            </div>
+
+            <h3 class="solution-header">Generalized Kruskal Trees</h3>
+
+            <div class="algorithm-box">
+                <strong>Maximum Spanning Tree Variant:</strong> We can also build Kruskal Reconstruction Trees for maximum spanning trees by processing edges in decreasing order of weight. This enables queries for maximum bottleneck paths.
+            </div>
+
+            <div class="query-box">
+                <strong>Range Query Extensions:</strong> The reconstruction tree can be extended to support more complex queries like counting edges in a weight range, finding the k-th minimum edge on a path, or updating edge weights dynamically.
+            </div>
+
+            <h3 class="solution-header">Optimization Techniques</h3>
+
+            <div class="optimization-box">
+                <strong>Memory Optimization:</strong><br>
+                • <strong>Implicit Tree:</strong> Store only necessary information instead of explicit tree structure<br>
+                • <strong>Compressed Representation:</strong> Use path compression techniques during construction<br>
+                • <strong>Lazy Propagation:</strong> Delay computations until queries are made<br>
+                • <strong>Cache-Friendly Layout:</strong> Arrange data structures for better memory access patterns
+            </div>
+
+            <div class="applications-box">
+                <strong>Real-World Applications:</strong><br>
+                • <strong>Network Analysis:</strong> Finding bottleneck paths in communication networks<br>
+                • <strong>Transportation:</strong> Optimizing routes with capacity constraints<br>
+                • <strong>Circuit Design:</strong> Analyzing critical paths in electronic circuits<br>
+                • <strong>Image Processing:</strong> Watershed algorithms and image segmentation<br>
+                • <strong>Bioinformatics:</strong> Phylogenetic tree analysis and sequence alignment
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Summary and Key Takeaways</h2>
+
+            <div class="algorithm-box">
+                Kruskal Reconstruction Trees provide an elegant solution for static path queries on trees. By preprocessing the graph into an auxiliary binary tree, we can answer complex path queries in constant time while maintaining reasonable construction costs.
+            </div>
+
+            <div class="tutorial-box">
+                <strong>What You've Learned:</strong><br>
+                • Understanding the construction algorithm for Kruskal Reconstruction Trees<br>
+                • Proof of correctness and why the LCA approach works<br>
+                • Practical implementation techniques and optimization strategies<br>
+                • Real-world applications and problem-solving approaches<br>
+                • Time and space complexity analysis
+            </div>
+
+            <div class="focus-problem">
+                <strong>🎯 Practice Challenge:</strong><br>
+                Try implementing a Kruskal Reconstruction Tree for different types of path queries. Start with minimum edge queries, then extend to maximum edge queries, and finally try range counting problems to build your understanding!
+            </div>
+
+            <div class="complexity">
+                <strong>Performance Summary:</strong><br>
+                • <strong>Construction:</strong> <span class="math-formula">$\mathcal{O}(M \log M + N \alpha(N))$</span> where <span class="math-formula">M</span> is the number of edges<br>
+                • <strong>Query:</strong> <span class="math-formula">$\mathcal{O}(1)$</span> with <span class="math-formula">$\mathcal{O}(N \log N)$</span> LCA preprocessing<br>
+                • <strong>Space:</strong> <span class="math-formula">$\mathcal{O}(N)$</span> for the reconstruction tree structure
+            </div>
+
+            <div class="optimization-box">
+                <strong>Final Notes:</strong> Kruskal Reconstruction Trees are particularly powerful when you have many queries on a static graph. The initial preprocessing cost is quickly amortized over multiple queries, making them ideal for competitive programming and real-world applications with query-heavy workloads.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+</body>
+</html>

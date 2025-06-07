@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centroid Decomposition</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            animation: slideInDown 1s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 400px;
+            height: 4px;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            margin: 20px auto;
+            border-radius: 2px;
+            animation: expandLine 1.2s ease-out 0.5s both;
+        }
+
+        @keyframes expandLine {
+            from {
+                width: 0;
+            }
+            to {
+                width: 400px;
+            }
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #34495e;
+            margin-top: 60px;
+            margin-bottom: 25px;
+            border-left: 5px solid #e74c3c;
+            padding-left: 20px;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h3::before {
+            content: '⚡';
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+
+        p {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: justify;
+            line-height: 1.8;
+        }
+
+        .code-container {
+            background: #1e1e1e;
+            border-radius: 12px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: 1px solid #333;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .code-header {
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #444;
+        }
+
+        pre {
+            margin: 0 !important;
+            background: #1e1e1e !important;
+            border-radius: 0 !important;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+            font-weight: 500 !important;
+        }
+
+        .line-numbers-rows {
+            border-right: 1px solid #444 !important;
+            padding-right: 10px !important;
+            margin-right: 15px !important;
+        }
+
+        .complexity {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            margin: 25px 0;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.1);
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 35px;
+            background: #fafbfc;
+            border-radius: 15px;
+            border: 1px solid #e1e8ed;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hover-effect {
+            transition: all 0.3s ease;
+        }
+
+        .hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 800;
+        }
+
+        .algorithm-box {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #28a745;
+            font-weight: 700;
+        }
+
+        .algorithm-box::before {
+            content: '⚡ Key Insight: ';
+            font-weight: 800;
+            color: #155724;
+        }
+
+        .centroid-box {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #f44336;
+            font-weight: 700;
+        }
+
+        .centroid-box::before {
+            content: '🎯 Centroid Definition: ';
+            font-weight: 800;
+            color: #d32f2f;
+        }
+
+        .decomposition-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #2196f3;
+            font-weight: 700;
+        }
+
+        .decomposition-box::before {
+            content: '🔄 Decomposition Process: ';
+            font-weight: 800;
+            color: #1976d2;
+        }
+
+        .focus-problem {
+            background: linear-gradient(135deg, #fef9e7, #f9e79f);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #e74c3c;
+            text-align: center;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(231, 76, 60, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+            }
+        }
+
+        .math-formula {
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: #2d3748;
+            border: 1px solid #e9ecef;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+            margin: 25px 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 4px solid #e74c3c;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -15px;
+            top: 15px;
+            background: #e74c3c;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .introduction-box {
+            background: linear-gradient(135deg, #fef9e7, #f9e79f);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #e74c3c;
+            font-weight: 700;
+        }
+
+        .introduction-box::before {
+            content: '📚 Introduction: ';
+            font-weight: 800;
+            color: #e67e22;
+        }
+
+        .solution-header {
+            color: #e74c3c;
+            font-weight: 800;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 8px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #718096;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .finding-centroid-box {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #9c27b0;
+            font-weight: 700;
+        }
+
+        .finding-centroid-box::before {
+            content: '🔍 Finding Centroid: ';
+            font-weight: 800;
+            color: #7b1fa2;
+        }
+
+        .implementation-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #2196f3;
+            font-weight: 700;
+        }
+
+        .implementation-box::before {
+            content: '⚙️ Implementation: ';
+            font-weight: 800;
+            color: #1976d2;
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 4px solid #ffc107;
+            margin: 25px 0;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.1);
+        }
+
+        .warning::before {
+            content: '⚠️ Warning: ';
+            font-size: 1.2em;
+            font-weight: 800;
+            color: #856404;
+        }
+
+        .resource-list {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #28a745;
+            font-weight: 700;
+        }
+
+        .resource-list::before {
+            content: '📖 Resources: ';
+            font-weight: 800;
+            color: #155724;
+        }
+
+        .solution-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #ff9800;
+            font-weight: 700;
+        }
+
+        .solution-box::before {
+            content: '💡 Solution Strategy: ';
+            font-weight: 800;
+            color: #f57c00;
+        }
+
+        .properties-box {
+            background: linear-gradient(135deg, #f0f4f8, #ddd6fe);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #8b5cf6;
+            font-weight: 700;
+        }
+
+        .properties-box::before {
+            content: '🏗️ Properties: ';
+            font-weight: 800;
+            color: #7c3aed;
+        }
+
+        ul {
+            margin: 25px 0;
+            padding-left: 0;
+        }
+
+        li {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            list-style: none;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        li::before {
+            content: '🔥';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .divide-conquer-box {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #28a745;
+            font-weight: 700;
+        }
+
+        .divide-conquer-box::before {
+            content: '🎯 Divide & Conquer: ';
+            font-weight: 800;
+            color: #155724;
+        }
+
+        .complexity-analysis-box {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #f44336;
+            font-weight: 700;
+        }
+
+        .complexity-analysis-box::before {
+            content: '📊 Complexity Analysis: ';
+            font-weight: 800;
+            color: #d32f2f;
+        }
+
+        .applications-box {
+            background: linear-gradient(135deg, #f0f4f8, #ddd6fe);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #8b5cf6;
+            font-weight: 700;
+        }
+
+        .applications-box::before {
+            content: '📖 Applications: ';
+            font-weight: 800;
+            color: #7c3aed;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+            
+            code {
+                font-size: 0.85rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Centroid Decomposition</h1>
+        <p class="subtitle">Advanced Divide & Conquer Technique for Trees</p>
+        
+        <div class="section hover-effect">
+            <h2>Introduction</h2>
+            
+            <div class="introduction-box">
+                Centroid Decomposition is a powerful divide and conquer technique used to solve complex problems on trees efficiently. By recursively decomposing a tree into smaller components based on centroids, we can reduce the complexity of many tree problems from quadratic to logarithmic.
+            </div>
+
+            <div class="divide-conquer-box">
+                <strong>Core Concept:</strong> Centroid Decomposition works by repeatedly splitting the tree and each of the resulting subgraphs at the centroid, producing <span class="math-formula">$\mathcal{O}(\log N)$</span> layers of subgraphs. This creates a hierarchical structure that enables efficient query processing and updates.
+            </div>
+
+            <div class="applications-box">
+                <strong>Common Applications:</strong><br>
+                • <strong>Path Queries:</strong> Answering queries about paths between nodes<br>
+                • <strong>Distance Problems:</strong> Finding shortest/longest paths in trees<br>
+                • <strong>Subtree Queries:</strong> Efficiently processing subtree-based operations<br>
+                • <strong>Dynamic Tree Problems:</strong> Handling updates and queries on changing trees<br>
+                • <strong>Optimization Problems:</strong> Solving complex optimization on tree structures
+            </div>
+
+            <h3 class="solution-header">Centroids</h3>
+
+            <div class="centroid-box">
+                A centroid of a tree is defined as a node such that when the tree is rooted at it, no other nodes have a subtree of size greater than <span class="math-formula">$\frac{N}{2}$</span>.
+            </div>
+
+            <div class="properties-box">
+                <strong>Key Properties of Centroids:</strong><br>
+                • Every tree has at least one centroid<br>
+                • A tree can have at most two centroids<br>
+                • If a tree has two centroids, they must be adjacent<br>
+                • Removing a centroid breaks the tree into components of size ≤ N/2<br>
+                • Finding a centroid takes O(N) time
+            </div>
+
+            <h3 class="solution-header">Finding a Centroid</h3>
+
+            <div class="focus-problem">
+                <strong>🎯 Finding a Centroid</strong><br>
+                <em>CSES - Very Easy</em><br>
+                Focus Problem – try your best to solve this problem before continuing!
+            </div>
+
+            <div class="finding-centroid-box">
+                We can find a centroid in a tree by starting at the root. Each step, loop through all of its children. If all of its children have subtree size less than or equal to <span class="math-formula">$\frac{N}{2}$</span>, then it is a centroid. Otherwise, move to the child with a subtree size that is more than <span class="math-formula">$\frac{N}{2}$</span> and repeat until you find a centroid.
+            </div>
+
+            <ol class="step-list">
+                <li>Start with any node as the current candidate</li>
+                <li>Calculate subtree sizes for all children</li>
+                <li>Check if current node is a centroid (no child subtree > N/2)</li>
+                <li>If not, move to the child with largest subtree and repeat</li>
+                <li>Continue until a centroid is found</li>
+            </ol>
+
+            <div class="algorithm-box">
+                <strong>Correctness:</strong> This algorithm always finds a centroid because we keep moving toward larger components. Since the tree is finite and we're always reducing the problem size, we must eventually reach a centroid.
+            </div>
+
+            <h3 class="solution-header">Implementation</h3>
+
+            <div class="complexity">
+                <strong>Time Complexity: $\mathcal{O}(N)$</strong><br>
+                <strong>Space Complexity: $\mathcal{O}(N)$</strong>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    C++ - Finding Centroid Implementation
+                </div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+const int maxn = 200010;
+
+int n;
+vector&lt;int&gt; adj[maxn];
+int subtree_size[maxn];
+
+int get_subtree_size(int node, int parent = -1) {
+    int &amp;res = subtree_size[node];
+    res = 1;
+    for (int i : adj[node]) {
+        if (i == parent) continue;
+        res += get_subtree_size(i, node);
+    }
+    return res;
+}
+
+int get_centroid(int node, int parent = -1) {
+    for (int i : adj[node]) {
+        if (i == parent) continue;
+        if (subtree_size[i] * 2 &gt; n) return get_centroid(i, node);
+    }
+    return node;
+}
+
+int main() {
+    cin &gt;&gt; n;
+    for (int i = 0; i &lt; n - 1; i++) {
+        int a, b;
+        cin &gt;&gt; a &gt;&gt; b;
+        a--;
+        b--;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+
+    get_subtree_size(0);
+    cout &lt;&lt; get_centroid(0) + 1 &lt;&lt; endl;
+}
+</code></pre>
+
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Centroid Decomposition</h2>
+            
+            <div class="focus-problem">
+                <strong>🎯 Xenia & Tree</strong><br>
+                <em>CF - Normal</em><br>
+                Focus Problem – try your best to solve this problem before continuing!
+            </div>
+
+            <div class="decomposition-box">
+                Centroid Decomposition is a divide and conquer technique for trees. Centroid Decomposition works by repeated splitting the tree and each of the resulting subgraphs at the centroid, producing <span class="math-formula">$\mathcal{O}(\log N)$</span> layers of subgraphs.
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Decomposition Process:</strong> At each step, we find the centroid of the current component, mark it as processed, and recursively decompose each of the resulting subcomponents. This creates a tree-like hierarchy where each node appears in at most O(log N) levels.
+            </div>
+
+            <div class="resource-list">
+                <strong>Learning Resources:</strong><br>
+                • <strong>Carpanese</strong> - Illustrated Intro to Centroid Decomposition (how to solve above problem)<br>
+                • <strong>Tanuj Khattar</strong> - Centroid Decomposition of a Tree (Illustrated Guide + Problem Walkthrough)<br>
+                • <strong>robert1003</strong> - A Simple Introduction to Centroid Decomposition (Illustrated Guide + Example problems)<br>
+                • <strong>CF galen_colin</strong> - Centroid Decomposition (blog + video for above problem. LCA isn't necessary though.)<br>
+                • <strong>GFG</strong> - Centroid Decomposition of Tree
+            </div>
+
+            <div class="warning">
+                The implementation by Carpanese (ll. 20-21) leads to a segmentation fault due to an invalidated iterator in the range-based for loop after erasing the element. Instead, you can store an is_removed array and check it before visiting children (this approach is presented below).
+            </div>
+
+            <div class="implementation-box">
+                <strong>Alternative Fix:</strong> The following problematic code:<br>
+                <code>for (auto v : tree[centroid]) tree[centroid].erase(v), tree[v].erase(centroid), build(v, centroid);</code><br><br>
+                Can be rewritten like so:<br>
+                <code>for (auto v : tree[centroid]) { tree[v].erase(centroid); build(v, centroid); } tree[centroid].clear();</code>
+            </div>
+
+            <div class="complexity-analysis-box">
+                The article also mentions an update complexity of <span class="math-formula">$\mathcal{O}(\log^2 n)$</span> because it assumes an additional factor of <span class="math-formula">$\mathcal{O}(\log n)$</span> to calculate the distance between a node and a given centroid ancestor. However, we can precompute these (as demonstrated in the code below) to reduce update complexity to <span class="math-formula">$\mathcal{O}(\log n)$</span> and overall complexity to <span class="math-formula">$\mathcal{O}((N + Q)\log n)$</span>.
+            </div>
+
+            <h3 class="solution-header">Implementation</h3>
+
+            <div class="implementation-box">
+                General centroid code is shown below.
+            </div>
+
+            <div class="complexity">
+                <strong>Time Complexity: $\mathcal{O}(N \log N)$ for construction</strong><br>
+                <strong>Query Complexity: $\mathcal{O}(\log N)$ per query</strong><br>
+                <strong>Space Complexity: $\mathcal{O}(N \log N)$</strong>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    C++ - General Centroid Decomposition
+                </div>
+                <pre class="line-numbers"><code class="language-cpp">vector&lt;vector&lt;int&gt;&gt; adj;
+vector&lt;bool&gt; is_removed;
+vector&lt;int&gt; subtree_size;
+
+/** DFS to calculate the size of the subtree rooted at `node` */
+int get_subtree_size(int node, int parent = -1) {
+    subtree_size[node] = 1;
+    for (int child : adj[node]) {
+        if (child == parent || is_removed[child]) continue;
+        subtree_size[node] += get_subtree_size(child, node);
+    }
+    return subtree_size[node];
+}
+
+/**
+ * Returns a centroid (a tree may have two centroids) of the subtree
+ * containing node `node` after node removals
+ * @param node current node
+ * @param tree_size size of current subtree after node removals
+ * @param parent parent of u
+ * @return first centroid found
+ */
+int get_centroid(int node, int tree_size, int parent = -1) {
+    for (int child : adj[node]) {
+        if (child == parent || is_removed[child]) continue;
+        if (subtree_size[child] * 2 &gt; tree_size) {
+            return get_centroid(child, tree_size, node);
+        }
+    }
+    return node;
+}
+
+/** Build up the centroid decomposition recursively */
+void build_centroid_decomp(int node = 0) {
+    int centroid = get_centroid(node, get_subtree_size(node));
+
+    // do something
+
+    is_removed[centroid] = true;
+
+    for (int child : adj[centroid]) {
+        if (is_removed[child]) continue;
+        build_centroid_decomp(child);
+    }
+}
+</code></pre>
+
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Solution - Xenia & Tree</h2>
+
+            <div class="solution-box">
+                For every node, there are at most <span class="math-formula">$\log N$</span> centroid components that include this node, where <span class="math-formula">N</span> denotes the number of nodes. Let's call the centroid whose component contains one node the centroid ancestor of this node.
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Key Observation:</strong> The path between every two nodes in the tree must include one of their common centroid ancestors, since the tree is being split into subtrees with the centroids as their respective roots.
+            </div>
+
+            <div class="solution-box">
+                If we store the distance to the nearest red node for every centroid, we can query the minimal distance between any node and the nearest red node by calculating the minimum distance between the node and one of its centroid ancestors with the minimal distance from that centroid to a red node.
+            </div>
+
+            <div class="implementation-box">
+                <strong>Solution Strategy:</strong><br>
+                • <strong>Preprocessing:</strong> Build centroid decomposition and precompute distances<br>
+                • <strong>Update Operation:</strong> When painting a node red, update all centroid ancestors<br>
+                • <strong>Query Operation:</strong> Find minimum distance among all centroid ancestors<br>
+                • <strong>Optimization:</strong> Precompute distances to avoid recalculation during queries
+            </div>
+
+            <p>To paint a node red, we just update all centroid ancestors of this node. Both operations can be done in <span class="math-formula">$\mathcal{O}(\log N)$</span> time, as there are at most that many centroid ancestors for one node.</p>
+
+            <div class="complexity">
+                <strong>Overall Time Complexity: $\mathcal{O}((N + Q) \log N)$</strong><br>
+                <strong>Space Complexity: $\mathcal{O}(N \log N)$</strong>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">
+                    C++ - Xenia & Tree Solution
+                </div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+// a number that is large enough while not causing overflow
+const int INF = 1e9;
+
+vector&lt;vector&lt;int&gt;&gt; adj;
+vector&lt;int&gt; subtree_size;
+vector&lt;int&gt; min_dist;
+vector&lt;bool&gt; is_removed;
+vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt; ancestors;
+
+int get_subtree_size(int node, int parent = -1) {
+    subtree_size[node] = 1;
+    for (int child : adj[node]) {
+        if (child == parent || is_removed[child]) continue;
+        subtree_size[node] += get_subtree_size(child, node);
+    }
+    return subtree_size[node];
+}
+
+int get_centroid(int node, int tree_size, int parent = -1) {
+    for (int child : adj[node]) {
+        if (child == parent || is_removed[child]) continue;
+        if (subtree_size[child] * 2 &gt; tree_size)
+            return get_centroid(child, tree_size, node);
+    }
+    return node;
+}
+
+/**
+ * Calculate the distance between current `node` and the `centroid` it belongs
+ */
+void get_dists(int node, int centroid, int parent = -1, int cur_dist = 1) {
+    for (int child : adj[node]) {
+        if (child == parent || is_removed[child]) continue;
+        cur_dist++;
+        get_dists(child, centroid, node, cur_dist);
+        cur_dist--;
+    }
+    ancestors[node].push_back({centroid, cur_dist});
+}
+
+void build_centroid_decomp(int node = 0) {
+    int centroid = get_centroid(node, get_subtree_size(node));
+
+    for (int child : adj[centroid]) {
+        if (is_removed[child]) continue;
+        get_dists(child, centroid, centroid);
+    }
+
+    is_removed[centroid] = true;
+    for (int child : adj[centroid]) {
+        if (is_removed[child]) continue;
+        build_centroid_decomp(child);
+    }
+}
+
+/**
+ * Paint `node` red by updating all of its ancestors' minimal distances
+ */
+void paint(int node) {
+    for (auto &amp;[ancestor, dist] : ancestors[node]) {
+        min_dist[ancestor] = min(min_dist[ancestor], dist);
+    }
+    min_dist[node] = 0;
+}
+
+/** Print the minimal distance between `node` to a red node */
+void query(int node) {
+    int ans = min_dist[node];
+    for (auto &amp;[ancestor, dist] : ancestors[node]) {
+        if (!dist) continue;
+        ans = min(ans, dist + min_dist[ancestor]);
+    }
+    cout &lt;&lt; ans &lt;&lt; "\n";
+}
+
+int main() {
+    int N, M;
+    cin &gt;&gt; N &gt;&gt; M;
+
+    adj.assign(N, vector&lt;int&gt;());
+    for (int i = 0; i &lt; N - 1; i++) {
+        int a, b;
+        cin &gt;&gt; a &gt;&gt; b;
+        a--, b--;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+
+    subtree_size.assign(N, 0);
+    ancestors.assign(N, vector&lt;pair&lt;int, int&gt;&gt;());
+    is_removed.assign(N, false);
+    build_centroid_decomp();
+
+    min_dist.assign(N, INF);
+    paint(0);
+    for (int i = 0; i &lt; M; i++) {
+        int t, v;
+        cin &gt;&gt; t &gt;&gt; v;
+        v--;
+        if (t == 1) {
+            paint(v);
+        } else {
+            query(v);
+        }
+    }
+}
+</code></pre>
+
+            </div>
+
+            <div class="algorithm-box">
+                <strong>Why This Works:</strong> Since every path in the original tree must pass through some centroid in our decomposition hierarchy, we can solve path-related queries by checking all relevant centroids. The logarithmic depth ensures efficiency.
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Advanced Concepts and Applications</h2>
+
+            <h3 class="solution-header">Advanced Techniques</h3>
+
+            <div class="properties-box">
+                <strong>Centroid Tree Properties:</strong><br>
+                • Height is at most <span class="math-formula">$\mathcal{O}(\log N)$</span><br>
+                • Each original node appears in exactly one level<br>
+                • Supports efficient path queries and updates<br>
+                • Enables divide-and-conquer solutions on trees<br>
+                • Can be combined with other data structures
+            </div>
+
+            <div class="applications-box">
+                <strong>Problem Categories:</strong><br>
+                • <strong>Distance Queries:</strong> Finding distances between nodes efficiently<br>
+                • <strong>Path Counting:</strong> Counting paths with specific properties<br>
+                • <strong>Tree Modifications:</strong> Handling dynamic updates on trees<br>
+                • <strong>Optimization:</strong> Solving min/max problems on tree paths<br>
+                • <strong>Pattern Matching:</strong> Finding specific patterns in tree structures
+            </div>
+
+            <h3 class="solution-header">Implementation Tips</h3>
+
+            <div class="implementation-box">
+                <strong>Best Practices:</strong><br>
+                • Always use a removed/visited array to avoid iterator invalidation<br>
+                • Precompute distances when possible to optimize query time<br>
+                • Consider memory usage - centroid decomposition can be space-intensive<br>
+                • Test edge cases like single nodes and linear trees<br>
+                • Use efficient data structures for storing centroid information
+            </div>
+
+            <div class="complexity-analysis-box">
+                <strong>Time Complexity Breakdown:</strong><br>
+                • <strong>Building decomposition:</strong> <span class="math-formula">$\mathcal{O}(N \log N)$</span><br>
+                • <strong>Finding each centroid:</strong> <span class="math-formula">$\mathcal{O}(N)$</span> per level<br>
+                • <strong>Processing each node:</strong> Appears in <span class="math-formula">$\mathcal{O}(\log N)$</span> levels<br>
+                • <strong>Query processing:</strong> <span class="math-formula">$\mathcal{O}(\log N)$</span> per query<br>
+                • <strong>Update operations:</strong> <span class="math-formula">$\mathcal{O}(\log N)$</span> per update
+            </div>
+
+            <h3 class="solution-header">Common Pitfalls and Solutions</h3>
+
+            <div class="warning">
+                <strong>Iterator Invalidation:</strong> Be careful when modifying containers while iterating. Use removed arrays or clear containers after processing all children.
+            </div>
+
+            <div class="warning">
+                <strong>Memory Overflow:</strong> Centroid decomposition can use significant memory. Consider space optimization techniques for large inputs.
+            </div>
+
+            <div class="warning">
+                <strong>Distance Calculation:</strong> Precompute distances during construction rather than calculating them during queries to achieve optimal complexity.
+            </div>
+
+            <h3 class="solution-header">Alternative Approaches</h3>
+
+            <div class="algorithm-box">
+                <strong>Heavy-Light Decomposition vs Centroid Decomposition:</strong><br>
+                • HLD: Better for path queries with updates, O(log²N) complexity<br>
+                • Centroid: Better for distance queries, O(log N) after preprocessing<br>
+                • Choose based on problem requirements and query types
+            </div>
+
+            <div class="decomposition-box">
+                <strong>Link-Cut Trees:</strong> For fully dynamic tree problems, Link-Cut Trees might be more appropriate than centroid decomposition, though they're more complex to implement.
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Summary and Key Takeaways</h2>
+
+            <div class="algorithm-box">
+                Centroid Decomposition is a powerful technique that transforms tree problems into manageable subproblems. By leveraging the hierarchical structure created by recursive centroid removal, we can solve complex queries efficiently.
+            </div>
+
+            <div class="introduction-box">
+                <strong>What You've Mastered:</strong><br>
+                • Understanding centroid properties and how to find them efficiently<br>
+                • The centroid decomposition algorithm and its implementation details<br>
+                • Solving practical problems like Xenia & Tree using decomposition<br>
+                • Analyzing time and space complexity of centroid-based solutions<br>
+                • Common pitfalls and how to avoid them in implementation
+            </div>
+
+            <div class="focus-problem">
+                <strong>🎯 Practice Challenge:</strong><br>
+                Try implementing centroid decomposition for different tree problems: distance queries, path counting, and dynamic tree modifications. Start with static problems and gradually move to more complex scenarios!
+            </div>
+
+            <div class="properties-box">
+                <strong>Key Insights to Remember:</strong><br>
+                • Every tree has at least one centroid, at most two<br>
+                • Centroid removal creates balanced subproblems<br>
+                • Each node appears in O(log N) centroid components<br>
+                • Precomputation is crucial for optimal query performance<br>
+                • Careful implementation prevents common iterator issues
+            </div>
+
+            <div class="complexity">
+                <strong>Performance Summary:</strong><br>
+                • <strong>Construction:</strong> <span class="math-formula">$\mathcal{O}(N \log N)$</span><br>
+                • <strong>Query:</strong> <span class="math-formula">$\mathcal{O}(\log N)$</span> with preprocessing<br>
+                • <strong>Update:</strong> <span class="math-formula">$\mathcal{O}(\log N)$</span> per operation<br>
+                • <strong>Space:</strong> <span class="math-formula">$\mathcal{O}(N \log N)$</span> total
+            </div>
+
+            <div class="applications-box">
+                <strong>Real-World Applications:</strong><br>
+                • <strong>Network Analysis:</strong> Finding critical nodes in communication networks<br>
+                • <strong>Computational Biology:</strong> Analyzing phylogenetic trees and evolutionary relationships<br>
+                • <strong>Game Development:</strong> Pathfinding and AI decision trees in complex environments<br>
+                • <strong>Database Systems:</strong> Query optimization in hierarchical data structures<br>
+                • <strong>Machine Learning:</strong> Decision tree optimization and ensemble methods
+            </div>
+
+            <div class="solution-box">
+                <strong>Final Advice:</strong> Centroid decomposition is a technique that requires practice to master. Start with basic problems, understand the recursive structure, and gradually tackle more complex applications. The key is recognizing when path-based queries can benefit from the centroid hierarchy.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+</body>
+</html>

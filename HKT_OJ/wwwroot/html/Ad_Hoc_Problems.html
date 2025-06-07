@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Hoc Problems</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            animation: slideInDown 1s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            margin: 20px auto;
+            border-radius: 2px;
+            animation: expandLine 1.2s ease-out 0.5s both;
+        }
+
+        @keyframes expandLine {
+            from {
+                width: 0;
+            }
+            to {
+                width: 120px;
+            }
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #34495e;
+            margin-top: 60px;
+            margin-bottom: 25px;
+            border-left: 5px solid #e74c3c;
+            padding-left: 20px;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h3::before {
+            content: '🎯';
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+
+        p {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: justify;
+            line-height: 1.8;
+        }
+
+        ul {
+            margin: 25px 0;
+            padding-left: 0;
+        }
+
+        li {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            list-style: none;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .code-container {
+            background: #1e1e1e;
+            border-radius: 12px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: 1px solid #333;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .code-header {
+            background: linear-gradient(90deg, #2c3e50, #34495e);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #444;
+        }
+
+        pre {
+            margin: 0 !important;
+            background: #1e1e1e !important;
+            border-radius: 0 !important;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+            font-weight: 500 !important;
+        }
+
+        .line-numbers-rows {
+            border-right: 1px solid #444 !important;
+            padding-right: 10px !important;
+            margin-right: 15px !important;
+        }
+
+        .complexity {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            margin: 25px 0;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.1);
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 4px solid #ffc107;
+            margin: 25px 0;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.1);
+        }
+
+        .warning::before {
+            content: '⚠️ ';
+            font-size: 1.2em;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 35px;
+            background: #fafbfc;
+            border-radius: 15px;
+            border: 1px solid #e1e8ed;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .math {
+            background: #f8f9fa;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: 'Times New Roman', serif;
+            font-weight: 700;
+            color: #495057;
+        }
+
+        .focus-problem {
+            background: linear-gradient(135deg, #fff5f5, #fed7d7);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #e74c3c;
+            text-align: center;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(231, 76, 60, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+            }
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ff9a9e 0%, #fecfef 100%);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 800;
+        }
+
+        .hover-effect {
+            transition: all 0.3s ease;
+        }
+
+        .hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .tips-container {
+            background: linear-gradient(135deg, #f0f8ff, #e6f3ff);
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 5px solid #3498db;
+            margin: 30px 0;
+        }
+
+        .strategy-box {
+            background: linear-gradient(135deg, #f8f0ff, #ede0ff);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            border-left: 4px solid #9b59b6;
+            font-weight: 700;
+        }
+
+        .important-note {
+            background: linear-gradient(135deg, #ffe6e6, #ffcccc);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-left: 4px solid #e74c3c;
+            margin: 25px 0;
+            font-weight: 700;
+        }
+
+        .solution-header {
+            color: #e74c3c;
+            font-weight: 800;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 8px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .hint-box {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+            font-weight: 700;
+        }
+
+        .hint-box::before {
+            content: '💡 Hint: ';
+            font-weight: 800;
+            color: #f57c00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ad Hoc Problems</h1>
+        
+        <div class="section hover-effect">
+            <h2>Understanding Ad Hoc Problems</h2>
+            <p><span class="highlight">Ad hoc problems</span> are problems that don't follow a standard algorithmic pattern or template. They require creative thinking, careful observation, and often unique approaches specific to each problem. Unlike problems that can be solved using well-known algorithms like sorting or graph traversal, ad hoc problems test your ability to think outside the box and find innovative solutions.</p>
+            
+            <p>The key to mastering ad hoc problems lies not in memorizing algorithms, but in developing problem-solving intuition and the ability to recognize patterns and make crucial observations that lead to the solution.</p>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>General Problem-Solving Strategies</h2>
+            
+            <div class="tips-container">
+                <h3>Essential Tips for Ad Hoc Problems</h3>
+                
+                <ul>
+                    <li><strong>Draw lots of small cases</strong> to gain a better understanding of the problem. If you're having trouble debugging, draw more cases. If you don't know how to start with a problem, draw more cases. Whenever you don't know how to further approach a problem, you're probably missing an important observation, so draw more cases and make observations about properties of the problem.</li>
+                    
+                    <li><strong>Write down your observations!</strong> Whenever you find an observation that seems useful, write it down! Writing down ideas lets you easily come back to them later, and makes sure you don't forget about ideas that could potentially be the solution.</li>
+                    
+                    <li><strong>Stay flexible with your approach.</strong> Don't get stuck on any specific idea, unless you see an entire solution. Try to approach the problem from a lot of different perspectives. Try to mess around with formulas or draw a visual depiction of the problem.</li>
+                    
+                    <li><strong>Keep experimenting.</strong> One of the most helpful things you can do when solving ad hoc problems is to keep trying ideas until you make progress. This is something you get better at as you do more problems.</li>
+                </ul>
+            </div>
+
+            <div class="strategy-box">
+                <h3>Key Problem-Solving Techniques</h3>
+                <p><strong>Pattern Recognition:</strong> Look for mathematical patterns, sequences, or recurring structures in the problem.</p>
+                <p><strong>Case Analysis:</strong> Break the problem into different cases and handle each one separately.</p>
+                <p><strong>Simulation:</strong> Sometimes the best approach is to directly simulate the process described in the problem.</p>
+                <p><strong>Greedy Insights:</strong> Many ad hoc problems have greedy solutions that become apparent through careful observation.</p>
+            </div>
+
+            <div class="important-note">
+                <strong>Remember:</strong> In the end, the best way to get better at ad hoc problems (or any type of problem) is to do a lot of them. Each problem you solve builds your intuition for future challenges.
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Example Problem: Milking Order</h2>
+            
+            <div class="focus-problem">
+                <strong>🎯 Focus Problem:</strong> Milking Order (Bronze - Hard)<br>
+                Try your best to solve this problem before continuing!
+            </div>
+
+            <div class="warning">
+                <strong>Important Strategy:</strong> Don't be afraid to give up on some approach if you aren't making progress! Sometimes the key insight comes when you step back and try a completely different angle.
+            </div>
+
+            <div class="hint-box">
+                What if we tried placing cow 1 at every possible position?
+            </div>
+
+            <h3 class="solution-header">Solution Approach</h3>
+            
+            <p>The key insight for this problem is to try placing cow 1 at every possible position and check if we can construct a valid ordering.</p>
+
+            <p>For each potential position of cow 1, we need to:</p>
+            <ul>
+                <li>Handle the hierarchy constraints that we must satisfy</li>
+                <li>Place the "free cows" (those not in any hierarchy) in remaining positions</li>
+                <li>Use a greedy approach to place hierarchy cows as early as possible</li>
+            </ul>
+
+            <p>As we sweep through the hierarchy, we maintain a pointer indicating our current position. Greedily, we should try to place these cows as early as possible to ensure we have room to fit all of them. We must ensure that this pointer never outruns some previous cow in our hierarchy.</p>
+
+            <div class="complexity">
+                <strong>Time Complexity Analysis:</strong><br>
+                • Each check operation takes <span class="math">O(N + M + K)</span> time<br>
+                • We try placing cow 1 at each of N positions<br>
+                • Total time complexity: <span class="math">O(N(N + M + K))</span>
+            </div>
+
+            <h3>Implementation</h3>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Milking Order Solution</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int n, m, k;
+
+/**
+ * @return whether it's possible to construct a
+ * valid ordering with given fixed elements
+ */
+bool check(vector&lt;int&gt; order, vector&lt;int&gt; &amp;hierarchy) {
+    vector&lt;int&gt; cow_to_pos(n, -1);
+    
+    for (int i = 0; i &lt; n; i++) {
+        if (order[i] != -1) { 
+            cow_to_pos[order[i]] = i; 
+        }
+    }
+    
+    int h_idx = 0;
+    for (int i = 0; i &lt; n &amp;&amp; h_idx &lt; m; i++) {
+        if (cow_to_pos[hierarchy[h_idx]] != -1) {
+            // we know the next cow has to be in front of it
+            if (i &gt; cow_to_pos[hierarchy[h_idx]]) { 
+                return false; 
+            }
+            i = cow_to_pos[hierarchy[h_idx]];
+            h_idx++;
+        } else {
+            while (i &lt; n &amp;&amp; order[i] != -1) { 
+                i++; 
+            }
+            // run out of places
+            if (i == n) { 
+                return false; 
+            }
+            
+            order[i] = hierarchy[h_idx];
+            cow_to_pos[hierarchy[h_idx]] = i;
+            h_idx++;
+        }
+    }
+    
+    return true;
+}
+
+int main() {
+    freopen("milkorder.in", "r", stdin);
+    freopen("milkorder.out", "w", stdout);
+    
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; k;
+    
+    vector&lt;int&gt; hierarchy(m);
+    for (int i = 0; i &lt; m; i++) {
+        cin &gt;&gt; hierarchy[i];
+        hierarchy[i]--;
+    }
+    
+    vector&lt;int&gt; order(n, -1);
+    for (int i = 0; i &lt; k; i++) {
+        int cow, pos;
+        cin &gt;&gt; cow &gt;&gt; pos;
+        order[--pos] = --cow;
+        
+        if (cow == 0) {  // already fixed, nothing we can do
+            cout &lt;&lt; pos + 1 &lt;&lt; endl;
+            return 0;
+        }
+    }
+    
+    for (int i = 0; i &lt; n; i++) {
+        // if already fixed, skip
+        if (order[i] == -1) {
+            // try placing cow 1 @ position i
+            order[i] = 0;
+            if (check(order, hierarchy)) {
+                cout &lt;&lt; i + 1 &lt;&lt; endl;
+                break;
+            }
+            order[i] = -1;
+        }
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="strategy-box">
+                <h3>Key Insights from This Solution</h3>
+                <p><strong>Greedy Placement:</strong> We place hierarchy cows as early as possible to maximize our chances of fitting all cows.</p>
+                <p><strong>Constraint Checking:</strong> We carefully verify that our placement doesn't violate any hierarchy constraints.</p>
+                <p><strong>Edge Case Handling:</strong> We handle the special case where cow 1 is already fixed in position.</p>
+                <p><strong>Systematic Search:</strong> We systematically try each possible position for cow 1 until we find a valid solution.</p>
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Building Your Ad Hoc Problem-Solving Skills</h2>
+            
+            <div class="tips-container">
+                <h3>Practice Strategies</h3>
+                <ul>
+                    <li><strong>Start with simpler cases:</strong> Always work through small examples by hand before coding</li>
+                    <li><strong>Look for patterns:</strong> Often the solution becomes clear when you see the pattern in small cases</li>
+                    <li><strong>Consider multiple approaches:</strong> Mathematical, simulation, greedy, or constructive algorithms</li>
+                    <li><strong>Debug systematically:</strong> When your solution fails, trace through your logic step by step</li>
+                    <li><strong>Learn from editorial solutions:</strong> Study how others approached problems you couldn't solve</li>
+                </ul>
+            </div>
+
+            <div class="important-note">
+                <strong>Final Advice:</strong> Ad hoc problems can be frustrating because there's no standard template to follow. However, they're also some of the most rewarding problems to solve because they require genuine creativity and insight. The more you practice, the better you'll become at recognizing the types of observations and approaches that lead to solutions.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(Optional) Introduction to Sets & Maps</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            animation: slideInDown 1s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            margin: 20px auto;
+            border-radius: 2px;
+            animation: expandLine 1.2s ease-out 0.5s both;
+        }
+
+        @keyframes expandLine {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100px;
+            }
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #34495e;
+            margin-top: 60px;
+            margin-bottom: 25px;
+            border-left: 5px solid #3498db;
+            padding-left: 20px;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h3::before {
+            content: '▶';
+            color: #3498db;
+            margin-right: 10px;
+            font-size: 0.8em;
+        }
+
+        p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: justify;
+            line-height: 1.8;
+        }
+
+        ul {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .code-container {
+            background: #1e1e1e;
+            border-radius: 12px;
+            margin: 25px 0;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: 1px solid #333;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .code-header {
+            background: linear-gradient(90deg, #2c3e50, #34495e);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #444;
+        }
+
+        pre {
+            margin: 0 !important;
+            background: #1e1e1e !important;
+            border-radius: 0 !important;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+            font-size: 0.95rem !important;
+            line-height: 1.6 !important;
+            font-weight: 500 !important;
+        }
+
+        .line-numbers-rows {
+            border-right: 1px solid #444 !important;
+            padding-right: 10px !important;
+            margin-right: 15px !important;
+        }
+
+        .complexity {
+            background: linear-gradient(135deg, #e8f4fd, #d4edda);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+            margin: 20px 0;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.1);
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.1);
+        }
+
+        .warning::before {
+            content: '⚠️ ';
+            font-size: 1.2em;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #fafbfc;
+            border-radius: 12px;
+            border: 1px solid #e1e8ed;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .math {
+            background: #f8f9fa;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: 'Times New Roman', serif;
+            font-weight: 700;
+            color: #495057;
+        }
+
+        .method-title {
+            color: #2980b9;
+            font-weight: 800;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        .operations {
+            background: #f1f3f4;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .focus-problem {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border: 2px solid #2196f3;
+            text-align: center;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(33, 150, 243, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+            }
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8e6cf 0%, #88d8a3 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 800;
+        }
+
+        .hover-effect {
+            transition: all 0.3s ease;
+        }
+
+        .hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>(Optional) Introduction to Sets & Maps</h1>
+        
+        <div class="section hover-effect">
+            <h2>What are Sets and Maps?</h2>
+            
+            <h3>Sets</h3>
+            <p>A <span class="highlight">set</span> is a collection of unique elements. Sets have three primary methods:</p>
+            <ul>
+                <li>one to <strong>add</strong> an element</li>
+                <li>one to <strong>remove</strong> an element</li>
+                <li>one to <strong>check</strong> whether an element is present</li>
+            </ul>
+
+            <h3>Maps</h3>
+            <p>A <span class="highlight">map</span> is a collection of entries, each consisting of a key and a value. In a map, all keys are required to be unique (i.e., they will form a set), but values can be repeated. Maps have three primary methods:</p>
+            <ul>
+                <li>one to <strong>add</strong> a specified key-value pairing</li>
+                <li>one to <strong>remove</strong> a key-value pairing</li>
+                <li>one to <strong>retrieve</strong> the value for a given key</li>
+            </ul>
+
+            <p>C++ and Java both have two implementations of sets and maps; one uses sorting while the other uses hashing. Python's implementation of sets and maps uses hashing.</p>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Sets</h2>
+            
+            <div class="focus-problem">
+                <strong>🎯 Focus Problem:</strong> Distinct Numbers (CSES - Easy)<br>
+                Try your best to solve this problem before continuing!
+            </div>
+
+            <h3>Sorted Sets</h3>
+            <p>Sorted sets store elements in sorted order. All primary methods (adding, removing, and checking) run in <span class="math">O(log N)</span> worst-case time, where <span class="math">N</span> is the number of elements in the set.</p>
+
+            <p>Sorted sets are implemented in C++ by <code>std::set</code> in the <code>&lt;set&gt;</code> header.</p>
+
+            <div class="operations">
+                <strong>Basic operations on std::set named s:</strong>
+                <ul>
+                    <li><code>s.insert(x)</code> - adds the element x to s if not already present</li>
+                    <li><code>s.erase(x)</code> - removes the element x from s if present</li>
+                    <li><code>s.count(x)</code> - returns 1 if s contains x and 0 if it doesn't</li>
+                </ul>
+            </div>
+
+            <p>You can also iterate through a set in sorted order using a for-each loop.</p>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Sorted Set Example</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;set&gt;
+using namespace std;
+
+void demo() {
+    set&lt;int&gt; s;
+    s.insert(1);                 // [1]
+    s.insert(4);                 // [1, 4]
+    s.insert(2);                 // [1, 2, 4]
+    
+    cout &lt;&lt; "Set contains: ";
+    for (int x : s) {
+        cout &lt;&lt; x &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+    
+    cout &lt;&lt; "Contains 2: " &lt;&lt; s.count(2) &lt;&lt; endl;  // 1
+    cout &lt;&lt; "Contains 3: " &lt;&lt; s.count(3) &lt;&lt; endl;  // 0
+}</code></pre>
+            </div>
+
+            <h3>Hashsets</h3>
+            <p>Hashsets store elements using hashing. Roughly, a hashset consists of some number of buckets <span class="math">B</span>, and each element is mapped to a bucket via a hash function. If <span class="math">B ≈ N</span> and the hash function independently maps each distinct element to a uniformly random bucket, then no bucket is expected to contain many elements, and all primary methods will run in <span class="math">O(1)</span> expected time.</p>
+
+            <div class="warning">
+                <strong>Warning!</strong> In the worst case, hashsets in C++ may take proportional to <span class="math">N</span> time per operation. This will be demonstrated later in the module.
+            </div>
+
+            <p>Hashsets are implemented in C++ by <code>std::unordered_set</code> in the <code>&lt;unordered_set&gt;</code> header.</p>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Hashset Example</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;unordered_set&gt;
+using namespace std;
+
+void demo() {
+    unordered_set&lt;int&gt; s;
+    s.insert(1);                 // {1}
+    s.insert(4);                 // {1, 4}
+    s.insert(2);                 // {1, 2, 4}
+    
+    cout &lt;&lt; "Set size: " &lt;&lt; s.size() &lt;&lt; endl;
+    cout &lt;&lt; "Contains 2: " &lt;&lt; s.count(2) &lt;&lt; endl;  // 1
+    cout &lt;&lt; "Contains 3: " &lt;&lt; s.count(3) &lt;&lt; endl;  // 0
+}</code></pre>
+            </div>
+
+            <p>Hashsets work with primitive types, but require a <strong>custom hash function</strong> for structures/classes like vectors and pairs.</p>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Solution - Distinct Numbers</h2>
+            <p>This problem asks us to calculate the number of distinct values in a given list.</p>
+
+            <h3 class="method-title">Method 1 - Sorted Set</h3>
+            <p>Because sets only store one copy of each value, we can insert all the numbers into a set, and then print out the size of the set.</p>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Sorted Set Solution</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    
+    set&lt;int&gt; distinctNumbers;
+    for (int i = 0; i &lt; n; i++) {
+        int x;
+        cin &gt;&gt; x;
+        distinctNumbers.insert(x);
+    }
+    
+    cout &lt;&lt; distinctNumbers.size() &lt;&lt; endl;
+    return 0;
+}</code></pre>
+            </div>
+
+            <h3 class="method-title">Method 2 - Hashset</h3>
+            <p>Same as method 1, but with sorted set replaced by a hashset.</p>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Hashset Solution</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    int n;
+    cin &gt;&gt; n;
+    
+    unordered_set&lt;int&gt; distinctNumbers;
+    for (int i = 0; i &lt; n; i++) {
+        int x;
+        cin &gt;&gt; x;
+        distinctNumbers.insert(x);
+    }
+    
+    cout &lt;&lt; distinctNumbers.size() &lt;&lt; endl;
+    return 0;
+}</code></pre>
+            </div>
+
+            <p>However, this fails on one test designed specifically to cause <code>unordered_set</code> to run in <span class="math">Θ(N²)</span> time. To get around this, you can either switch to <code>set</code> or use a custom hash function.</p>
+
+            <div class="complexity">
+                <strong>Should I worry about anti-hash tests in USACO?</strong><br>
+                No - historically, no USACO problem has included an anti-hash test. However, these sorts of tests often appear in Codeforces, especially in educational rounds, where open hacking is allowed.
+            </div>
+
+            <h3 class="method-title">Method 3 - Sorting</h3>
+            <p>Check out the solution involving sorting as an alternative approach to this problem.</p>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Maps</h2>
+            
+            <div class="focus-problem">
+                <strong>🎯 Focus Problem:</strong> Associative Array (YS - Easy)<br>
+                Try your best to solve this problem before continuing!
+            </div>
+
+            <h3>Sorted Maps</h3>
+            <p>In sorted maps, the pairs are sorted in order of key. As with sorted sets, all primary methods run in <span class="math">O(log N)</span> worst-case time, where <span class="math">N</span> is the number of pairs in the map.</p>
+
+            <h3>Hashmaps</h3>
+            <p>In hashmaps, the pairs are hashed to buckets by the key, and as with hashsets, all primary methods run in <span class="math">O(1)</span> expected time under some assumptions about the hash function.</p>
+
+            <p>In C++, sorted maps are implemented with <code>std::map</code> and hashmaps are implemented with <code>std::unordered_map</code>.</p>
+
+            <div class="operations">
+                <strong>Basic operations on std::map and std::unordered_map named m:</strong>
+                <ul>
+                    <li><code>m[key]</code> - returns a reference to the value associated with the key</li>
+                    <li><code>m.at(key)</code> - behaves the same as m[key] if key exists, throws exception otherwise</li>
+                    <li><code>m[key] = value</code> - assigns the value to the key</li>
+                    <li><code>m.count(key)</code> - checks whether a key exists in the map</li>
+                    <li><code>m.erase(key)</code> - removes the map entry associated with the specified key</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <strong>Important Note:</strong> If key is not present in the map, then <code>m[key]</code> constructs the value using the default constructor. For <code>int</code>, this sets the value to 0. For <code>std::string</code>, this sets the value to an empty string.
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Map Example</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;map&gt;
+using namespace std;
+
+void demo() {
+    map&lt;int, int&gt; m;
+    m[1] = 5;                    // [(1, 5)]
+    m[3] = 14;                   // [(1, 5); (3, 14)]
+    m[2] = 7;                    // [(1, 5); (2, 7); (3, 14)]
+    
+    cout &lt;&lt; "Value at key 2: " &lt;&lt; m[2] &lt;&lt; endl;  // 7
+    cout &lt;&lt; "Key 4 exists: " &lt;&lt; m.count(4) &lt;&lt; endl;  // 0
+    cout &lt;&lt; "Map size: " &lt;&lt; m.size() &lt;&lt; endl;  // 3
+}</code></pre>
+            </div>
+
+            <h3>Iterating Over Maps</h3>
+            <p>An <code>std::map</code> stores entries as pairs in the form <code>{key, value}</code>. To iterate over maps, you can use a for loop. The <code>auto</code> keyword suffices to iterate over any type of pair.</p>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Map Iteration</div>
+                <pre class="line-numbers"><code class="language-cpp">// Both of these output the same thing
+for (const auto &amp;x : m) { 
+    cout &lt;&lt; x.first &lt;&lt; " " &lt;&lt; x.second &lt;&lt; endl; 
+}
+
+for (auto x : m) { 
+    cout &lt;&lt; x.first &lt;&lt; " " &lt;&lt; x.second &lt;&lt; endl; 
+}
+
+// You can modify values (but not keys) when iterating
+for (auto &amp;x : m) {
+    x.second = 1234;  // Change all values to 1234
+}</code></pre>
+            </div>
+
+            <p>The first method (iterating over const references) is generally preferred because the second will make a copy of each element that it iterates over.</p>
+
+            <div class="warning">
+                <strong>Important Warning:</strong> It is generally a bad idea to insert or remove elements of a map while iterating over it, as this can invalidate iterators and cause segmentation faults.
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Safe Map Modification During Iteration</div>
+                <pre class="line-numbers"><code class="language-cpp">// Method 1: Create a new map instead of modifying the old one
+map&lt;int, int&gt; m, M;
+for (int i = 0; i &lt; 10; ++i) m[i] = i;
+
+int current_iteration = 0;
+for (const auto &amp;it : m) {
+    // only includes every third element
+    if (current_iteration % 3 == 0) { 
+        M[it.first] = it.second; 
+    }
+    current_iteration++;
+}
+
+// Method 2: Maintain a list of keys to erase
+map&lt;int, int&gt; m2;
+for (int i = 0; i &lt; 10; ++i) { m2[i] = i; }
+
+vector&lt;int&gt; to_erase;
+current_iteration = 0;
+for (const auto &amp;it : m2) {
+    // removes every third element
+    if (current_iteration % 3 == 0) { 
+        to_erase.push_back(it.first); 
+    }
+    current_iteration++;
+}
+
+for (int key : to_erase) {
+    m2.erase(key);
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section hover-effect">
+            <h2>Solution - Associative Array</h2>
+            <p>Note that we use 64-bit integers since <code>k</code> and <code>v</code> may be large.</p>
+
+            <div class="code-container">
+                <div class="code-header">C++ - Associative Array Solution</div>
+                <pre class="line-numbers"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;map&gt;
+using namespace std;
+
+int main() {
+    int query_num;
+    cin &gt;&gt; query_num;
+    
+    map&lt;long long, long long&gt; a;
+    
+    for (int q = 0; q &lt; query_num; q++) {
+        int t;
+        cin &gt;&gt; t;
+        
+        if (t == 0) {
+            long long k, v;
+            cin &gt;&gt; k &gt;&gt; v;
+            a[k] = v;
+        } else if (t == 1) {
+            long long k;
+            cin &gt;&gt; k;
+            cout &lt;&lt; a[k] &lt;&lt; "\n";
+        }
+    }
+    
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="complexity">
+                <strong>Time Complexity Analysis:</strong><br>
+                • Each query operation (insert/lookup) takes <span class="math">O(log N)</span> time<br>
+                • Total time complexity: <span class="math">O(Q log N)</span> where Q is the number of queries<br>
+                • Space complexity: <span class="math">O(N)</span> where N is the number of unique keys
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+</body>
+</html>
