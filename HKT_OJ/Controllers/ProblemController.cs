@@ -488,6 +488,42 @@ namespace HKT_OJ.Controllers
 
             return Ok(submissions);
         }
+
+        // Trong ProblemController.cs
+
+        [Authorize(Roles = "0")] // Student, Professor, Admin
+        [HttpGet("mysubmissions")]
+        public async Task<IActionResult> GetMySubmissions()
+        {
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                return Unauthorized("User not logged in.");
+
+            int userId = int.Parse(userIdClaim);
+
+            var submissions = await _context.Submission
+                .Where(s => s.UserId == userId)
+                .OrderByDescending(s => s.SubmitAtTime)
+                .Select(s => new
+                {
+                    SubmissionId = s.SubmissionId,
+                    SubmitAtTime = s.SubmitAtTime,
+                    ProblemName = _context.Problem
+                        .Where(p => p.ProblemId == s.ProblemId)
+                        .Select(p => p.Name)
+                        .FirstOrDefault() ?? "Unknown",
+                    TimeExecuted = s.Time,
+                    Memory = s.Memory,
+                    Language = s.Language,
+                    Result = s.Result
+                })
+                .ToListAsync();
+
+            return Ok(submissions);
+        }
+
+
+
         [HttpGet("solution/{problemId}")]
         public async Task<IActionResult> GetProblemSolution(int problemId)
         {

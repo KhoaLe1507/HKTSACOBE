@@ -655,6 +655,16 @@
   },
   {
     "ContainingType": "HKT_OJ.Controllers.ProblemController",
+    "Method": "GetMySubmissions",
+    "RelativePath": "api/Problem/mysubmissions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.ProblemController",
     "Method": "GetProblemSolution",
     "RelativePath": "api/Problem/solution/{problemId}",
     "HttpMethod": "GET",
@@ -1226,6 +1236,27 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.StatisticsController",
+    "Method": "GetAdminDashboardStats",
+    "RelativePath": "api/Statistics/admin-dashboard",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "startDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {

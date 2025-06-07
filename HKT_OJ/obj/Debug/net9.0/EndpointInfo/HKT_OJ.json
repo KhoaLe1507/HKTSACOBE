@@ -851,6 +851,18 @@
         }
       }
     },
+    "/api/Problem/mysubmissions": {
+      "get": {
+        "tags": [
+          "Problem"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Problem/solution/{problemId}": {
       "get": {
         "tags": [
@@ -1939,6 +1951,36 @@
       }
     },
     "/api/Statistics/professor-dashboard": {
+      "get": {
+        "tags": [
+          "Statistics"
+        ],
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Statistics/admin-dashboard": {
       "get": {
         "tags": [
           "Statistics"
