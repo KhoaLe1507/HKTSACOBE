@@ -6,6 +6,6 @@ namespace HKT_OJ.ViewModels
     public class ApprovalRequest
     {
         [Required]
-        public string NewStatus { get; set; } = "Approved"; // "Approved" hoặc "Rejected"
+        public string NewStatus { get; set; } = "Pending"; // "Approved" hoặc "Rejected"
     }
 }

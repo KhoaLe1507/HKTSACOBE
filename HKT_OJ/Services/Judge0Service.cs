@@ -12,9 +12,10 @@ namespace HKT_OJ.Services
         public Judge0Service()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://judge0-ce.p.rapidapi.com/");
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", "dfd07089a0msh3caae10d120f03cp1536b6jsn87d624a43086");
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "judge0-ce.p.rapidapi.com");
+             //_httpClient.BaseAddress = new Uri("https://judge0-ce.p.rapidapi.com/");
+            // _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", "dfd07089a0msh3caae10d120f03cp1536b6jsn87d624a43086");
+            // _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "judge0-ce.p.rapidapi.com");
+            _httpClient.BaseAddress = new Uri("http://localhost:2358/");
         }
 
         public async Task<string> SubmitCodeAsync(SubmissionRequest req)

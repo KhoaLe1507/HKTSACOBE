@@ -52,8 +52,15 @@ namespace HKT_OJ.Controllers
             _context.BlogPost.Add(blog);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Blog post created successfully", blog.BlogPostId });
+            return Ok(new
+            {
+                postId = blog.BlogPostId,
+                message = "Blog post created successfully"
+            });
         }
+
+
+
 
 
         // ✅ API Edit Blog
@@ -111,6 +118,14 @@ namespace HKT_OJ.Controllers
                 .OrderByDescending(b => b.CreatedAt)
                 .Select(b => new AllBlog
                 {
+                    PostId = b.BlogPostId,
+                    Title = b.Title,
+                    Content = b.Content,
+                    ImageUrl = b.ImageUrl,
+                    CreatedAt = b.CreatedAt,
+                    Visibility = b.Visibility,
+                    UserId = b.UserId, // ✅ THÊM DÒNG NÀY
+
                     AuthorName = _context.User
                         .Where(u => u.UserId == b.UserId)
                         .Select(u => u.FullName)
@@ -119,18 +134,51 @@ namespace HKT_OJ.Controllers
                     Role = _context.User
                         .Where(u => u.UserId == b.UserId)
                         .Select(u => u.Role == 0 ? "Student" : u.Role == 1 ? "Professor" : "Admin")
-                        .FirstOrDefault() ?? "Unknown",
-
-                    PostId = b.BlogPostId,
-                    Title = b.Title,
-                    Content = b.Content,
-                    ImageUrl = b.ImageUrl,
-                    CreatedAt = b.CreatedAt,
-                    Visibility = b.Visibility
+                        .FirstOrDefault() ?? "Unknown"
                 })
+
                 .ToListAsync();
 
+            foreach (var b in blogs)
+            {
+                Console.WriteLine($"📌 Blog: {b.Title} - UserId = {b.UserId}");
+            }
+
             return Ok(blogs);
+        }
+
+        [Authorize]
+        [HttpDelete("delete/{postId}")]
+        public async Task<IActionResult> DeleteBlog(int postId)
+        {
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var roleClaim = User.FindFirstValue(ClaimTypes.Role);
+
+            if (userIdClaim == null || roleClaim == null)
+                return Unauthorized("User not logged in.");
+
+            int userId = int.Parse(userIdClaim);
+            int role = int.Parse(roleClaim);
+
+            var blog = await _context.BlogPost.FindAsync(postId);
+            if (blog == null)
+                return NotFound("Blog post not found.");
+
+            // ✅ Chỉ cho phép:
+            // - Admin (role == 2)
+            // - Tác giả (blog.UserId == userId)
+            if (role != 2 && blog.UserId != userId)
+                return Forbid("Bạn không có quyền xoá bài viết này.");
+
+            // ✅ Xoá tất cả comment thuộc bài viết
+            var relatedComments = _context.BlogComment
+                .Where(c => c.PostId == postId);
+            _context.BlogComment.RemoveRange(relatedComments);
+
+            _context.BlogPost.Remove(blog);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Blog and related comments deleted." });
         }
 
 
@@ -204,7 +252,7 @@ namespace HKT_OJ.Controllers
 
             return Ok(pendingBlogs);
         }
-        [Authorize(Roles = "2")]
+
         [HttpPost("approve/{postId}")]
         public async Task<IActionResult> ApproveOrRejectBlog(int postId, [FromBody] ApprovalRequest request)
         {
@@ -253,6 +301,7 @@ namespace HKT_OJ.Controllers
                 .Select(c => new {
                     c.BlogCommentId,
                     c.Content,
+                    c.UserId,
                     c.CreatedAt,
                     c.ParentCommentId,
                     User = _context.User
@@ -268,6 +317,25 @@ namespace HKT_OJ.Controllers
 
             return Ok(comments);
         }
+
+        [Authorize]
+        [HttpDelete("comment/delete/{commentId}")]
+        public async Task<IActionResult> DeleteComment(int commentId)
+        {
+            var comment = await _context.BlogComment.FindAsync(commentId);
+            if (comment == null)
+                return NotFound();
+
+            var replies = _context.BlogComment
+                .Where(c => c.ParentCommentId == commentId);
+            _context.BlogComment.RemoveRange(replies);
+
+            _context.BlogComment.Remove(comment);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
 
 
     }

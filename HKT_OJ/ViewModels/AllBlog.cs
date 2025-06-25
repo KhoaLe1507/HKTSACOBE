@@ -12,6 +12,7 @@ namespace HKT_OJ.ViewModels
         public string? ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Visibility { get; set; } = "Private";
+        public int UserId { get; set; }
 
         public string ApprovalStatus { get; set; }
     }

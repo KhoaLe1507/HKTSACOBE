@@ -58,6 +58,7 @@ namespace HKT_OJ
             builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddSingleton<Judge0Service>();
+            builder.Services.AddScoped<GeminiService>();
 
             var app = builder.Build();
 

@@ -263,6 +263,7 @@ namespace HKT_OJ.Controllers
             {
                 user = new
                 {
+                    total = users.Count,
                     byRole = userByRole,
                     usersOverTime,
                     topStudents,
@@ -287,7 +288,7 @@ namespace HKT_OJ.Controllers
                 {
                     totalSections = sections.Count,
                     totalModules = modules.Count,
-                    totalContents = contents.Count,
+                    totalModuleContents = contents.Count,
                     lessonBySection,
                     lessonByFrequent,
                     topAuthors

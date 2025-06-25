@@ -346,9 +346,41 @@
   },
   {
     "ContainingType": "HKT_OJ.Controllers.BlogController",
+    "Method": "DeleteComment",
+    "RelativePath": "api/Blog/comment/delete/{commentId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "commentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.BlogController",
     "Method": "GetComments",
     "RelativePath": "api/Blog/comments/{postId}",
     "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.BlogController",
+    "Method": "DeleteBlog",
+    "RelativePath": "api/Blog/delete/{postId}",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -409,6 +441,70 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.ChatBotController",
+    "Method": "AnalyzeBlog",
+    "RelativePath": "api/chatbot/analyze-blog",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "HKT_OJ.ViewModels.BlogAnalysisRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.ChatBotController",
+    "Method": "AnalyzeBlogFull",
+    "RelativePath": "api/chatbot/analyze-blog-full",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "HKT_OJ.ViewModels.BlogAnalysisRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.ChatBotController",
+    "Method": "Ask",
+    "RelativePath": "api/chatbot/ask",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "HKT_OJ.Models.ChatRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "HKT_OJ.Controllers.ChatBotController",
+    "Method": "GenerateInputCode",
+    "RelativePath": "api/chatbot/generate-input-code",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "HKT_OJ.ViewModels.GenerateInputCodeRequest",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
